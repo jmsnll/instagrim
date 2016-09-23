@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -25,11 +24,10 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  *
  * @author Administrator
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login","/Login/*"})
+@WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
 public class Login extends HttpServlet {
 
-    Cluster cluster=null;
-
+    Cluster cluster = null;
 
     public void init(ServletConfig config) throws ServletException {
         // TODO Auto-generated method stub
@@ -47,30 +45,29 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username=request.getParameter("username");
-        String password=request.getParameter("password");
-        
-        User us=new User();
-        us.setCluster(cluster);
-        boolean isValid=us.IsValidUser(username, password);
-        HttpSession session=request.getSession();
-        System.out.println("Session in servlet "+session);
-        if (isValid){
-            LoggedIn lg= new LoggedIn();
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        User user = new User(username, password, cluster);
+        boolean isValid = user.IsValidUser(username, password);
+        HttpSession session = request.getSession();
+        System.out.println("Session in servlet " + session);
+        if (isValid) {
+            LoggedIn lg = new LoggedIn();
             lg.setLogedin();
             lg.setUsername(username);
             //request.setAttribute("LoggedIn", lg);
-            
+
             session.setAttribute("LoggedIn", lg);
-            System.out.println("Session in servlet "+session);
-            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-	    rd.forward(request,response);
-            
-        }else{
+            System.out.println("Session in servlet " + session);
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+            rd.forward(request, response);
+
+        } else {
             response.sendRedirect("/Instagrim/login.jsp");
         }
-        
+
     }
 
     /**
