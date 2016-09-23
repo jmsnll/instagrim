@@ -43,7 +43,7 @@ public final class Keyspaces {
                     + "  );";
             String CreateUserProfile = "CREATE TABLE if not exists instagrim.userprofiles (\n"
                     + "      login text PRIMARY KEY,\n"
-                    + "     password text,\n"
+                     + "     password text,\n"
                     + "      first_name text,\n"
                     + "      last_name text,\n"
                     + "      email set<text>,\n"
@@ -98,5 +98,6 @@ public final class Keyspaces {
         } catch (Exception et) {
             System.out.println("Other keyspace or coulm definition error" + et);
         }
+
     }
 }

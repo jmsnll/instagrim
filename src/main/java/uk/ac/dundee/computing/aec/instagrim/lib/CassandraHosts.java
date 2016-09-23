@@ -7,12 +7,23 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ********************************************************
+ *
+ *
+ * @author administrator
+ *
+ * Hosts are 192.168.2.10 Seed for Vagrant hosts
+ *
+ *
+ *
+ *
+ */
 public final class CassandraHosts {
 
     private static Cluster cluster;
     static String Host = "127.0.0.1";  //at least one starting point to talk to
     //static String Host = "localhost";
-
     public CassandraHosts() {
 
     }
@@ -28,12 +39,12 @@ public final class CassandraHosts {
             cluster = Cluster.builder().addContactPoint(Host).build();
         }
         System.out.println("Cluster Name " + cluster.getClusterName());
-        Metadata mdata = null;
-        try {
-            mdata = cluster.getMetadata();
-        } catch (Exception et) {
+        Metadata mdata=null;
+        try{
+             mdata = cluster.getMetadata();
+        }catch(Exception et){
             System.out.println("Can't get metadata");
-            System.out.println("Exception " + et);
+            System.out.println("Exception "+et);
             return (null);
         }
         Set<Host> hosts = mdata.getAllHosts();
@@ -56,7 +67,7 @@ public final class CassandraHosts {
         System.out.println("getCluster");
         cluster = Cluster.builder()
                 .addContactPoint(Host).build();
-        if (getHosts(cluster) == null) {
+        if (getHosts(cluster)==null){
             return null;
         }
         Keyspaces.SetUpKeySpaces(cluster);
@@ -68,4 +79,5 @@ public final class CassandraHosts {
     public void close() {
         cluster.close();
     }
+
 }

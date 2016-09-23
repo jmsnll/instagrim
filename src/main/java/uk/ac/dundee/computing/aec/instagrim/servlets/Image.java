@@ -45,6 +45,8 @@ public class Image extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Cluster cluster;
     private HashMap CommandsMap = new HashMap();
+    
+    
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -79,13 +81,13 @@ public class Image extends HttpServlet {
         }
         switch (command) {
             case 1:
-                DisplayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
+                DisplayImage(Convertors.DISPLAY_PROCESSED,args[2], response);
                 break;
             case 2:
                 DisplayImageList(args[2], request, response);
                 break;
             case 3:
-                DisplayImage(Convertors.DISPLAY_THUMB, args[2], response);
+                DisplayImage(Convertors.DISPLAY_THUMB,args[2],  response);
                 break;
             default:
                 error("Bad Operator", response);
@@ -102,12 +104,13 @@ public class Image extends HttpServlet {
 
     }
 
-    private void DisplayImage(int type, String Image, HttpServletResponse response) throws ServletException, IOException {
+    private void DisplayImage(int type,String Image, HttpServletResponse response) throws ServletException, IOException {
         PicModel tm = new PicModel();
         tm.setCluster(cluster);
-
-        Pic p = tm.getPic(type, java.util.UUID.fromString(Image));
-
+  
+        
+        Pic p = tm.getPic(type,java.util.UUID.fromString(Image));
+        
         OutputStream out = response.getOutputStream();
 
         response.setContentType(p.getType());
@@ -128,14 +131,15 @@ public class Image extends HttpServlet {
 
             String type = part.getContentType();
             String filename = part.getSubmittedFileName();
-
+            
+            
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
-            HttpSession session = request.getSession();
-            LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-            String username = "majed";
-            if (lg.getlogedin()) {
-                username = lg.getUsername();
+            HttpSession session=request.getSession();
+            LoggedIn lg= (LoggedIn)session.getAttribute("LoggedIn");
+            String username="majed";
+            if (lg.getlogedin()){
+                username=lg.getUsername();
             }
             if (i > 0) {
                 byte[] b = new byte[i + 1];
@@ -148,7 +152,7 @@ public class Image extends HttpServlet {
                 is.close();
             }
             RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
-            rd.forward(request, response);
+             rd.forward(request, response);
         }
 
     }

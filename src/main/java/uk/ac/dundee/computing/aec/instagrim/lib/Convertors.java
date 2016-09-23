@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import com.eaio.uuid.UUID;
 
 public final class Convertors {
-
-    public static int DISPLAY_IMAGE = 0;
-    public static int DISPLAY_THUMB = 1;
-    public static int DISPLAY_PROCESSED = 2;
-
+    public static int DISPLAY_IMAGE=0;
+    public static int DISPLAY_THUMB=1;
+    public static int DISPLAY_PROCESSED=2;
     public void Convertors() {
 
     }
@@ -19,6 +17,8 @@ public final class Convertors {
     public static java.util.UUID getTimeUUID() {
         return java.util.UUID.fromString(new com.eaio.uuid.UUID().toString());
     }
+    
+    
 
     public static byte[] asByteArray(java.util.UUID uuid) {
 
@@ -66,7 +66,7 @@ public final class Convertors {
             // System.out.print(Integer.toHexString(val)+",");
         }
 
-        //System.out.println();
+	  //System.out.println();
     }
 
 //From: http://www.captain.at/howto-java-convert-binary-data.php
@@ -115,7 +115,7 @@ public final class Convertors {
 
         StringTokenizer st = SplitString(type);
         args = new String[st.countTokens()];
-        //Lets assume the number is the last argument
+		//Lets assume the number is the last argument
 
         int argv = 0;
         while (st.hasMoreTokens()) {;
@@ -132,17 +132,17 @@ public final class Convertors {
             argv++;
         }
 
-        //so now they'll be in the args array.  
+	//so now they'll be in the args array.  
         // argv[0] should be the user directory
         return args;
     }
-
+    
     public static String[] SplitRequestPath(HttpServletRequest request) {
         String args[] = null;
 
         StringTokenizer st = SplitString(request.getRequestURI());
         args = new String[st.countTokens()];
-        //Lets assume the number is the last argument
+		//Lets assume the number is the last argument
 
         int argv = 0;
         while (st.hasMoreTokens()) {;
@@ -159,7 +159,7 @@ public final class Convertors {
             argv++;
         }
 
-        //so now they'll be in the args array.  
+	//so now they'll be in the args array.  
         // argv[0] should be the user directory
         return args;
     }
@@ -168,4 +168,5 @@ public final class Convertors {
         return new StringTokenizer(str, "/");
 
     }
+
 }
