@@ -17,17 +17,19 @@ import uk.ac.dundee.computing.aec.instagrim.lib.TwoFactorAuthUtil;
 
 public class User {
 
+    private String name;
     private String username;
     private String passwordHash;
     private String email;
-    private Boolean emailConfirmed;
-    private String name;
+    private Boolean emailVerified;
     private String base32secret;
+    
+    private Boolean active;
 
     private Cluster cluster;
-    
+
     TwoFactorAuthUtil twoFactor = new TwoFactorAuthUtil();
-    
+
     public User(String username, String password, Cluster cluster) {
         this.username = username;
         try {
@@ -35,6 +37,7 @@ public class User {
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.active = true;
         this.cluster = cluster;
     }
 
@@ -48,17 +51,29 @@ public class User {
         this.email = email;
         this.name = name;
         this.base32secret = twoFactor.generateBase32Secret();
+        this.active = true;
         this.cluster = cluster;
-        
     }
-    
+
     public String getCurrentTwoFactorCode() {
+        String code = null;
         try {
-            return twoFactor.generateCurrentNumber(this.base32secret);
+            code = twoFactor.generateCurrentNumber(this.base32secret);
         } catch (GeneralSecurityException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "";
+        return code;
+    }
+    
+    public Boolean isValidCode(String code) {
+        try {
+            if(code.equals(twoFactor.generateCurrentNumber(this.base32secret))) {
+                return true;
+            }
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     public boolean Register() {
@@ -66,10 +81,18 @@ public class User {
     }
 
     public boolean Deactivate() {
+        this.active = false;
+        return true;
+    }
+    
+    public boolean Reactivate() {
+        this.active = true;
         return true;
     }
 
     public boolean Delete() {
+        Session session = cluster.connect("instagrim");
+        
         return true;
     }
 
@@ -124,5 +147,33 @@ public class User {
         }
 
         return false;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPasswordHash() {
+        return this.passwordHash;
+    }
+
+    public String getEmailAddress() {
+        return this.email;
+    }
+
+    public Boolean isEmailVerified() {
+        return this.emailVerified;
+    }
+
+    public void verifyEmail() {
+        this.emailVerified = true;
     }
 }
