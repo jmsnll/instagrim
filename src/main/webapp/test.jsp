@@ -10,7 +10,7 @@
         <h1>Hello World!</h1>
         <%
             Pic ps = new Pic();
-            LoggedIn lg = new LoggedIn();
+            LoggedIn logInHandler = new LoggedIn();
         %>
     </body>
 </html>
