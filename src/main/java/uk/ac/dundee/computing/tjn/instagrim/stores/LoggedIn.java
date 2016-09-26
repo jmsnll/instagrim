@@ -2,7 +2,7 @@ package uk.ac.dundee.computing.tjn.instagrim.stores;
 
 public class LoggedIn {
 
-    boolean logedin = false;
+    boolean loggedIn = false;
     String username = null;
 
     public void LogedIn() {
@@ -17,19 +17,19 @@ public class LoggedIn {
         return username;
     }
 
-    public void setLogedin() {
-        logedin = true;
+    public void setLoggedin() {
+        loggedIn = true;
     }
 
-    public void setLogedout() {
-        logedin = false;
+    public void setLoggedout() {
+        loggedIn = false;
     }
 
     public void setLoginState(boolean logedin) {
-        this.logedin = logedin;
+        this.loggedIn = logedin;
     }
 
     public boolean getlogedin() {
-        return logedin;
+        return loggedIn;
     }
 }
