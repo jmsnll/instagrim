@@ -55,8 +55,8 @@ public final class Keyspaces {
                 ResultSet rs = session
                         .execute(boundStatement);
                 System.out.println("created instagrim ");
-            } catch (Exception et) {
-                System.out.println("Can't create instagrim " + et);
+            } catch (Exception ex) {
+                System.out.println("Can't create instagrim " + ex);
             }
 
             //now add some column families 
@@ -65,35 +65,35 @@ public final class Keyspaces {
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(CreatePicTable);
                 session.execute(cqlQuery);
-            } catch (Exception et) {
-                System.out.println("Can't create tweet table " + et);
+            } catch (Exception ex) {
+                System.out.println("Can't create tweet table " + ex);
             }
             System.out.println("" + Createuserpiclist);
 
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(Createuserpiclist);
                 session.execute(cqlQuery);
-            } catch (Exception et) {
-                System.out.println("Can't create user pic list table " + et);
+            } catch (Exception ex) {
+                System.out.println("Can't create user pic list table " + ex);
             }
             System.out.println("" + CreateAddressType);
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(CreateAddressType);
                 session.execute(cqlQuery);
-            } catch (Exception et) {
-                System.out.println("Can't create Address type " + et);
+            } catch (Exception ex) {
+                System.out.println("Can't create Address type " + ex);
             }
             System.out.println("" + CreateUserProfile);
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfile);
                 session.execute(cqlQuery);
-            } catch (Exception et) {
-                System.out.println("Can't create Address Profile " + et);
+            } catch (Exception ex) {
+                System.out.println("Can't create Address Profile " + ex);
             }
             session.close();
 
-        } catch (Exception et) {
-            System.out.println("Other keyspace or coulm definition error" + et);
+        } catch (Exception ex) {
+            System.out.println("Other keyspace or coulm definition error" + ex);
         }
 
     }
