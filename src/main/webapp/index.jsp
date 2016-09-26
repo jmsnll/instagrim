@@ -1,10 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : Sep 28, 2014, 7:01:44 PM
-    Author     : Administrator
---%>
-
-
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -21,11 +14,9 @@
         </header>
         <nav>
             <ul>
-
-               
                 <li><a href="upload.jsp">Upload</a></li>
                     <%
-                        
+
                         LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
                         if (lg != null) {
                             String UserName = lg.getUsername();
@@ -34,13 +25,11 @@
 
                 <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
                     <%}
-                            }else{
-                                %>
-                 <li><a href="register.jsp">Register</a></li>
+                    } else {
+                    %>
+                <li><a href="register.jsp">Register</a></li>
                 <li><a href="login.jsp">Login</a></li>
-                <%
-                                        
-                            
+                    <%
                     }%>
             </ul>
         </nav>

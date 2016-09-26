@@ -1,11 +1,5 @@
-<%-- 
-    Document   : test
-    Created on : Sep 29, 2014, 9:16:48 AM
-    Author     : Administrator
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
+<%@ page import="uk.ac.dundee.computing.tjn.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,6 +11,6 @@
         <%
             Pic ps = new Pic();
             LoggedIn lg = new LoggedIn();
-            %>
+        %>
     </body>
 </html>

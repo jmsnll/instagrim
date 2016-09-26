@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
@@ -20,10 +15,6 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.User;
 import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
 
-/**
- *
- * @author Administrator
- */
 @WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
 public class Login extends HttpServlet {
 

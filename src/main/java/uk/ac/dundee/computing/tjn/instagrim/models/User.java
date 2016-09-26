@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.ac.dundee.computing.tjn.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.tjn.instagrim.lib.TwoFactorAuthUtil;
-import org.krysalis.barcode4j.*;
 
 public class User {
 
@@ -103,7 +102,7 @@ public class User {
         PreparedStatement ps = session.prepare("DELETE FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
         session.execute(bs.bind(this.username));
-                
+
         return true;
     }
 
