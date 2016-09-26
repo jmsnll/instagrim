@@ -25,7 +25,7 @@ public class User {
 
     private final Cluster cluster;
 
-    TwoFactorAuthUtil twoFactorHandler = new TwoFactorAuthUtil();
+    private TwoFactorAuthUtil twoFactorHandler = new TwoFactorAuthUtil();
 
     public User(String username, String password, Cluster cluster) {
         this.username = username;
