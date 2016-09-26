@@ -20,9 +20,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.tjn.instagrim.models.PicModel;
+import uk.ac.dundee.computing.tjn.instagrim.models.ImageModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
-import uk.ac.dundee.computing.tjn.instagrim.stores.Pic;
 
 /**
  * Servlet implementation class Image
@@ -51,7 +50,6 @@ public class Image extends HttpServlet {
         CommandsMap.put("Image", 1);
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
-
     }
 
     public void init(ServletConfig config) throws ServletException {
@@ -59,17 +57,13 @@ public class Image extends HttpServlet {
         cluster = CassandraHosts.getCluster();
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String args[] = Convertors.SplitRequestPath(request);
         int command;
         try {
             command = (Integer) CommandsMap.get(args[1]);
-        } catch (Exception et) {
+        } catch (Exception ex) {
             error("Bad Operator", response);
             return;
         }
@@ -89,27 +83,26 @@ public class Image extends HttpServlet {
     }
 
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PicModel tm = new PicModel();
+        ImageModel tm = new ImageModel();
         tm.setCluster(cluster);
-        java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(User);
-        RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
-        request.setAttribute("Pics", lsPics);
+        java.util.LinkedList<uk.ac.dundee.computing.tjn.instagrim.stores.Image> listImages = tm.getImagesForUser(User);
+        RequestDispatcher rd = request.getRequestDispatcher("/gallery.jsp");
+        request.setAttribute("Images", listImages);
         rd.forward(request, response);
-
     }
 
     private void DisplayImage(int type, String Image, HttpServletResponse response) throws ServletException, IOException {
-        PicModel tm = new PicModel();
+        ImageModel tm = new ImageModel();
         tm.setCluster(cluster);
 
-        Pic p = tm.getPic(type, java.util.UUID.fromString(Image));
+        uk.ac.dundee.computing.tjn.instagrim.stores.Image image = tm.getImage(type, java.util.UUID.fromString(Image));
 
         OutputStream out = response.getOutputStream();
 
-        response.setContentType(p.getType());
-        response.setContentLength(p.getLength());
+        response.setContentType(image.getType());
+        response.setContentLength(image.getLength());
         //out.write(Image);
-        InputStream is = new ByteArrayInputStream(p.getBytes());
+        InputStream is = new ByteArrayInputStream(image.getBytes());
         BufferedInputStream input = new BufferedInputStream(is);
         byte[] buffer = new byte[8192];
         for (int length = 0; (length = input.read(buffer)) > 0;) {
@@ -137,9 +130,9 @@ public class Image extends HttpServlet {
                 byte[] b = new byte[i + 1];
                 is.read(b);
                 System.out.println("Length : " + b.length);
-                PicModel tm = new PicModel();
+                ImageModel tm = new ImageModel();
                 tm.setCluster(cluster);
-                tm.insertPic(b, type, filename, username);
+                tm.insertImage(b, type, filename, username);
 
                 is.close();
             }

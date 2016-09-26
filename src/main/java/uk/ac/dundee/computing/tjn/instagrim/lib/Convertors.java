@@ -124,7 +124,7 @@ public final class Convertors {
                 //System.out.println("String was "+URLDecoder.decode(args[argv],"UTF-8"));
                 args[argv] = URLDecoder.decode(args[argv], "UTF-8");
 
-            } catch (Exception et) {
+            } catch (Exception ex) {
                 System.out.println("Bad URL Encoding" + args[argv]);
             }
             argv++;
@@ -151,7 +151,7 @@ public final class Convertors {
                 //System.out.println("String was "+URLDecoder.decode(args[argv],"UTF-8"));
                 args[argv] = URLDecoder.decode(args[argv], "UTF-8");
 
-            } catch (Exception et) {
+            } catch (Exception ex) {
                 System.out.println("Bad URL Encoding" + args[argv]);
             }
             argv++;

@@ -14,7 +14,7 @@ public final class Keyspaces {
             String createKeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
             String createImagesTable = "CREATE TABLE if not exists instagrim.images ("
                     + " user varchar,"
-                    + " picid uuid, "
+                    + " imageid uuid, "
                     + " interaction_time timestamp,"
                     + " title varchar,"
                     + " image blob,"
@@ -25,14 +25,14 @@ public final class Keyspaces {
                     + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
-                    + " PRIMARY KEY (picid)"
+                    + " PRIMARY KEY (imageid)"
                     + ")";
             String createUserImageListTable = "CREATE TABLE if not exists instagrim.userimagelist (\n"
-                    + "picid uuid,\n"
+                    + "imageid uuid,\n"
                     + "user varchar,\n"
-                    + "pic_added timestamp,\n"
-                    + "PRIMARY KEY (user,pic_added)\n"
-                    + ") WITH CLUSTERING ORDER BY (pic_added desc);";
+                    + "image_added timestamp,\n"
+                    + "PRIMARY KEY (user,image_added)\n"
+                    + ") WITH CLUSTERING ORDER BY (image_added desc);";
             String createAddressTable = "CREATE TYPE if not exists instagrim.address (\n"
                     + "      street text,\n"
                     + "      city text,\n"
@@ -70,7 +70,7 @@ public final class Keyspaces {
                 SimpleStatement cqlQuery = new SimpleStatement(createUserImageListTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
-                System.out.println("Can't create user pic list table " + ex);
+                System.out.println("Can't create user image list table " + ex);
             }
             System.out.println("" + createAddressTable);
             try {

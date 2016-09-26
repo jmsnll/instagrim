@@ -28,9 +28,9 @@ public final class CassandraHosts {
         Metadata mdata = null;
         try {
             mdata = cluster.getMetadata();
-        } catch (Exception et) {
+        } catch (Exception ex) {
             System.out.println("Can't get metadata");
-            System.out.println("Exception " + et);
+            System.out.println("Exception " + ex);
             return (null);
         }
         Set<Host> hosts = mdata.getAllHosts();

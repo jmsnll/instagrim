@@ -23,21 +23,21 @@
         </nav>
 
         <article>
-            <h1>Your Pics</h1>
+            <h1>Your Images</h1>
             <%
-                java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
-                if (lsPics == null) {
+                LinkedList<Image> listImages = (LinkedList<Image>) request.getAttribute("Images");
+                if (listImages == null) {
             %>
-            <p>No Pictures found</p>
+            <p>No Images found</p>
             <%
             } else {
-                Iterator<Pic> iterator;
-                iterator = lsPics.iterator();
+                Iterator<Image> iterator;
+                iterator = listImages.iterator();
                 while (iterator.hasNext()) {
-                    Pic p = (Pic) iterator.next();
+                    Image image = (Image) iterator.next();
 
             %>
-            <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
+            <a href="/Instagrim/Image/<%=image.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=image.getSUUID()%>"></a><br/><%
 
                     }
                 }

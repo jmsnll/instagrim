@@ -9,7 +9,7 @@
     <body>
         <h1>Hello World!</h1>
         <%
-            Pic ps = new Pic();
+            Image ps = new Image();
             LoggedIn lg = new LoggedIn();
         %>
     </body>
