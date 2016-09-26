@@ -128,10 +128,10 @@ public class Image extends HttpServlet {
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
             HttpSession session = request.getSession();
-            LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+            LoggedIn logInHandler = (LoggedIn) session.getAttribute("LoggedIn");
             String username = "majed";
-            if (lg.getlogedin()) {
-                username = lg.getUsername();
+            if (logInHandler.isLoggedIn()) {
+                username = logInHandler.getUsername();
             }
             if (i > 0) {
                 byte[] b = new byte[i + 1];
