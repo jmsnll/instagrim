@@ -17,13 +17,13 @@
                 <li><a href="upload.jsp">Upload</a></li>
                     <%
 
-                        LoggedIn logInHandler = (LoggedIn) session.getAttribute("LoggedIn");
-                        if (logInHandler != null) {
-                            String UserName = logInHandler.getUsername();
-                            if (logInHandler.isLoggedIn()) {
+                        LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+                        if (lg != null) {
+                            String UserName = lg.getUsername();
+                            if (lg.getlogedin()) {
                     %>
 
-                <li><a href="/Instagrim/Images/<%=logInHandler.getUsername()%>">Your Images</a></li>
+                <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
                     <%}
                     } else {
                     %>
