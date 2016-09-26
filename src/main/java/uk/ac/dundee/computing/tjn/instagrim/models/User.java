@@ -27,6 +27,16 @@ public class User {
 
     TwoFactorAuthUtil twoFactorHandler = new TwoFactorAuthUtil();
 
+    public User(String username, String password, Cluster cluster) {
+        this.username = username;
+        try {
+            this.passwordSHA1 = AeSimpleSHA1.SHA1(password);
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.cluster = cluster;
+    }
+
     public User(String username, String password, String email, String name, Cluster cluster) {
         this.username = username;
         try {
