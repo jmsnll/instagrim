@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.User;
 
-@WebServlet(name = "Register", urlPatterns = {"/register"})
+@WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
 
     Cluster cluster = null;

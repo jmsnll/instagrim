@@ -28,11 +28,11 @@ import uk.ac.dundee.computing.tjn.instagrim.stores.Pic;
  * Servlet implementation class Image
  */
 @WebServlet(urlPatterns = {
-    "/image",
-    "/image/*",
-    "/thumb/*",
-    "/images",
-    "/images/*"
+    "/Image",
+    "/Image/*",
+    "/Thumb/*",
+    "/Images",
+    "/Images/*"
 })
 @MultipartConfig
 

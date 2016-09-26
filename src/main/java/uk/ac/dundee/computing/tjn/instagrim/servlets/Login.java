@@ -15,7 +15,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.User;
 import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
 
-@WebServlet(name = "Login", urlPatterns = {"/login", "/login/authenticate", "/login/*"})
+@WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
 public class Login extends HttpServlet {
 
     Cluster cluster = null;
