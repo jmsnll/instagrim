@@ -15,7 +15,7 @@
         <nav>
             <ul>
 
-                <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
+                <li><a href="/Instagrim/images/majed">Sample Images</a></li>
             </ul>
         </nav>
 
@@ -27,7 +27,7 @@
                     <li>Password <input type="password" name="password"></li>
                 </ul>
                 <br/>
-                <input type="submit" value="Login"> 
+                <input type="submit" value="login"> 
             </form>
 
         </article>

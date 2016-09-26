@@ -11,8 +11,8 @@ public final class Keyspaces {
     public static void SetUpKeySpaces(Cluster c) {
         try {
             //Add some keyspaces here
-            String createkeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
-            String CreatePicTable = "CREATE TABLE if not exists instagrim.pics ("
+            String createKeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
+            String createImagesTable = "CREATE TABLE if not exists instagrim.images ("
                     + " user varchar,"
                     + " picid uuid, "
                     + " interaction_time timestamp,"
@@ -22,70 +22,66 @@ public final class Keyspaces {
                     + " processed blob,"
                     + " imagelength int,"
                     + " thumblength int,"
-                    + "  processedlength int,"
+                    + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
                     + " PRIMARY KEY (picid)"
                     + ")";
-            String Createuserpiclist = "CREATE TABLE if not exists instagrim.userpiclist (\n"
+            String createUserImageListTable = "CREATE TABLE if not exists instagrim.userimagelist (\n"
                     + "picid uuid,\n"
                     + "user varchar,\n"
                     + "pic_added timestamp,\n"
                     + "PRIMARY KEY (user,pic_added)\n"
                     + ") WITH CLUSTERING ORDER BY (pic_added desc);";
-            String CreateAddressType = "CREATE TYPE if not exists instagrim.address (\n"
+            String createAddressTable = "CREATE TYPE if not exists instagrim.address (\n"
                     + "      street text,\n"
                     + "      city text,\n"
                     + "      zip int\n"
                     + "  );";
-            String CreateUserProfile = "CREATE TABLE if not exists instagrim.accounts (\n"
+            String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      username text PRIMARY KEY,\n"
                     + "      password text,\n"
-                    + "      first_name text,\n"
-                    + "      last_name text,\n"
-                    + "      email set<text>,\n"
+                    + "      name text,\n"
+                    + "      email text,\n"
                     + "      base32secret text"
                     + "  );";
             Session session = c.connect();
             try {
-                PreparedStatement statement = session
-                        .prepare(createkeyspace);
-                BoundStatement boundStatement = new BoundStatement(
-                        statement);
-                ResultSet rs = session
-                        .execute(boundStatement);
+                PreparedStatement statement = session.prepare(createKeyspace);
+                BoundStatement boundStatement = new BoundStatement(statement);
+                ResultSet rs = session.execute(boundStatement);
                 System.out.println("created instagrim ");
             } catch (Exception ex) {
                 System.out.println("Can't create instagrim " + ex);
             }
 
             //now add some column families 
-            System.out.println("" + CreatePicTable);
+            System.out.println("" + createImagesTable);
 
             try {
-                SimpleStatement cqlQuery = new SimpleStatement(CreatePicTable);
+                SimpleStatement cqlQuery = new SimpleStatement(createImagesTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
                 System.out.println("Can't create tweet table " + ex);
             }
-            System.out.println("" + Createuserpiclist);
+            System.out.println("" + createUserImageListTable);
 
             try {
-                SimpleStatement cqlQuery = new SimpleStatement(Createuserpiclist);
+                SimpleStatement cqlQuery = new SimpleStatement(createUserImageListTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
                 System.out.println("Can't create user pic list table " + ex);
             }
-            System.out.println("" + CreateAddressType);
+            System.out.println("" + createAddressTable);
             try {
-                SimpleStatement cqlQuery = new SimpleStatement(CreateAddressType);
+                SimpleStatement cqlQuery = new SimpleStatement(createAddressTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
                 System.out.println("Can't create Address type " + ex);
             }
-            System.out.println("" + CreateUserProfile);
+            System.out.println("" + createAccountsTable);
             try {
-                SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfile);
+                SimpleStatement cqlQuery = new SimpleStatement(createAccountsTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
                 System.out.println("Can't create Address Profile " + ex);
