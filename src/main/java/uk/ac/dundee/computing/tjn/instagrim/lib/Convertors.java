@@ -4,20 +4,47 @@ import java.net.URLDecoder;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ *
+ * @author thms
+ */
 public final class Convertors {
 
+    /**
+     *
+     */
     public static int DISPLAY_IMAGE = 0;
+
+    /**
+     *
+     */
     public static int DISPLAY_THUMB = 1;
+
+    /**
+     *
+     */
     public static int DISPLAY_PROCESSED = 2;
 
+    /**
+     *
+     */
     public void Convertors() {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public static java.util.UUID getTimeUUID() {
         return java.util.UUID.fromString(new com.eaio.uuid.UUID().toString());
     }
 
+    /**
+     *
+     * @param uuid
+     * @return
+     */
     public static byte[] asByteArray(java.util.UUID uuid) {
 
         long msb = uuid.getMostSignificantBits();
@@ -34,6 +61,11 @@ public final class Convertors {
         return buffer;
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public static byte[] longToByteArray(long value) {
         byte[] buffer = new byte[8]; //longs are 8 bytes I believe
         for (int i = 7; i >= 0; i--) { //fill from the right
@@ -45,6 +77,11 @@ public final class Convertors {
         return buffer;
     }
 
+    /**
+     *
+     * @param buffer
+     * @return
+     */
     public static long byteArrayToLong(byte[] buffer) {
         long value = 0;
         long multiplier = 1;
@@ -57,6 +94,10 @@ public final class Convertors {
         return value;
     }
 
+    /**
+     *
+     * @param buffer
+     */
     public static void displayByteArrayAsHex(byte[] buffer) {
         int byteArrayLength = buffer.length;
         for (int i = 0; i < byteArrayLength; i++) {
@@ -68,6 +109,12 @@ public final class Convertors {
     }
 
 //From: http://www.captain.at/howto-java-convert-binary-data.php
+    /**
+     *
+     * @param arr
+     * @param start
+     * @return
+     */
     public static long arr2long(byte[] arr, int start) {
         int i = 0;
         int len = 4;
@@ -86,6 +133,11 @@ public final class Convertors {
         return accum;
     }
 
+    /**
+     *
+     * @param Tags
+     * @return
+     */
     public static String[] SplitTags(String Tags) {
         String args[] = null;
 
@@ -108,6 +160,11 @@ public final class Convertors {
 
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public static String[] SplitFiletype(String type) {
         String args[] = null;
 
@@ -135,6 +192,11 @@ public final class Convertors {
         return args;
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     public static String[] SplitRequestPath(HttpServletRequest request) {
         String args[] = null;
 

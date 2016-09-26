@@ -52,6 +52,8 @@ public class TwoFactorAuthUtil {
 
     /**
      * Generate a secret key in base32 format (A-Z2-7)
+     *
+     * @return
      */
     public String generateBase32Secret() {
         StringBuilder sb = new StringBuilder();
@@ -75,6 +77,10 @@ public class TwoFactorAuthUtil {
      *
      * For more details of this magic algorithm, see:
      * http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm
+     *
+     * @param secret
+     * @return
+     * @throws java.security.GeneralSecurityException
      */
     public String generateCurrentNumber(String secret) throws GeneralSecurityException {
         return generateCurrentNumber(secret, System.currentTimeMillis());
@@ -83,6 +89,11 @@ public class TwoFactorAuthUtil {
     /**
      * Same as {@link #generateCurrentNumber(String)} except at a particular
      * time in millis. Mostly for testing purposes.
+     *
+     * @param secret
+     * @param currentTimeMillis
+     * @return
+     * @throws java.security.GeneralSecurityException
      */
     public String generateCurrentNumber(String secret, long currentTimeMillis) throws GeneralSecurityException {
 
@@ -128,6 +139,10 @@ public class TwoFactorAuthUtil {
      *
      * NOTE: this must be URL escaped if it is to be put into a href on a
      * web-page.
+     *
+     * @param keyId
+     * @param secret
+     * @return
      */
     public String qrImageUrl(String keyId, String secret) {
         StringBuilder sb = new StringBuilder(128);

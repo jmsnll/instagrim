@@ -23,9 +23,6 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.ImageModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
 
-/**
- * Servlet implementation class Image
- */
 @WebServlet(urlPatterns = {
     "/Image",
     "/Image/*",
@@ -41,24 +38,18 @@ public class Image extends HttpServlet {
     private Cluster cluster;
     private HashMap CommandsMap = new HashMap();
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public Image() {
         super();
-        // TODO Auto-generated constructor stub
         CommandsMap.put("Image", 1);
         CommandsMap.put("Images", 2);
         CommandsMap.put("Thumb", 3);
     }
 
     public void init(ServletConfig config) throws ServletException {
-        // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
         String args[] = Convertors.SplitRequestPath(request);
         int command;
         try {
@@ -143,7 +134,6 @@ public class Image extends HttpServlet {
     }
 
     private void error(String mess, HttpServletResponse response) throws ServletException, IOException {
-
         PrintWriter out = null;
         out = new PrintWriter(response.getOutputStream());
         out.println("<h1>You have a na error in your input</h1>");
