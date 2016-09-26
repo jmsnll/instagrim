@@ -39,12 +39,12 @@ public final class Keyspaces {
                     + "      zip int\n"
                     + "  );";
             String CreateUserProfile = "CREATE TABLE if not exists instagrim.accounts (\n"
-                    + "      login text PRIMARY KEY,\n"
-                    + "     password text,\n"
+                    + "      username text PRIMARY KEY,\n"
+                    + "      password text,\n"
                     + "      first_name text,\n"
                     + "      last_name text,\n"
                     + "      email set<text>,\n"
-                    + "      addresses  map<text, frozen <address>>\n"
+                    + "      base32secret text"
                     + "  );";
             Session session = c.connect();
             try {
