@@ -38,7 +38,7 @@ public final class Keyspaces {
                     + "      city text,\n"
                     + "      zip int\n"
                     + "  );";
-            String CreateUserProfile = "CREATE TABLE if not exists instagrim.userprofiles (\n"
+            String CreateUserProfile = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      login text PRIMARY KEY,\n"
                     + "     password text,\n"
                     + "      first_name text,\n"
