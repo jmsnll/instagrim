@@ -1,4 +1,4 @@
-package uk.ac.dundee.computing.aec.instagrim.models;
+package uk.ac.dundee.computing.tjn.instagrim.models;
 
 /*
  * Expects a cassandra columnfamily defined as
@@ -12,6 +12,7 @@ package uk.ac.dundee.computing.aec.instagrim.models;
  * To manually generate a UUID use:
  * http://www.famkruithof.net/uuid/uuidgen
  */
+import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
@@ -34,8 +35,7 @@ import javax.imageio.ImageIO;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
 
-import uk.ac.dundee.computing.aec.instagrim.lib.*;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.tjn.instagrim.stores.Pic;
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
 
 public class PicModel {

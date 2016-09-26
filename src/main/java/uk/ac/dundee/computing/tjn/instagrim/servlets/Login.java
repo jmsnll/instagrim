@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.dundee.computing.aec.instagrim.servlets;
+package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.aec.instagrim.models.User;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.tjn.instagrim.models.User;
+import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
 
 /**
  *
@@ -50,7 +50,7 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
 
         User user = new User(username, password, cluster);
-        boolean isValid = user.IsValidUser(username, password);
+        boolean isValid = user.isValidUser(username, password);
         HttpSession session = request.getSession();
         System.out.println("Session in servlet " + session);
         if (isValid) {

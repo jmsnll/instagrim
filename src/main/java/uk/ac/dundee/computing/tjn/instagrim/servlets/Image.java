@@ -1,4 +1,4 @@
-package uk.ac.dundee.computing.aec.instagrim.servlets;
+package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.BufferedInputStream;
@@ -22,11 +22,11 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
-import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.tjn.instagrim.models.PicModel;
+import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.tjn.instagrim.stores.Pic;
 
 /**
  * Servlet implementation class Image

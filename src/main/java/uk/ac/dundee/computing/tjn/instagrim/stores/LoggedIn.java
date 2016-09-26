@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.dundee.computing.aec.instagrim.stores;
+package uk.ac.dundee.computing.tjn.instagrim.stores;
 
 /**
  *

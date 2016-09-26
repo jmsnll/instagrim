@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.dundee.computing.aec.instagrim.servlets;
+package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
@@ -15,8 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.aec.instagrim.models.User;
+import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.tjn.instagrim.models.User;
 
 /**
  *
@@ -45,9 +45,11 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
 
-        User user = new User(username, password, cluster);
-        user.RegisterUser(username, password);
+        User user = new User(username, password, email, name, cluster);
+        user.Register();
 
         response.sendRedirect("/Instagrim");
 
