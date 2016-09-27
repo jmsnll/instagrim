@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "Profile", urlPatterns = {"/profile/*"}, initParams = {
+@WebServlet(name = "Profile", urlPatterns = {"/Profile/*"}, initParams = {
     @WebInitParam(name = "Name", value = "Value")})
 public class Profile extends HttpServlet {
 

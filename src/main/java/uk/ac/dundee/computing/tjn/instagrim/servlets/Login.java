@@ -40,7 +40,6 @@ public class Login extends HttpServlet {
             LoggedIn logInHandler = new LoggedIn();
             logInHandler.setLoggedIn(true);
             logInHandler.setUsername(username);
-            //request.setAttribute("LoggedIn", logInHandler);
 
             session.setAttribute("LoggedIn", logInHandler);
             System.out.println("Session in servlet " + session);

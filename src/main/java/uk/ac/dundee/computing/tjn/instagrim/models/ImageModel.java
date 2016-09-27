@@ -23,7 +23,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.LinkedList;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -38,11 +37,7 @@ public class ImageModel {
 
     Cluster cluster;
 
-    public void ImageModel() {
-
-    }
-
-    public void setCluster(Cluster cluster) {
+    public ImageModel(Cluster cluster) {
         this.cluster = cluster;
     }
 

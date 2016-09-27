@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -74,17 +75,15 @@ public class Image extends HttpServlet {
     }
 
     private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ImageModel tm = new ImageModel();
-        tm.setCluster(cluster);
-        java.util.LinkedList<uk.ac.dundee.computing.tjn.instagrim.stores.Image> listImages = tm.getImagesForUser(User);
+        ImageModel tm = new ImageModel(cluster);
+        LinkedList<uk.ac.dundee.computing.tjn.instagrim.stores.Image> listImages = tm.getImagesForUser(User);
         RequestDispatcher rd = request.getRequestDispatcher("/gallery.jsp");
         request.setAttribute("Images", listImages);
         rd.forward(request, response);
     }
 
     private void DisplayImage(int type, String Image, HttpServletResponse response) throws ServletException, IOException {
-        ImageModel tm = new ImageModel();
-        tm.setCluster(cluster);
+        ImageModel tm = new ImageModel(cluster);
 
         uk.ac.dundee.computing.tjn.instagrim.stores.Image image = tm.getImage(type, java.util.UUID.fromString(Image));
 
@@ -121,8 +120,7 @@ public class Image extends HttpServlet {
                 byte[] b = new byte[i + 1];
                 is.read(b);
                 System.out.println("Length : " + b.length);
-                ImageModel tm = new ImageModel();
-                tm.setCluster(cluster);
+                ImageModel tm = new ImageModel(cluster);
                 tm.insertImage(b, type, filename, username);
 
                 is.close();
