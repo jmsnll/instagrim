@@ -37,7 +37,7 @@ public class Image extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private Cluster cluster;
-    private HashMap CommandsMap = new HashMap();
+    private final HashMap CommandsMap = new HashMap();
 
     public Image() {
         super();
