@@ -16,6 +16,7 @@ public class Register extends HttpServlet {
 
     Cluster cluster = null;
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
         cluster = CassandraHosts.getCluster();
     }

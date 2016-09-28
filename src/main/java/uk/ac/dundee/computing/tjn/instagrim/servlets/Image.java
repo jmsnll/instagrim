@@ -46,10 +46,12 @@ public class Image extends HttpServlet {
         CommandsMap.put("Thumb", 3);
     }
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
-        cluster = CassandraHosts.getCluster();
+        this.cluster = CassandraHosts.getCluster();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
         int command;
@@ -101,6 +103,7 @@ public class Image extends HttpServlet {
         out.close();
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
             System.out.println("Part Name " + part.getName());
@@ -132,11 +135,9 @@ public class Image extends HttpServlet {
     }
 
     private void error(String mess, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = null;
-        out = new PrintWriter(response.getOutputStream());
-        out.println("<h1>You have a na error in your input</h1>");
-        out.println("<h2>" + mess + "</h2>");
-        out.close();
-        return;
+        try (PrintWriter out = new PrintWriter(response.getOutputStream())) {
+            out.println("<h1>You have a na error in your input</h1>");
+            out.println("<h2>" + mess + "</h2>");
+        }
     }
 }
