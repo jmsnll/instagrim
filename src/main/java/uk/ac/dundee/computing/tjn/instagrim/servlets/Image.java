@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -87,7 +88,7 @@ public class Image extends HttpServlet {
     private void DisplayImage(int type, String Image, HttpServletResponse response) throws ServletException, IOException {
         ImageModel tm = new ImageModel(cluster);
 
-        uk.ac.dundee.computing.tjn.instagrim.stores.Image image = tm.getImage(type, java.util.UUID.fromString(Image));
+        uk.ac.dundee.computing.tjn.instagrim.stores.Image image = tm.getImage(type, UUID.fromString(Image));
 
         OutputStream out = response.getOutputStream();
 
