@@ -23,6 +23,7 @@ import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.ImageModel;
+import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
 
 @WebServlet(urlPatterns = {
@@ -77,31 +78,31 @@ public class Image extends HttpServlet {
         }
     }
 
-    private void DisplayImageList(String User, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ImageModel tm = new ImageModel(cluster);
-        LinkedList<uk.ac.dundee.computing.tjn.instagrim.stores.Image> listImages = tm.getImagesForUser(User);
+    private void DisplayImageList(String user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ImageModel im = new ImageModel(cluster);
+        LinkedList<ImageStore> listImages = im.getImagesForUser(user);
         RequestDispatcher rd = request.getRequestDispatcher("/gallery.jsp");
         request.setAttribute("Images", listImages);
         rd.forward(request, response);
     }
 
-    private void DisplayImage(int type, String Image, HttpServletResponse response) throws ServletException, IOException {
+    private void DisplayImage(int type, String imageID, HttpServletResponse response) throws ServletException, IOException {
         ImageModel tm = new ImageModel(cluster);
 
-        uk.ac.dundee.computing.tjn.instagrim.stores.Image image = tm.getImage(type, UUID.fromString(Image));
+        ImageStore image = tm.getImage(type, UUID.fromString(imageID));
 
-        OutputStream out = response.getOutputStream();
+        OutputStream os = response.getOutputStream();
 
         response.setContentType(image.getType());
         response.setContentLength(image.getLength());
-        //out.write(Image);
+        
         InputStream is = new ByteArrayInputStream(image.getBytes());
-        BufferedInputStream input = new BufferedInputStream(is);
+        BufferedInputStream bis = new BufferedInputStream(is);
         byte[] buffer = new byte[8192];
-        for (int length = 0; (length = input.read(buffer)) > 0;) {
-            out.write(buffer, 0, length);
+        for (int length = 0; (length = bis.read(buffer)) > 0;) {
+            os.write(buffer, 0, length);
         }
-        out.close();
+        os.close();
     }
 
     @Override
@@ -135,10 +136,10 @@ public class Image extends HttpServlet {
 
     }
 
-    private void error(String mess, HttpServletResponse response) throws ServletException, IOException {
+    private void error(String message, HttpServletResponse response) throws ServletException, IOException {
         try (PrintWriter out = new PrintWriter(response.getOutputStream())) {
-            out.println("<h1>You have a na error in your input</h1>");
-            out.println("<h2>" + mess + "</h2>");
+            out.println("<h1>You have an error in your input</h1>");
+            out.println("<h2>" + message + "</h2>");
         }
     }
 }
