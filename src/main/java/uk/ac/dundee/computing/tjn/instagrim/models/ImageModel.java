@@ -31,7 +31,7 @@ import javax.imageio.ImageIO;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
 
-import uk.ac.dundee.computing.tjn.instagrim.stores.Image;
+import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
 
 public class ImageModel {
 
@@ -123,8 +123,8 @@ public class ImageModel {
         return pad(image, 4);
     }
 
-    public LinkedList<Image> getImagesForUser(String User) {
-        java.util.LinkedList<Image> images = new java.util.LinkedList<>();
+    public LinkedList<ImageStore> getImagesForUser(String User) {
+        java.util.LinkedList<ImageStore> images = new java.util.LinkedList<>();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("select imageid from userimagelist where user =?");
         ResultSet rs = null;
@@ -137,7 +137,7 @@ public class ImageModel {
             return null;
         } else {
             for (Row row : rs) {
-                Image image = new Image();
+                ImageStore image = new ImageStore();
                 java.util.UUID UUID = row.getUUID("imageID");
                 System.out.println("UUID" + UUID.toString());
                 image.setUUID(UUID);
@@ -148,7 +148,7 @@ public class ImageModel {
         return images;
     }
 
-    public Image getImage(int image_type, java.util.UUID imageID) {
+    public ImageStore getImage(int image_type, java.util.UUID imageID) {
         Session session = cluster.connect("instagrim");
         ByteBuffer bImage = null;
         String type = null;
@@ -197,7 +197,7 @@ public class ImageModel {
             return null;
         }
         session.close();
-        Image image = new Image();
+        ImageStore image = new ImageStore();
         image.setImage(bImage, length, type);
 
         return image;
