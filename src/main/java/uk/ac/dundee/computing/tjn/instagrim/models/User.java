@@ -111,9 +111,9 @@ public class User {
 
     public boolean Register() {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("INSERT INTO accounts (name, username, password, email) Values(?,?,?,?)");
+        PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, name, email, emailVerified) Values(?,?,?,?,?)");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(name, username, password, email));
+        session.execute(bs.bind(username, password, name, email, false));
         return true;
     }
 
