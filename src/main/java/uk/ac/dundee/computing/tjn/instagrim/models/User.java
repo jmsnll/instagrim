@@ -20,7 +20,6 @@ public class User {
     private String email;
     private Boolean emailVerified;
     private String base32secret;
-
     private String bio;
 
     private final Cluster cluster;
@@ -77,7 +76,7 @@ public class User {
         return true;
     }
 
-    public final void enableTwoFactor() {
+    public void enableTwoFactor() {
         this.base32secret = twoFactorHandler.generateBase32Secret();
     }
 

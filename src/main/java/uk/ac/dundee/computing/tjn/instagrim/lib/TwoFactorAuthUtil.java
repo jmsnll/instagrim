@@ -79,7 +79,9 @@ public class TwoFactorAuthUtil {
      * http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm
      *
      * @param secret
+     *
      * @return
+     *
      * @throws java.security.GeneralSecurityException
      */
     public String generateCurrentNumber(String secret) throws GeneralSecurityException {
@@ -92,7 +94,9 @@ public class TwoFactorAuthUtil {
      *
      * @param secret
      * @param currentTimeMillis
+     *
      * @return
+     *
      * @throws java.security.GeneralSecurityException
      */
     public String generateCurrentNumber(String secret, long currentTimeMillis) throws GeneralSecurityException {
@@ -142,6 +146,7 @@ public class TwoFactorAuthUtil {
      *
      * @param keyId
      * @param secret
+     *
      * @return
      */
     public String qrImageUrl(String keyId, String secret) {
@@ -197,7 +202,8 @@ public class TwoFactorAuthUtil {
                 throw new IllegalArgumentException("Invalid base-32 character: " + ch);
             }
             /*
-			 * There are probably better ways to do this but this seemed the most straightforward.
+             * There are probably better ways to do this but this seemed the
+             * most straightforward.
              */
             switch (which) {
                 case 0:

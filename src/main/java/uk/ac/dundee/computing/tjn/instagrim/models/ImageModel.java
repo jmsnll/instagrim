@@ -1,16 +1,10 @@
 package uk.ac.dundee.computing.tjn.instagrim.models;
 
 /*
- * Expects a cassandra columnfamily defined as
- * use keyspace2;
- CREATE TABLE Tweets (
- user varchar,
- interaction_time timeuuid,
- tweet varchar,
- PRIMARY KEY (user,interaction_time)
- ) WITH CLUSTERING ORDER BY (interaction_time DESC);
- * To manually generate a UUID use:
- * http://www.famkruithof.net/uuid/uuidgen
+ * Expects a cassandra columnfamily defined as use keyspace2; CREATE TABLE
+ * Tweets ( user varchar, interaction_time timeuuid, tweet varchar, PRIMARY KEY
+ * (user,interaction_time) ) WITH CLUSTERING ORDER BY (interaction_time DESC);
+ * To manually generate a UUID use: http://www.famkruithof.net/uuid/uuidgen
  */
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import com.datastax.driver.core.BoundStatement;
