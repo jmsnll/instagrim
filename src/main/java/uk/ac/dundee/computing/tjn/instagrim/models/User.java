@@ -30,7 +30,7 @@ public class User {
     public User(String username, Cluster cluster) {
         this.username = username;
         this.cluster = cluster;
-        loadUserDetails();
+        pull();
     }
 
     public User(String username, String password, String email, String name, Cluster cluster) {
@@ -46,7 +46,7 @@ public class User {
         this.cluster = cluster;
     }
 
-    private void loadUserDetails() {
+    public void pull() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT * FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
@@ -61,6 +61,13 @@ public class User {
             this.base32secret = row.getString("base32secret");
             this.bio = row.getString("bio");
         }
+    }
+
+    public void push() {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, name = ?, email = ?, emailVerified = ?, base32secret = ?, bio = ? WHERE username = ?;");
+        BoundStatement bs = new BoundStatement(ps);
+        session.execute(bs.bind(this.password, this.name, this.email, this.emailVerified, this.base32secret, this.bio, this.username));
     }
 
     public boolean isTwoFactorEnabled() {
@@ -140,13 +147,13 @@ public class User {
         }
         return false;
     }
-    
+
     public static boolean Exists(String username, Cluster cluster) {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT username FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(username));
-        if(rs.isExhausted()) {
+        if (rs.isExhausted()) {
             return false;
         }
         return true;
