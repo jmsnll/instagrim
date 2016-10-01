@@ -53,17 +53,4 @@ public class Profile extends HttpServlet {
             throws ServletException, IOException {
 
     }
-
-    private String getBase32Secret(String username) {
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select * from accounts where username = ?");
-        BoundStatement bs = new BoundStatement(ps);
-        ResultSet rs = session.execute(bs.bind(username));
-        if (rs.isExhausted()) {
-            System.out.println("No user found with username: " + username);
-            return null;
-        }
-        Row row = rs.one();
-        return row.getString("base32secret");
-    }
 }
