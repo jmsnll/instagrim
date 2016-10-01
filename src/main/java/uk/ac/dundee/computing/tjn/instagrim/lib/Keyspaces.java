@@ -40,7 +40,7 @@ public final class Keyspaces {
                     + "      email text,\n"
                     + "      emailVerified boolean,\n"
                     + "      base32secret text,\n"
-                    + "      biography text,\n"
+                    + "      bio text,\n"
                     + "      profile_pic blob\n"
                     + "  );";
             Session session = c.connect();

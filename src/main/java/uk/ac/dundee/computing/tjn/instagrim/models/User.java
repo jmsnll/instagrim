@@ -59,7 +59,7 @@ public class User {
             this.email = row.getString("email");
             this.emailVerified = row.getBool("emailVerified");
             this.base32secret = row.getString("base32secret");
-            this.bio = row.getString("biography");
+            this.bio = row.getString("bio");
         }
     }
 
