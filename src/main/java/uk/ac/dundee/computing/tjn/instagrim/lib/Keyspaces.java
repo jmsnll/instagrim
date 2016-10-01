@@ -33,17 +33,15 @@ public final class Keyspaces {
                     + "image_added timestamp,\n"
                     + "PRIMARY KEY (user,image_added)\n"
                     + ") WITH CLUSTERING ORDER BY (image_added desc);";
-            String createAddressTable = "CREATE TYPE if not exists instagrim.address (\n"
-                    + "      street text,\n"
-                    + "      city text,\n"
-                    + "      zip int\n"
-                    + "  );";
             String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      username text PRIMARY KEY,\n"
                     + "      password text,\n"
                     + "      name text,\n"
                     + "      email text,\n"
-                    + "      base32secret text"
+                    + "      emailVerified boolean,\n"
+                    + "      base32secret text,\n"
+                    + "      biography text,\n"
+                    + "      profile_pic blob\n"
                     + "  );";
             Session session = c.connect();
             try {
@@ -72,13 +70,6 @@ public final class Keyspaces {
             } catch (Exception ex) {
                 System.out.println("Can't create user image list table " + ex);
             }
-            System.out.println("" + createAddressTable);
-            try {
-                SimpleStatement cqlQuery = new SimpleStatement(createAddressTable);
-                session.execute(cqlQuery);
-            } catch (Exception ex) {
-                System.out.println("Can't create Address type " + ex);
-            }
             System.out.println("" + createAccountsTable);
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(createAccountsTable);
@@ -89,7 +80,7 @@ public final class Keyspaces {
             session.close();
 
         } catch (Exception ex) {
-            System.out.println("Other keyspace or coulm definition error" + ex);
+            System.out.println("Other keyspace or coulmn definition error" + ex);
         }
 
     }

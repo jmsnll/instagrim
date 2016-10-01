@@ -33,8 +33,8 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        User user = new User(username, password, cluster);
-        boolean isValid = user.isValidUser(username, password);
+        //User user = new User(username, password, cluster);
+        boolean isValid = User.isValidUser(username, password, cluster);
         HttpSession session = request.getSession();
         System.out.println("Session in servlet " + session);
         if (isValid) {

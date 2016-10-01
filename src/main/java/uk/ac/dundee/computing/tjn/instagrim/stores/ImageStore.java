@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
  *
  * @author thms
  */
-public class Image {
+public class ImageStore {
 
     private ByteBuffer bImage = null;
     private int length;

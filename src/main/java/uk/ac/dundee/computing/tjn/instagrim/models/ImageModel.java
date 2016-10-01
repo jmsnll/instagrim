@@ -123,15 +123,15 @@ public class ImageModel {
         return pad(image, 4);
     }
 
-    public LinkedList<ImageStore> getImagesForUser(String User) {
-        java.util.LinkedList<ImageStore> images = new java.util.LinkedList<>();
+    public LinkedList<ImageStore> getImagesForUser(String username) {
+        LinkedList<ImageStore> images = new LinkedList<>();
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("select imageid from userimagelist where user =?");
         ResultSet rs = null;
         BoundStatement boundStatement = new BoundStatement(ps);
         rs = session.execute( // this is where the query is executed
                 boundStatement.bind( // here you are binding the 'boundStatement'
-                        User));
+                        username));
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
@@ -148,7 +148,7 @@ public class ImageModel {
         return images;
     }
 
-    public ImageStore getImage(int image_type, java.util.UUID imageID) {
+    public ImageStore getImage(int imageType, java.util.UUID imageID) {
         Session session = cluster.connect("instagrim");
         ByteBuffer bImage = null;
         String type = null;
@@ -158,12 +158,12 @@ public class ImageModel {
             ResultSet rs = null;
             PreparedStatement ps = null;
 
-            if (image_type == Convertors.DISPLAY_IMAGE) {
+            if (imageType == Convertors.DISPLAY_IMAGE) {
 
                 ps = session.prepare("select image,imagelength,type from images where imageID =?");
-            } else if (image_type == Convertors.DISPLAY_THUMB) {
+            } else if (imageType == Convertors.DISPLAY_THUMB) {
                 ps = session.prepare("select thumb,imagelength,thumblength,type from images where imageID =?");
-            } else if (image_type == Convertors.DISPLAY_PROCESSED) {
+            } else if (imageType == Convertors.DISPLAY_PROCESSED) {
                 ps = session.prepare("select processed,processedlength,type from images where imageID =?");
             }
             BoundStatement boundStatement = new BoundStatement(ps);
@@ -176,14 +176,14 @@ public class ImageModel {
                 return null;
             } else {
                 for (Row row : rs) {
-                    if (image_type == Convertors.DISPLAY_IMAGE) {
+                    if (imageType == Convertors.DISPLAY_IMAGE) {
                         bImage = row.getBytes("image");
                         length = row.getInt("imagelength");
-                    } else if (image_type == Convertors.DISPLAY_THUMB) {
+                    } else if (imageType == Convertors.DISPLAY_THUMB) {
                         bImage = row.getBytes("thumb");
                         length = row.getInt("thumblength");
 
-                    } else if (image_type == Convertors.DISPLAY_PROCESSED) {
+                    } else if (imageType == Convertors.DISPLAY_PROCESSED) {
                         bImage = row.getBytes("processed");
                         length = row.getInt("processedlength");
                     }

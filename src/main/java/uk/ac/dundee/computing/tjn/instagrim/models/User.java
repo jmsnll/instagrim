@@ -6,9 +6,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.ac.dundee.computing.tjn.instagrim.lib.PasswordStorage;
@@ -16,16 +14,24 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.TwoFactorAuthUtil;
 
 public class User {
 
-    private String name;
     private String username;
     private String password;
+    private String name;
     private String email;
-    private Boolean emailVerificationStatus;
+    private Boolean emailVerified;
     private String base32secret;
+    
+    private String biography;
 
     private final Cluster cluster;
 
     private TwoFactorAuthUtil twoFactorHandler = new TwoFactorAuthUtil();
+
+    public User(String username, Cluster cluster) {
+        this.username = username;
+        this.cluster = cluster;
+        loadUserDetails();
+    }
 
     public User(String username, String password, Cluster cluster) {
         this.username = username;
@@ -50,6 +56,23 @@ public class User {
         this.cluster = cluster;
     }
 
+    private void loadUserDetails() {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT * FROM accounts WHERE username = ?");
+        BoundStatement bs = new BoundStatement(ps);
+        bs.bind(this.username);
+        ResultSet rs = session.execute(bs);
+
+        for (Row row : rs) {
+            this.password = row.getString("password");
+            this.name = row.getString("name");
+            this.email = row.getString("email");
+            this.emailVerified = row.getBool("emailVerified");
+            this.base32secret = row.getString("base32secret");
+            this.biography = row.getString("biography");
+        }
+    }
+
     public boolean isTwoFactorEnabled() {
         if (this.base32secret == null) {
             return false;
@@ -57,7 +80,7 @@ public class User {
         return true;
     }
 
-    public void enableTwoFactor() {
+    public final void enableTwoFactor() {
         this.base32secret = twoFactorHandler.generateBase32Secret();
     }
 
@@ -91,7 +114,7 @@ public class User {
 
     public boolean Register() {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("insert into accounts (name, username, password, email) Values(?,?,?,?)");
+        PreparedStatement ps = session.prepare("INSERT INTO accounts (name, username, password, email) Values(?,?,?,?)");
         BoundStatement bs = new BoundStatement(ps);
         session.execute(bs.bind(name, username, password, email));
         return true;
@@ -102,13 +125,12 @@ public class User {
         PreparedStatement ps = session.prepare("DELETE FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
         session.execute(bs.bind(this.username));
-
         return true;
     }
 
-    public boolean isValidUser(String username, String password) {
+    public static boolean isValidUser(String username, String password, Cluster cluster) {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select password from accounts where username = ?");
+        PreparedStatement ps = session.prepare("SELECT password FROM accounts WHERE username = ?");
         BoundStatement boundStatement = new BoundStatement(ps);
         ResultSet rs = session.execute(boundStatement.bind(username));
         if (rs.isExhausted()) {
@@ -165,12 +187,12 @@ public class User {
         this.email = email;
     }
 
-    public Boolean getEmailVerificationStatus() {
-        return emailVerificationStatus;
+    public Boolean getEmailVerified() {
+        return emailVerified;
     }
 
-    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
-        this.emailVerificationStatus = emailVerificationStatus;
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 
 }

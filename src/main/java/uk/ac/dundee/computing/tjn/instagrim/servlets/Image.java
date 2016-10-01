@@ -87,9 +87,9 @@ public class Image extends HttpServlet {
     }
 
     private void DisplayImage(int type, String imageID, HttpServletResponse response) throws ServletException, IOException {
-        ImageModel tm = new ImageModel(cluster);
+        ImageModel im = new ImageModel(cluster);
 
-        ImageStore image = tm.getImage(type, UUID.fromString(imageID));
+        ImageStore image = im.getImage(type, UUID.fromString(imageID));
 
         OutputStream os = response.getOutputStream();
 
