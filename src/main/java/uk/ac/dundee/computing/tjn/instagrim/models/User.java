@@ -195,4 +195,16 @@ public class User {
         this.emailVerified = emailVerified;
     }
 
+    public String getBase32secret() {
+        return base32secret;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
 }
