@@ -33,16 +33,6 @@ public class User {
         loadUserDetails();
     }
 
-    public User(String username, String password, Cluster cluster) {
-        this.username = username;
-        try {
-            this.password = PasswordStorage.createHash(password);
-        } catch (PasswordStorage.CannotPerformOperationException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.cluster = cluster;
-    }
-
     public User(String username, String password, String email, String name, Cluster cluster) {
         this.username = username;
         try {
