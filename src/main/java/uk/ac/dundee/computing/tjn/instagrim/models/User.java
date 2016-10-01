@@ -21,7 +21,7 @@ public class User {
     private Boolean emailVerified;
     private String base32secret;
 
-    private String biography;
+    private String bio;
 
     private final Cluster cluster;
 
@@ -59,7 +59,7 @@ public class User {
             this.email = row.getString("email");
             this.emailVerified = row.getBool("emailVerified");
             this.base32secret = row.getString("base32secret");
-            this.biography = row.getString("biography");
+            this.bio = row.getString("biography");
         }
     }
 
@@ -189,12 +189,11 @@ public class User {
         return base32secret;
     }
 
-    public String getBiography() {
-        return biography;
+    public String getBio() {
+        return bio;
     }
 
-    public void setBiography(String biography) {
-        this.biography = biography;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
-
 }

@@ -133,7 +133,6 @@ public class Image extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
             rd.forward(request, response);
         }
-
     }
 
     private void error(String message, HttpServletResponse response) throws ServletException, IOException {
