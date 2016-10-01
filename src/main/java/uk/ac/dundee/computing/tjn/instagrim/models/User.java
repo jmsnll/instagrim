@@ -143,7 +143,7 @@ public class User {
     
     public static boolean Exists(String username, Cluster cluster) {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.connect("SELECT username FROM accounts WHERE username = ?");
+        PreparedStatement ps = session.prepare("SELECT username FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(username));
         if(rs.isExhausted()) {
