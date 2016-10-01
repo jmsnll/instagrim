@@ -121,8 +121,8 @@ public class User {
     public static boolean isValidUser(String username, String password, Cluster cluster) {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT password FROM accounts WHERE username = ?");
-        BoundStatement boundStatement = new BoundStatement(ps);
-        ResultSet rs = session.execute(boundStatement.bind(username));
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet rs = session.execute(bs.bind(username));
         if (rs.isExhausted()) {
             System.out.println("No accounts returned.");
             return false;
@@ -139,6 +139,17 @@ public class User {
             }
         }
         return false;
+    }
+    
+    public static boolean Exists(String username, Cluster cluster) {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.connect("SELECT username FROM accounts WHERE username = ?");
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet rs = session.execute(bs.bind(username));
+        if(rs.isExhausted()) {
+            return false;
+        }
+        return true;
     }
 
     public String getName() {
