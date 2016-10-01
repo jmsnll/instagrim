@@ -109,6 +109,9 @@ public class User {
     }
 
     public boolean Register() {
+        if (Exists(username, cluster)) {
+            return false;
+        }
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, name, email, emailVerified) Values(?,?,?,?,?)");
         BoundStatement bs = new BoundStatement(ps);

@@ -30,8 +30,10 @@ public class Register extends HttpServlet {
         String email = request.getParameter("email");
 
         User user = new User(username, password, email, name, cluster);
-        user.Register();
-
+        if (!user.Register()) {
+            // do something
+            // return
+        }
         response.sendRedirect("/Instagrim");
 
     }
