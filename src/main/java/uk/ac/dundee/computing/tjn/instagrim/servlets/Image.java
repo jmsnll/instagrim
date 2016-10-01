@@ -95,7 +95,7 @@ public class Image extends HttpServlet {
 
         response.setContentType(image.getType());
         response.setContentLength(image.getLength());
-        
+
         InputStream is = new ByteArrayInputStream(image.getBytes());
         BufferedInputStream bis = new BufferedInputStream(is);
         byte[] buffer = new byte[8192];

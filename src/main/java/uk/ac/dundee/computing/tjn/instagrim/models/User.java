@@ -20,7 +20,7 @@ public class User {
     private String email;
     private Boolean emailVerified;
     private String base32secret;
-    
+
     private String biography;
 
     private final Cluster cluster;
