@@ -35,7 +35,7 @@
                 while (iterator.hasNext()) {
                     ImageStore image = (ImageStore) iterator.next();
             %>
-            <a href="/Instagrim/Image/<%=image.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=image.getSUUID()%>"></a><br/><%
+            <a href="/Instagrim/Image/<%=image.getID()%>" ><img src="/Instagrim/Thumb/<%=image.getID()%>"></a><br/><%
                     }
                 }
                 %>
