@@ -1,11 +1,11 @@
 package uk.ac.dundee.computing.tjn.instagrim.stores;
 
-public class LoggedIn {
+public class SessionStore {
 
     private boolean loggedIn = false;
     private String username = null;
 
-    public void Logged() {
+    public SessionStore() {
 
     }
 

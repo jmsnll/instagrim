@@ -24,7 +24,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.ImageModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
-import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
 @WebServlet(urlPatterns = {
     "/Image",
@@ -116,7 +116,7 @@ public class Image extends HttpServlet {
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
             HttpSession session = request.getSession();
-            LoggedIn logInHandler = (LoggedIn) session.getAttribute("LoggedIn");
+            SessionStore logInHandler = (SessionStore) session.getAttribute("SessionStore");
             String username = "majed";
             if (logInHandler.isLoggedIn()) {
                 username = logInHandler.getUsername();
