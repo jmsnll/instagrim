@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.User;
-import uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn;
+import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
 @WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
 public class Login extends HttpServlet {
@@ -37,7 +37,7 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession();
         System.out.println("Session in servlet " + session);
         if (isValid) {
-            LoggedIn logInHandler = new LoggedIn();
+            SessionStore logInHandler = new SessionStore();
             logInHandler.setLoggedIn(true);
             logInHandler.setUsername(username);
 
