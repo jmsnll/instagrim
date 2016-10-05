@@ -1,4 +1,4 @@
-<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.LoggedIn"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,7 +16,7 @@
             <ul>
                 <li><a href="upload.jsp">Upload</a></li>
                     <%
-                        LoggedIn logInHandler = (LoggedIn) session.getAttribute("LoggedIn");
+                        SessionStore logInHandler = (SessionStore) session.getAttribute("SessionStore");
                         if (logInHandler != null) {
                             String UserName = logInHandler.getUsername();
                             if (logInHandler.isLoggedIn()) {

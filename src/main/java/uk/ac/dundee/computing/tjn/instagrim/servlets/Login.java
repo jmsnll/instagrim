@@ -41,7 +41,7 @@ public class Login extends HttpServlet {
             logInHandler.setLoggedIn(true);
             logInHandler.setUsername(username);
 
-            session.setAttribute("LoggedIn", logInHandler);
+            session.setAttribute("SessionStore", logInHandler);
             System.out.println("Session in servlet " + session);
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);

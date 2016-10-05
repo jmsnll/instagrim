@@ -134,7 +134,7 @@ public class ImageModel {
                 ImageStore image = new ImageStore();
                 java.util.UUID UUID = row.getUUID("imageID");
                 System.out.println("UUID" + UUID.toString());
-                image.setUUID(UUID);
+                image.setID(UUID);
                 images.add(image);
 
             }
