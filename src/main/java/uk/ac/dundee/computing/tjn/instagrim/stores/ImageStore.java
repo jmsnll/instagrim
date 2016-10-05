@@ -2,7 +2,7 @@ package uk.ac.dundee.computing.tjn.instagrim.stores;
 
 import com.datastax.driver.core.utils.Bytes;
 import java.nio.ByteBuffer;
-import java.util.UUID
+import java.util.UUID;
 
 public class ImageStore {
 
