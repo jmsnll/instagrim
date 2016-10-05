@@ -10,7 +10,6 @@
     </head>
     <body>
         <header>
-
             <h1>InstaGrim ! </h1>
             <h2>Your world in Black and White</h2>
         </header>
@@ -35,10 +34,8 @@
                 iterator = listImages.iterator();
                 while (iterator.hasNext()) {
                     ImageStore image = (ImageStore) iterator.next();
-
             %>
             <a href="/Instagrim/Image/<%=image.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=image.getSUUID()%>"></a><br/><%
-
                     }
                 }
                 %>
