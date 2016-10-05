@@ -25,16 +25,16 @@
         <article>
             <h1>Your Images</h1>
             <%
-                LinkedList<Image> listImages = (LinkedList<Image>) request.getAttribute("Images");
+                LinkedList<ImageStore> listImages = (LinkedList<ImageStore>) request.getAttribute("Images");
                 if (listImages == null) {
             %>
             <p>No Images found</p>
             <%
             } else {
-                Iterator<Image> iterator;
+                Iterator<ImageStore> iterator;
                 iterator = listImages.iterator();
                 while (iterator.hasNext()) {
-                    Image image = (Image) iterator.next();
+                    ImageStore image = (ImageStore) iterator.next();
 
             %>
             <a href="/Instagrim/Image/<%=image.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=image.getSUUID()%>"></a><br/><%
