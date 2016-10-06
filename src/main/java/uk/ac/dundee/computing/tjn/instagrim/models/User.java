@@ -129,7 +129,12 @@ public class User {
 
     public static boolean isValidUser(String username, String password, Cluster cluster) {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT password FROM accounts WHERE username = ?");
+        PreparedStatement ps;
+        if (username.contains("@")) {
+            ps = session.prepare("SELECT password FROM accounts WHERE email = ?");
+        } else {
+            ps = session.prepare("SELECT password FROM accounts WHERE username = ?");
+        }
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(username));
         if (rs.isExhausted()) {
