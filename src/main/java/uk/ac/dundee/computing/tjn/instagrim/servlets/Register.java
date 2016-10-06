@@ -27,14 +27,31 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String password_confirmation = request.getParameter("password_confirmation");
         String first_name = request.getParameter("first_name");
         String last_name = request.getParameter("last_name");
         String email = request.getParameter("email");
 
-        User user = new User(username, password, email, first_name, last_name, cluster);
-        if (!user.Register()) {
-            request.setAttribute("usernameAvailable", false);
-            RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+        boolean register = true;
+
+        if (User.Exists(username, cluster)) {
+            request.setAttribute("username_taken", true);
+            register = false;
+        }
+        if (!password.equals(password_confirmation)) {
+            request.setAttribute("password_mismatch", true);
+            register = false;
+        }
+//        if (!email.contains("@") || !email.contains(".")) {
+//            request.setAttribute("invalid_email", true);
+//            register = false;
+//        }
+
+        if (register) {
+            User user = new User(username, password, email, first_name, last_name, cluster);
+            user.Register();
+        } else {
             rd.forward(request, response);
             return;
         }

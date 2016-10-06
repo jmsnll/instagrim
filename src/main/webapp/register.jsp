@@ -39,11 +39,11 @@
                         </div>
                         <%
 
-                            boolean usernameAvailable = true;
-                            if (request.getAttribute("usernameAvailable") != null) {
-                                usernameAvailable = (boolean) request.getAttribute("usernameAvailable");
+                            boolean username_taken = false;
+                            if (request.getAttribute("username_taken") != null) {
+                                username_taken = (boolean) request.getAttribute("username_taken");
                             }
-                            if (!usernameAvailable) {
+                            if (username_taken) {
                         %>
                         <div class="form-group">
                             ALREADY TAKEN: <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username" tabindex="3">
