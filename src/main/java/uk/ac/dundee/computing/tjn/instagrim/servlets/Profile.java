@@ -41,6 +41,9 @@ public class Profile extends HttpServlet {
         String args[] = Convertors.SplitRequestPath(request);
         String profileName = args[2];
         String postID = args[3];
+        if (profileName.equals("edit")) {
+
+        }
         user = new User(profileName, cluster);
         try (PrintWriter pw = response.getWriter()) {
             pw.write("Profile: " + profileName);

@@ -16,7 +16,7 @@
             <ul>
                 <li><a href="upload.jsp">Upload</a></li>
                     <%
-                        SessionStore logInHandler = (SessionStore) session.getAttribute("SessionStore");
+                        SessionStore logInHandler = (SessionStore) session.getAttribute("LoggedIn");
                         if (logInHandler != null) {
                             String UserName = logInHandler.getUsername();
                             if (logInHandler.isLoggedIn()) {

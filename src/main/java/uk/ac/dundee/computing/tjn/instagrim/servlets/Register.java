@@ -34,6 +34,7 @@ public class Register extends HttpServlet {
             // do something
             // return
         }
+
         response.sendRedirect("/Instagrim");
 
     }

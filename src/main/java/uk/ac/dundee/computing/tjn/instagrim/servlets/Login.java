@@ -29,7 +29,6 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -37,11 +36,11 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession();
         System.out.println("Session in servlet " + session);
         if (isValid) {
-            SessionStore logInHandler = new SessionStore();
-            logInHandler.setLoggedIn(true);
-            logInHandler.setUsername(username);
+            SessionStore ss = new SessionStore();
+            ss.setLoggedIn(true);
+            ss.setUsername(username);
 
-            session.setAttribute("SessionStore", logInHandler);
+            session.setAttribute("LoggedIn", ss);
             System.out.println("Session in servlet " + session);
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
