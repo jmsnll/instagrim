@@ -1,3 +1,6 @@
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.LinkedList"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -42,7 +45,8 @@
                                     if (ss != null && ss.isLoggedIn()) {
 
                                 %>
-                                <li><a href="#">My Account</a>
+                                <li>
+                                <li><a href="">My Account</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Settings</a>
@@ -62,13 +66,13 @@
                             </ul>
                         </li>
                         <li class="dropdown" id="notifications">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell-o" aria-hidden="true"></i></a>
                             <ul class="dropdown-menu">
 
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><l class="fa fa-plus-square-o"></l></a>
+                            <a href="upload.jsp"><l class="fa fa-plus-square-o"></l></a>
                         </li>
                     </ul>
                 </div>
@@ -76,31 +80,11 @@
         </nav>
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 user-profile">
-
-                </div>
-                <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-color: green">
-                    </div>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-color: blue">
-
-                    </div>
+                <div class="col-lg-12 text-center user-profile">
+                    <h1>Welcome to Instagrim!</h1>
                 </div>
                 <div class="col-sm-4 text-center">
                     <div class="user-post" style="background-color: red">
-
-                    </div>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-color: red">
-
-                    </div>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-color: green">
-
                     </div>
                 </div>
             </div>
