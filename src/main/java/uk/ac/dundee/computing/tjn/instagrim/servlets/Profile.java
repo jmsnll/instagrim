@@ -19,7 +19,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.User;
 
-@WebServlet(name = "Profile", urlPatterns = {"/profile/*"}, initParams = {
+@WebServlet(name = "Profile", urlPatterns = {"/profile/*", "/profile/edit/"}, initParams = {
     @WebInitParam(name = "Name", value = "Value")})
 public class Profile extends HttpServlet {
 
