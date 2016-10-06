@@ -24,4 +24,9 @@ public class SessionStore {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void logOut() {
+        this.loggedIn = false;
+        this.username = null;
+    }
 }
