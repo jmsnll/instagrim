@@ -40,10 +40,8 @@
                         <%
 
                             boolean usernameAvailable = true;
-                            try {
+                            if (request.getAttribute("usernameAvailable") != null) {
                                 usernameAvailable = (boolean) request.getAttribute("usernameAvailable");
-                            } catch (Exception ex) {
-
                             }
                             if (!usernameAvailable) {
                         %>
