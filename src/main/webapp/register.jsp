@@ -38,8 +38,14 @@
                             </div>
                         </div>
                         <%
-                            boolean avail = (boolean) request.getAttribute("usernameAvailable");
-                            if (!avail) {
+
+                            boolean usernameAvailable = true;
+                            try {
+                                usernameAvailable = (boolean) request.getAttribute("usernameAvailable");
+                            } catch (Exception ex) {
+
+                            }
+                            if (!usernameAvailable) {
                         %>
                         <div class="form-group">
                             ALREADY TAKEN: <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username" tabindex="3">
