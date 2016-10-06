@@ -2,6 +2,7 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,12 +33,12 @@ public class Register extends HttpServlet {
 
         User user = new User(username, password, email, first_name, last_name, cluster);
         if (!user.Register()) {
-            // do something
-            // return
+            request.setAttribute("usernameAvailable", false);
+            RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+            rd.forward(request, response);
+            return;
         }
-
         response.sendRedirect("/Instagrim");
-
     }
 
     @Override
