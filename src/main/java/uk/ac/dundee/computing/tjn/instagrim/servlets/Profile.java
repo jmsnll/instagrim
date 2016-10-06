@@ -47,6 +47,7 @@ public class Profile extends HttpServlet {
         user = new User(profileName, cluster);
         try (PrintWriter pw = response.getWriter()) {
             pw.write("Profile: " + profileName);
+            pw.write("\nFirst name: " + user.getFirst_name());
             pw.write("\nPost ID: " + postID);
         }
     }

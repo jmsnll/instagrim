@@ -26,10 +26,11 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String name = request.getParameter("name");
+        String first_name = request.getParameter("first_name");
+        String last_name = request.getParameter("last_name");
         String email = request.getParameter("email");
 
-        User user = new User(username, password, email, name, cluster);
+        User user = new User(username, password, email, first_name, last_name, cluster);
         if (!user.Register()) {
             // do something
             // return

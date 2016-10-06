@@ -16,7 +16,8 @@ public class User {
 
     private String username;
     private String password;
-    private String name;
+    private String first_name;
+    private String last_name;
     private String email;
     private Boolean emailVerified;
     private String base32secret;
@@ -32,7 +33,7 @@ public class User {
         pull();
     }
 
-    public User(String username, String password, String email, String name, Cluster cluster) {
+    public User(String username, String password, String email, String first_name, String last_name, Cluster cluster) {
         this.username = username;
         try {
             this.password = PasswordStorage.createHash(password);
@@ -40,7 +41,8 @@ public class User {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.email = email;
-        this.name = name;
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.base32secret = null;
         this.cluster = cluster;
     }
@@ -54,7 +56,8 @@ public class User {
 
         for (Row row : rs) {
             this.password = row.getString("password");
-            this.name = row.getString("name");
+            this.first_name = row.getString("first_name");
+            this.last_name = row.getString("last_name");
             this.email = row.getString("email");
             this.emailVerified = row.getBool("emailVerified");
             this.base32secret = row.getString("base32secret");
@@ -64,9 +67,9 @@ public class User {
 
     public void push() {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, name = ?, email = ?, emailVerified = ?, base32secret = ?, bio = ? WHERE username = ?;");
+        PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, first_name = ?, last_name = ?, email = ?, emailVerified = ?, base32secret = ?, bio = ? WHERE username = ?;");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(this.password, this.name, this.email, this.emailVerified, this.base32secret, this.bio, this.username));
+        session.execute(bs.bind(this.password, this.first_name, this.last_name, this.email, this.emailVerified, this.base32secret, this.bio, this.username));
     }
 
     public boolean isTwoFactorEnabled() {
@@ -113,9 +116,9 @@ public class User {
             return false;
         }
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, name, email, emailVerified) Values(?,?,?,?,?)");
+        PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, first_name, last_name, email, emailVerified) Values(?,?,?,?,?,?)");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(username, password, name, email, false));
+        session.execute(bs.bind(username, password, first_name, last_name, email, false));
         return true;
     }
 
@@ -159,14 +162,6 @@ public class User {
             return false;
         }
         return true;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {
@@ -215,5 +210,21 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 }

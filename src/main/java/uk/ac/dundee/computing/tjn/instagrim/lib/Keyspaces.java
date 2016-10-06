@@ -36,7 +36,8 @@ public final class Keyspaces {
             String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      username text PRIMARY KEY,\n"
                     + "      password text,\n"
-                    + "      name text,\n"
+                    + "      first_name text,\n"
+                    + "      last_name text,\n"
                     + "      email text,\n"
                     + "      emailVerified boolean,\n"
                     + "      base32secret text,\n"
@@ -53,7 +54,7 @@ public final class Keyspaces {
                 System.out.println("Can't create instagrim " + ex);
             }
 
-            //now add some column families 
+            //now add some column families
             System.out.println("" + createImagesTable);
 
             try {
