@@ -1,3 +1,6 @@
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.models.ImageModel"%>
+<%@page import="com.datastax.driver.core.Cluster"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.LinkedList"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore"%>
@@ -83,10 +86,26 @@
                 <div class="col-lg-12 text-center user-profile">
                     <h1>Welcome to Instagrim!</h1>
                 </div>
+                <%
+                    Cluster cluster = CassandraHosts.getCluster();
+                    ImageModel im = new ImageModel(cluster);
+                    LinkedList<ImageStore> images = im.getMostRecent();
+                    if (images == null) {
+                %>
+                <p>No posts found!</p>
+                <%} else {
+                    Iterator<ImageStore> iterator = images.iterator();
+                    while (iterator.hasNext()) {
+                        ImageStore is = (ImageStore) iterator.next();
+                %>
                 <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-color: red">
+                    <div class="user-post" style="background-image: url('/Instagrim/Image/<%=is.getID()%>')">
                     </div>
                 </div>
+                <%
+                        }
+                    }
+                %>
             </div>
         </div>
     </body>
