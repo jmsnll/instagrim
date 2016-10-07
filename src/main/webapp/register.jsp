@@ -38,7 +38,7 @@
                             if (request.getAttribute("message") != null) {
                                 message = (String) request.getAttribute("message");
                             }
-                            if (username_taken) {
+                            if (username_taken || password_mismatch) {
                         %>
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
