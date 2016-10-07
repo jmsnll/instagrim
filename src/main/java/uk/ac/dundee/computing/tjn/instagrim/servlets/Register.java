@@ -48,6 +48,7 @@ public class Register extends HttpServlet {
         }
         User user = new User(username, password, email, first_name, last_name, cluster);
         user.Register();
+        rd.forward(request, response);
         response.sendRedirect("/Instagrim");
     }
 
