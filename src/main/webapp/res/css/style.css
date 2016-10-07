@@ -9,6 +9,16 @@ body {
     font-size: 2em;
 }
 
+#title-big {
+    font-family: 'Pacifico', cursive;
+    font-size: 5em;
+}
+
+#title-big a {
+    color: #333;
+    text-decoration: none;
+}
+
 .nav, .navbar-brand {
     font-size: 1.5em;
 }

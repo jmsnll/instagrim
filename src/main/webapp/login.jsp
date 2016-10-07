@@ -20,11 +20,12 @@
     </head>
     <body>
         <div class="container">
+            <h1 id="title-big" class="text-center"><a href="/Instagrim">Instagrim</a></h1>
+            <br>
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
                     <form role="form" method="post" action="Login">
                         <fieldset>
-                            <h2>Please Sign In</h2>
                             <hr>
                             <div class="form-group has-feedback">
                                 <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username or Email Address">
