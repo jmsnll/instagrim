@@ -33,7 +33,7 @@
                                 username_taken = (boolean) request.getAttribute("username_taken");
                             }
                             if (request.getAttribute("password_mismatch") != null) {
-                                username_taken = (boolean) request.getAttribute("password_mismatch");
+                                password_mismatch = (boolean) request.getAttribute("password_mismatch");
                             }
                             if (request.getAttribute("message") != null) {
                                 message = (String) request.getAttribute("message");
