@@ -23,6 +23,28 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
                     <form role="form" method="post" action="Register">
+                        <%
+                            boolean username_taken = false;
+                            boolean password_mismatch = false;
+                            String message = "";
+                            if (request.getAttribute("username_taken") != null) {
+                                username_taken = (boolean) request.getAttribute("username_taken");
+                            }
+                            if (request.getAttribute("password_mismatch") != null) {
+                                username_taken = (boolean) request.getAttribute("password_mismatch");
+                            }
+                            if (request.getAttribute("message") != null) {
+                                message = (String) request.getAttribute("message");
+                            }
+                            if (username_taken) {
+                        %>
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <strong>Oh snap!</strong> <%=message%>
+                        </div>
+                        <%
+                            }
+                        %>
                         <h2>Please Sign Up <small>It's free and always will be.</small></h2>
                         <hr>
                         <div class="row">
@@ -38,11 +60,6 @@
                             </div>
                         </div>
                         <%
-
-                            boolean username_taken = false;
-                            if (request.getAttribute("username_taken") != null) {
-                                username_taken = (boolean) request.getAttribute("username_taken");
-                            }
                             if (username_taken) {
                         %>
                         <div class="form-group">

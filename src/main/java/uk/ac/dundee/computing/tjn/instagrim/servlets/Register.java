@@ -33,28 +33,21 @@ public class Register extends HttpServlet {
         String email = request.getParameter("email");
 
         RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
-        boolean register = true;
 
         if (User.Exists(username, cluster)) {
             request.setAttribute("username_taken", true);
-            register = false;
-        }
-        if (!password.equals(password_confirmation)) {
-            request.setAttribute("password_mismatch", true);
-            register = false;
-        }
-//        if (!email.contains("@") || !email.contains(".")) {
-//            request.setAttribute("invalid_email", true);
-//            register = false;
-//        }
-
-        if (register) {
-            User user = new User(username, password, email, first_name, last_name, cluster);
-            user.Register();
-        } else {
+            request.setAttribute("message", "Looks like that username is already taken, please try again.");
             rd.forward(request, response);
             return;
         }
+        if (!password.equals(password_confirmation)) {
+            request.setAttribute("password_mismatch", true);
+            request.setAttribute("message", "Passwords do not match, please try again.");
+            rd.forward(request, response);
+            return;
+        }
+        User user = new User(username, password, email, first_name, last_name, cluster);
+        user.Register();
         response.sendRedirect("/Instagrim");
     }
 
