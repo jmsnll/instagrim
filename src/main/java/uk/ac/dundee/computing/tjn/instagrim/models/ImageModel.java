@@ -37,12 +37,11 @@ public class ImageModel {
 
     public void insertImage(byte[] b, String type, String name, String user) {
         try {
-            Convertors convertor = new Convertors();
 
             String types[] = Convertors.SplitFiletype(type);
             ByteBuffer buffer = ByteBuffer.wrap(b);
             int length = b.length;
-            java.util.UUID imageID = convertor.getTimeUUID();
+            java.util.UUID imageID = Convertors.getTimeUUID();
 
             //The following is a quick and dirty way of doing this, will fill the disk quickly !
             Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
@@ -148,7 +147,6 @@ public class ImageModel {
         String type = null;
         int length = 0;
         try {
-            Convertors convertor = new Convertors();
             ResultSet rs = null;
             PreparedStatement ps = null;
 
