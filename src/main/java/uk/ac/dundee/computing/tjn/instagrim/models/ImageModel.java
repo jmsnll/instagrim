@@ -13,6 +13,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.SimpleStatement;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -21,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
@@ -41,7 +43,7 @@ public class ImageModel {
             String types[] = Convertors.SplitFiletype(type);
             ByteBuffer buffer = ByteBuffer.wrap(b);
             int length = b.length;
-            java.util.UUID imageID = Convertors.getTimeUUID();
+            UUID imageID = Convertors.getTimeUUID();
 
             //The following is a quick and dirty way of doing this, will fill the disk quickly !
             Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
@@ -57,7 +59,7 @@ public class ImageModel {
             Session session = cluster.connect("instagrim");
 
             PreparedStatement psInsertImage = session.prepare("insert into images ( imageID, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
-            PreparedStatement psInsertImageToUser = session.prepare("insert into userimagelist ( imageID, user, image_added) values(?,?,?)");
+            PreparedStatement psInsertImageToUser = session.prepare("insert into posts ( imageID, user, image_added) values(?,?,?)");
             BoundStatement bsInsertImage = new BoundStatement(psInsertImage);
             BoundStatement bsInsertImageToUser = new BoundStatement(psInsertImageToUser);
 
@@ -119,23 +121,39 @@ public class ImageModel {
     public LinkedList<ImageStore> getImagesForUser(String username) {
         LinkedList<ImageStore> images = new LinkedList<>();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select imageid from userimagelist where user =?");
-        ResultSet rs = null;
-        BoundStatement boundStatement = new BoundStatement(ps);
-        rs = session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        username));
+        PreparedStatement ps = session.prepare("select imageid from posts where user =?");
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet rs = session.execute(bs.bind(username));
         if (rs.isExhausted()) {
             System.out.println("No Images returned");
             return null;
         } else {
             for (Row row : rs) {
                 ImageStore image = new ImageStore();
-                java.util.UUID UUID = row.getUUID("imageID");
-                System.out.println("UUID" + UUID.toString());
-                image.setID(UUID);
+                UUID uuid = row.getUUID("imageID");
+                System.out.println("UUID" + uuid.toString());
+                image.setID(uuid);
                 images.add(image);
 
+            }
+        }
+        return images;
+    }
+
+    public LinkedList<ImageStore> getMostRecent() {
+        LinkedList<ImageStore> images = new LinkedList<>();
+        Session session = cluster.connect("instagrim");
+        SimpleStatement ss = new SimpleStatement("select imageid from posts limit 9");
+        ResultSet rs = session.execute(ss);
+
+        if (rs.isExhausted()) {
+
+        } else {
+            for (Row row : rs) {
+                ImageStore image = new ImageStore();
+                UUID uuid = row.getUUID("imageID");
+                image.setID(uuid);
+                images.add(image);
             }
         }
         return images;
