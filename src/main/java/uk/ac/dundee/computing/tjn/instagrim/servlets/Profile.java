@@ -1,18 +1,13 @@
 package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
-import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,15 +15,15 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 
-@WebServlet(name = "Profile", urlPatterns = {"/profile/*"}, initParams = {
-    @WebInitParam(name = "Name", value = "Value")})
+@WebServlet(urlPatterns = {"/profile/*"})
+@MultipartConfig
+
 public class Profile extends HttpServlet {
 
     private Cluster cluster;
-    private UserModel user;
 
     public Profile() {
-
+        super();
     }
 
     @Override
@@ -40,12 +35,17 @@ public class Profile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
         String username = args[2];
-        String postID = "";
-        user = new UserModel(username, cluster);
-        try (PrintWriter pw = response.getWriter()) {
-            pw.write("Profile: " + username);
-            pw.write("\nFirst name: " + user.getFirst_name());
-            pw.write("\nPost ID: " + postID);
+        DisplayProfile(username, request, response);
+    }
+
+    private void DisplayProfile(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
+        if (UserModel.Exists(username, cluster)) {
+            request.setAttribute("user", username);
+            rd.forward(request, response);
+        } else {
+            PrintWriter pw = response.getWriter();
+            pw.write("User '" + username + "' does not exist.");
         }
     }
 

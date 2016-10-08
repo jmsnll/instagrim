@@ -45,8 +45,6 @@
                             <ul class="dropdown-menu">
                                 <%
                                     SessionStore ss = (SessionStore) session.getAttribute("LoggedIn");
-                                    String username = ss.getUsername();
-
                                     if (ss != null && ss.isLoggedIn()) {
 
                                 %>
@@ -88,29 +86,11 @@
                 <div class="col-lg-12 text-center user-profile">
                     <h1>Welcome to Instagrim!</h1>
                 </div>
-                <div class="col-lg-12 user-profile">
-
-                </div>
-                <%
-                    Cluster cluster = CassandraHosts.getCluster();
-                    ImageModel im = new ImageModel(cluster);
-                    LinkedList<ImageStore> images = im.getImagesForUser(username);
-                    if (images == null) {
-                %>
-                <p>No posts found!</p>
-                <%} else {
-                    Iterator<ImageStore> iterator = images.iterator();
-                    while (iterator.hasNext()) {
-                        ImageStore is = (ImageStore) iterator.next();
-                %>
+                <p><%=session.getAttribute("user")%></p>
                 <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-image: url('/Instagrim/Image/<%=is.getID()%>')">
+                    <div class="user-post" style="background-color: red">
                     </div>
                 </div>
-                <%
-                        }
-                    }
-                %>
             </div>
         </div>
     </body>
