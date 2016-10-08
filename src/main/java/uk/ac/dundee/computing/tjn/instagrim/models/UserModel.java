@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import uk.ac.dundee.computing.tjn.instagrim.lib.PasswordStorage;
 import uk.ac.dundee.computing.tjn.instagrim.lib.TwoFactorAuthUtil;
 
-public class User {
+public class UserModel {
 
     private String username;
     private String password;
@@ -27,18 +27,18 @@ public class User {
 
     private TwoFactorAuthUtil twoFactorHandler = new TwoFactorAuthUtil();
 
-    public User(String username, Cluster cluster) {
+    public UserModel(String username, Cluster cluster) {
         this.username = username;
         this.cluster = cluster;
         pull();
     }
 
-    public User(String username, String password, String email, String first_name, String last_name, Cluster cluster) {
+    public UserModel(String username, String password, String email, String first_name, String last_name, Cluster cluster) {
         this.username = username;
         try {
             this.password = PasswordStorage.createHash(password);
         } catch (PasswordStorage.CannotPerformOperationException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.email = email;
         this.first_name = first_name;
@@ -95,7 +95,7 @@ public class User {
         try {
             code = twoFactorHandler.generateCurrentNumber(this.base32secret);
         } catch (GeneralSecurityException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return code;
     }
@@ -106,7 +106,7 @@ public class User {
                 return true;
             }
         } catch (GeneralSecurityException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -146,7 +146,7 @@ public class User {
                         return true;
                     }
                 } catch (PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException ex) {
-                    Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -180,7 +180,7 @@ public class User {
         try {
             this.password = PasswordStorage.createHash(password);
         } catch (PasswordStorage.CannotPerformOperationException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

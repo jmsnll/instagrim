@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
-import uk.ac.dundee.computing.tjn.instagrim.models.User;
+import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 
 @WebServlet(name = "Register", urlPatterns = {"/Register"})
 public class Register extends HttpServlet {
@@ -34,7 +34,7 @@ public class Register extends HttpServlet {
 
         RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
 
-        if (User.Exists(username, cluster)) {
+        if (UserModel.Exists(username, cluster)) {
             request.setAttribute("username_taken", true);
             request.setAttribute("message", "Looks like that username is already taken, please try again.");
             rd.forward(request, response);
@@ -46,7 +46,7 @@ public class Register extends HttpServlet {
             rd.forward(request, response);
             return;
         }
-        User user = new User(username, password, email, first_name, last_name, cluster);
+        UserModel user = new UserModel(username, password, email, first_name, last_name, cluster);
         user.Register();
         rd.forward(request, response);
         response.sendRedirect("/Instagrim");

@@ -8,6 +8,7 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,14 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.tjn.instagrim.models.User;
+import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 
-@WebServlet(name = "Profile", urlPatterns = {"/profile/*", "/profile/edit/"}, initParams = {
+@WebServlet(name = "Profile", urlPatterns = {"/profile/*"}, initParams = {
     @WebInitParam(name = "Name", value = "Value")})
 public class Profile extends HttpServlet {
 
     private Cluster cluster;
-    private User user;
+    private UserModel user;
 
     public Profile() {
 
@@ -36,25 +37,20 @@ public class Profile extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
-        String profileName = args[2];
-        String postID = args[3];
-        if (profileName.equals("edit")) {
-
-        }
-        user = new User(profileName, cluster);
+        String username = args[2];
+        String postID = "";
+        user = new UserModel(username, cluster);
         try (PrintWriter pw = response.getWriter()) {
-            pw.write("Profile: " + profileName);
+            pw.write("Profile: " + username);
             pw.write("\nFirst name: " + user.getFirst_name());
             pw.write("\nPost ID: " + postID);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 }
