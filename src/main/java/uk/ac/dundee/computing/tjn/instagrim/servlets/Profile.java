@@ -2,7 +2,6 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,9 +10,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
+import uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore;
 
 @WebServlet(urlPatterns = {"/profile/*"})
 @MultipartConfig
@@ -33,20 +34,17 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
+
         String args[] = Convertors.SplitRequestPath(request);
         String username = args[2];
-        DisplayProfile(username, request, response);
-    }
 
-    private void DisplayProfile(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
-        if (UserModel.Exists(username, cluster)) {
-            request.setAttribute("user", username);
-            rd.forward(request, response);
-        } else {
-            PrintWriter pw = response.getWriter();
-            pw.write("User '" + username + "' does not exist.");
-        }
+        UserModel user = new UserModel(username, cluster);
+        ProfileStore profile = new ProfileStore(user);
+        javax.swing.JOptionPane.showMessageDialog(null, profile.getUsername());
+        request.setAttribute("Profile", profile);
+        rd.forward(request, response);
     }
 
     @Override

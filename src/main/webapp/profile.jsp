@@ -1,3 +1,4 @@
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.models.ImageModel"%>
 <%@page import="com.datastax.driver.core.Cluster"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
@@ -45,8 +46,8 @@
                             <ul class="dropdown-menu">
                                 <%
                                     SessionStore ss = (SessionStore) session.getAttribute("LoggedIn");
+                                    ProfileStore profile = (ProfileStore) session.getAttribute("Profile");
                                     if (ss != null && ss.isLoggedIn()) {
-
                                 %>
                                 <li>
                                 <li><a href="">My Account</a>
@@ -57,7 +58,7 @@
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Logout</a>
                                 </li>
-                                <%                                } else {
+                                <%} else {
                                 %>
                                 <li><a href="login.jsp">Sign In</a>
                                 </li>
@@ -84,9 +85,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center user-profile">
-                    <h1>Welcome to Instagrim!</h1>
+                    <h1>Welcome to Instagrim, <%=profile.getUsername()%>!</h1>
                 </div>
-                <p><%=session.getAttribute("user")%></p>
                 <div class="col-sm-4 text-center">
                     <div class="user-post" style="background-color: red">
                     </div>
