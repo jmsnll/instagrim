@@ -16,7 +16,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore;
 
-@WebServlet(urlPatterns = {"/profile/*"})
+@WebServlet(urlPatterns = {"/profile", "/profile/*"})
 @MultipartConfig
 
 public class Profile extends HttpServlet {
@@ -34,16 +34,26 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
-
         String args[] = Convertors.SplitRequestPath(request);
-        String username = args[2];
+        if (args.length > 2) {
+            DisplayUser(args[2], request, response);
+        } else {
+            DisplayCurrentProfile(request, response);
+        }
+    }
 
+    private void DisplayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
+        HttpSession session = request.getSession();
         UserModel user = new UserModel(username, cluster);
         ProfileStore profile = new ProfileStore(user);
-        javax.swing.JOptionPane.showMessageDialog(null, profile.getUsername());
-        request.setAttribute("Profile", profile);
+
+        session.setAttribute("Profile", profile);
+        rd.forward(request, response);
+    }
+
+    private void DisplayCurrentProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher("/profie.jsp");
         rd.forward(request, response);
     }
 
