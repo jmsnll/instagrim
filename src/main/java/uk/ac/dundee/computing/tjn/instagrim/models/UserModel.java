@@ -7,6 +7,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.security.GeneralSecurityException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.ac.dundee.computing.tjn.instagrim.lib.PasswordStorage;
@@ -16,11 +17,12 @@ public class UserModel {
 
     private String username;
     private String password;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String email;
     private Boolean emailVerified;
     private String base32secret;
+    private UUID profilePic;
     private String bio;
 
     private final Cluster cluster;
@@ -41,8 +43,8 @@ public class UserModel {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.email = email;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = first_name;
+        this.lastName = last_name;
         this.base32secret = null;
         this.cluster = cluster;
     }
@@ -56,8 +58,8 @@ public class UserModel {
 
         for (Row row : rs) {
             this.password = row.getString("password");
-            this.first_name = row.getString("first_name");
-            this.last_name = row.getString("last_name");
+            this.firstName = row.getString("first_name");
+            this.lastName = row.getString("last_name");
             this.email = row.getString("email");
             this.emailVerified = row.getBool("emailVerified");
             this.base32secret = row.getString("base32secret");
@@ -69,7 +71,7 @@ public class UserModel {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, first_name = ?, last_name = ?, email = ?, emailVerified = ?, base32secret = ?, bio = ? WHERE username = ?;");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(this.password, this.first_name, this.last_name, this.email, this.emailVerified, this.base32secret, this.bio, this.username));
+        session.execute(bs.bind(this.password, this.firstName, this.lastName, this.email, this.emailVerified, this.base32secret, this.bio, this.username));
     }
 
     public boolean isTwoFactorEnabled() {
@@ -118,7 +120,7 @@ public class UserModel {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, first_name, last_name, email, emailVerified) Values(?,?,?,?,?,?)");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(username, password, first_name, last_name, email, false));
+        session.execute(bs.bind(username, password, firstName, lastName, email, false));
         return true;
     }
 
@@ -212,19 +214,27 @@ public class UserModel {
         this.bio = bio;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public UUID getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(UUID profilePic) {
+        this.profilePic = profilePic;
     }
 }
