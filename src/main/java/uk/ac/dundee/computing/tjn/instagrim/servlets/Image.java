@@ -81,7 +81,7 @@ public class Image extends HttpServlet {
     private void DisplayImageList(String user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ImageModel im = new ImageModel(cluster);
         LinkedList<ImageStore> listImages = im.getImagesForUser(user);
-        RequestDispatcher rd = request.getRequestDispatcher("/gallery.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/discover.jsp");
         request.setAttribute("Images", listImages);
         rd.forward(request, response);
     }
