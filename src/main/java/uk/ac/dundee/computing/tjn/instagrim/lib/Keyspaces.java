@@ -56,12 +56,12 @@ public final class Keyspaces {
                     + "      first_name varchar,\n"
                     + "      last_name varchar,\n"
                     + "      email varchar,\n"
-                    + "      emailVerified boolean,\n"
+                    + "      email_verified boolean,\n"
                     + "      base32secret varchar,\n"
                     + "      following set<varchar>,\n"
                     + "      followers set<varchar>,\n"
                     + "      bio text,\n"
-                    + "      profile_pic uuid\n"
+                    + "      profile_pic blob\n"
                     + "  );";
             Session session = c.connect();
             try {

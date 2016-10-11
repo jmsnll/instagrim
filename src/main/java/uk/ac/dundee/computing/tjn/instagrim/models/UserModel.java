@@ -7,8 +7,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.security.GeneralSecurityException;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.ac.dundee.computing.tjn.instagrim.lib.PasswordStorage;
@@ -23,10 +22,9 @@ public class UserModel {
     private String email;
     private Boolean emailVerified;
     private String base32secret;
-    private HashSet<String> followers;
-    private HashSet<String> following;
+    private Set<String> followers;
+    private Set<String> following;
     private String bio;
-    private UUID profilePic;
 
     private final Cluster cluster;
 
@@ -64,17 +62,21 @@ public class UserModel {
             this.firstName = row.getString("first_name");
             this.lastName = row.getString("last_name");
             this.email = row.getString("email");
-            this.emailVerified = row.getBool("emailVerified");
+            this.emailVerified = row.getBool("email_verified");
             this.base32secret = row.getString("base32secret");
             this.bio = row.getString("bio");
+            this.following = row.getSet("following", String.class);
+            this.followers = row.getSet("followers", String.class);
         }
     }
 
     public void push() {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, first_name = ?, last_name = ?, email = ?, emailVerified = ?, base32secret = ?, bio = ? WHERE username = ?;");
+        PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, "
+                + "first_name = ?, last_name = ?, email = ?, emailVerified = ?, base32secret = ?,"
+                + " bio = ?, following = ?, followers = ? WHERE username = ?;");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(this.password, this.firstName, this.lastName, this.email, this.emailVerified, this.base32secret, this.bio, this.username));
+        session.execute(bs.bind(this.password, this.firstName, this.lastName, this.email, this.emailVerified, this.base32secret, this.bio, this.following, this.followers, this.username));
     }
 
     public boolean isTwoFactorEnabled() {
@@ -247,27 +249,19 @@ public class UserModel {
         this.lastName = lastName;
     }
 
-    public UUID getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(UUID profilePic) {
-        this.profilePic = profilePic;
-    }
-
-    public HashSet<String> getFollowers() {
+    public Set<String> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(HashSet<String> followers) {
+    public void setFollowers(Set<String> followers) {
         this.followers = followers;
     }
 
-    public HashSet<String> getFollowing() {
+    public Set<String> getFollowing() {
         return following;
     }
 
-    public void setFollowing(HashSet<String> following) {
+    public void setFollowing(Set<String> following) {
         this.following = following;
     }
 }
