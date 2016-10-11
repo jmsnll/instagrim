@@ -40,29 +40,27 @@ public class Profile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
         switch (args.length) {
+            // instagrim/profile
             case 2:
                 DisplayCurrentProfile(request, response);
                 break;
+            // instagrim/profile/<username>
             case 3:
                 DisplayUser(args[2], request, response);
                 break;
+            // instagrim/profile/<username>/<postid>
             case 4:
                 DisplayPost(UUID.fromString(args[3]), request, response);
                 break;
         }
-        if (args.length == 3) {
-            DisplayUser(args[2], request, response);
-        } else {
-            DisplayCurrentProfile(request, response);
-        }
     }
 
     private void DisplayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        RequestDispatcher rd = request.getRequestDispatcher("/views/viewpost.jsp");
     }
 
     private void DisplayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         if (UserModel.Exists(username, cluster)) {
             UserModel user = new UserModel(username, cluster);
@@ -76,14 +74,14 @@ public class Profile extends HttpServlet {
     }
 
     private void DisplayCurrentProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/profie.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
         DisplayUser(sessionStore.getUsername(), request, response);
     }
 
     private void DisplayError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/profile.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         session.setAttribute("UserNotFound", true);
         rd.forward(request, response);

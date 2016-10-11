@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.tjn.instagrim.models.ImageModel;
+import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
@@ -72,10 +72,10 @@ public class Image extends HttpServlet {
         }
     }
 
-    private void DisplayImage(int type, String imageID, HttpServletResponse response) throws ServletException, IOException {
-        ImageModel im = new ImageModel(cluster);
+    private void DisplayImage(int type, String postID, HttpServletResponse response) throws ServletException, IOException {
+        PostModel im = new PostModel(cluster);
 
-        ImageStore image = im.getImage(type, UUID.fromString(imageID));
+        ImageStore image = im.getImage(type, UUID.fromString(postID));
 
         OutputStream os = response.getOutputStream();
 
@@ -97,7 +97,6 @@ public class Image extends HttpServlet {
             System.out.println("Part Name " + part.getName());
 
             String type = part.getContentType();
-            String filename = part.getSubmittedFileName();
 
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
@@ -111,8 +110,8 @@ public class Image extends HttpServlet {
                 byte[] b = new byte[i + 1];
                 is.read(b);
                 System.out.println("Length : " + b.length);
-                ImageModel tm = new ImageModel(cluster);
-                tm.insertImage(b, type, filename, username);
+                PostModel tm = new PostModel(cluster);
+                tm.createPost(username, "caption_placeholder", b, type);
 
                 is.close();
             }

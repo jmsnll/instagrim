@@ -1,5 +1,5 @@
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore"%>
-<%@page import="uk.ac.dundee.computing.tjn.instagrim.models.ImageModel"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.models.PostModel"%>
 <%@page import="com.datastax.driver.core.Cluster"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
 <%@page import="java.util.Iterator"%>
@@ -20,7 +20,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link href="../res/css/style.css" rel="stylesheet">
+        <link href="res/css/style.css" rel="stylesheet">
 
         <script type="text/javascript" src="https://use.fontawesome.com/0ba8b6a4e2.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -98,8 +98,8 @@
                 <%
                     }
                     Cluster cluster = CassandraHosts.getCluster();
-                    ImageModel im = new ImageModel(cluster);
-                    LinkedList<ImageStore> images = im.getImagesForUser(profile.getUsername());
+                    PostModel im = new PostModel(cluster);
+                    LinkedList<ImageStore> images = im.getUsersImages(profile.getUsername());
                     if (images == null) {
                 %>
                 <p>Looks like <%=profile.getFirstName()%> hasn't made any posts yet!</p>

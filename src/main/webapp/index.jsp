@@ -1,4 +1,4 @@
-<%@page import="uk.ac.dundee.computing.tjn.instagrim.models.ImageModel"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.models.PostModel"%>
 <%@page import="com.datastax.driver.core.Cluster"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
 <%@page import="java.util.Iterator"%>
@@ -87,8 +87,8 @@
                 </div>
                 <%
                     Cluster cluster = CassandraHosts.getCluster();
-                    ImageModel im = new ImageModel(cluster);
-                    LinkedList<ImageStore> images = im.getMostRecent();
+                    PostModel post = new PostModel(cluster);
+                    LinkedList<ImageStore> images = post.getMostRecentImages();
                     if (images == null) {
                 %>
                 <p>No posts found!</p>

@@ -27,8 +27,14 @@ public final class Keyspaces {
                     + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
-                    + " PRIMARY KEY (imageid)"
+                    + " PRIMARY KEY (postid, username)"
                     + ")";
+            String createAccountPostsTable = "CREATE TABLE if not exists instagrim.accountposts (\n"
+                    + "postid uuid,\n"
+                    + "username varchar,\n"
+                    + "posted timestamp,\n"
+                    + "PRIMARY KEY (username, posted)\n"
+                    + ") WITH CLUSTERING ORDER BY (posted desc);";
             String createCommentsTable = "CREATE TABLE if not exists instagrim.postcomments ("
                     + "commentid uuid,"
                     + "username varchar,"
@@ -74,14 +80,14 @@ public final class Keyspaces {
             } catch (Exception ex) {
                 System.out.println("Can't create images table " + ex);
             }
-//            System.out.println("" + createPostsTable);
-//
-//            try {
-//                SimpleStatement cqlQuery = new SimpleStatement(createPostsTable);
-//                session.execute(cqlQuery);
-//            } catch (Exception ex) {
-//                System.out.println("Can't create user image list table " + ex);
-//            }
+            System.out.println("" + createAccountPostsTable);
+
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(createAccountPostsTable);
+                session.execute(cqlQuery);
+            } catch (Exception ex) {
+                System.out.println("Can't create account posts table " + ex);
+            }
             System.out.println("" + createCommentsTable);
 
             try {

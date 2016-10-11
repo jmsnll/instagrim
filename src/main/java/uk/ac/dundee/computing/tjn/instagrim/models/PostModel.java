@@ -35,7 +35,7 @@ public class PostModel {
 
     private String username;
     private UUID postID;
-    private LocalDate posted;
+    private Date posted;
     private String caption;
     private TreeSet<String> likes;
     private TreeSet<UUID> comments;
@@ -59,10 +59,16 @@ public class PostModel {
             ByteBuffer processedBuffer = ByteBuffer.wrap(processed);
             Session session = cluster.connect("instagrim");
             PreparedStatement psInsertPost = session.prepare("INSERT INTO posts (postid, username, posted, caption, likes, comments, image, thumbnail, processed, imageLength, thumbnailLength, processedLength, type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement psInsertAccountPosts = session.prepare("INSERT INTO accountposts (postid, username, posted) VALUES (?,?,?)");
             BoundStatement bsInsertPost = new BoundStatement(psInsertPost);
-            LocalDate now = LocalDate.fromMillisSinceEpoch(System.currentTimeMillis());
+            BoundStatement bsInsertAccountPosts = new BoundStatement(psInsertAccountPosts);
+
+            Date now = new Date(System.currentTimeMillis());
+            javax.swing.JOptionPane.showMessageDialog(null, now.toString());
+
             TreeSet emptyTreeSet = new TreeSet();
             session.execute(bsInsertPost.bind(postID, username, now, caption, emptyTreeSet, emptyTreeSet, imageBuffer, thumbnailBuffer, processedBuffer, image.length, thumbnail.length, processed.length, type));
+            session.execute(bsInsertAccountPosts.bind(postID, username, now));
             session.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PostModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,9 +83,9 @@ public class PostModel {
         }
     }
 
-    public byte[] imageResize(String imageID, String type) {
+    public byte[] imageResize(String postID, String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + imageID));
+            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
             BufferedImage thumbnail = createThumbnail(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(thumbnail, type, baos);
@@ -94,9 +100,9 @@ public class PostModel {
         return null;
     }
 
-    public byte[] imageDecolour(String imageID, String type) {
+    public byte[] imageDecolour(String postID, String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + imageID));
+            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
             BufferedImage processed = createProcessed(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(processed, type, baos);
@@ -135,7 +141,7 @@ public class PostModel {
             post.setCaption(row.getString("caption"));
             post.setComments(row.getSet("comments", UUID.class));
             post.setLikes(row.getSet("likes", String.class));
-            post.setPosted(row.getDate("posted"));
+//            post.setPosted(row.getTimestamp("posted"));
             post.setUsername(row.getString("username"));
             return post;
         }
@@ -157,7 +163,7 @@ public class PostModel {
                 post.setCaption(row.getString("caption"));
                 post.setComments(row.getSet("comments", UUID.class));
                 post.setLikes(row.getSet("likes", String.class));
-                post.setPosted(row.getDate("posted"));
+//                post.setPosted(row.getTimestamp("posted"));
                 post.setUsername(row.getString("username"));
                 posts.add(post);
             }
@@ -185,7 +191,7 @@ public class PostModel {
                 post.setCaption(row.getString("caption"));
                 post.setComments(row.getSet("comments", UUID.class));
                 post.setLikes(row.getSet("likes", String.class));
-                post.setPosted(row.getDate("posted"));
+//                post.setPosted(row.getTimestamp("posted"));
                 post.setUsername(row.getString("username"));
                 posts.add(post);
             }
@@ -225,7 +231,7 @@ public class PostModel {
         } else {
             for (Row row : rs) {
                 ImageStore image = new ImageStore();
-                UUID uuid = row.getUUID("imageID");
+                UUID uuid = row.getUUID("postid");
                 image.setID(uuid);
                 images.add(image);
             }
@@ -277,5 +283,53 @@ public class PostModel {
         ImageStore image = new ImageStore();
         image.setImage(imageBuffer, length, type);
         return image;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UUID getPostID() {
+        return postID;
+    }
+
+    public void setPostID(UUID postID) {
+        this.postID = postID;
+    }
+
+    public Date getPosted() {
+        return posted;
+    }
+
+    public void setPosted(Date posted) {
+        this.posted = posted;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public TreeSet<String> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(TreeSet<String> likes) {
+        this.likes = likes;
+    }
+
+    public TreeSet<UUID> getComments() {
+        return comments;
+    }
+
+    public void setComments(TreeSet<UUID> comments) {
+        this.comments = comments;
     }
 }
