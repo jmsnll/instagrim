@@ -29,9 +29,7 @@ import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 @WebServlet(urlPatterns = {
     "/Image",
     "/Image/*",
-    "/Thumb/*",
-    "/Images",
-    "/Images/*"
+    "/Thumb/*"
 })
 @MultipartConfig
 
@@ -44,8 +42,7 @@ public class Image extends HttpServlet {
     public Image() {
         super();
         CommandsMap.put("Image", 1);
-        CommandsMap.put("Images", 2);
-        CommandsMap.put("Thumb", 3);
+        CommandsMap.put("Thumb", 2);
     }
 
     @Override
@@ -68,22 +65,11 @@ public class Image extends HttpServlet {
                 DisplayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
                 break;
             case 2:
-                DisplayImageList(args[2], request, response);
-                break;
-            case 3:
                 DisplayImage(Convertors.DISPLAY_THUMB, args[2], response);
                 break;
             default:
                 error("Bad Operator", response);
         }
-    }
-
-    private void DisplayImageList(String user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ImageModel im = new ImageModel(cluster);
-        LinkedList<ImageStore> listImages = im.getImagesForUser(user);
-        RequestDispatcher rd = request.getRequestDispatcher("/discover.jsp");
-        request.setAttribute("Images", listImages);
-        rd.forward(request, response);
     }
 
     private void DisplayImage(int type, String imageID, HttpServletResponse response) throws ServletException, IOException {
