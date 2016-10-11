@@ -24,7 +24,7 @@
             <br>
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                    <form role="form" method="post" action="Login">
+                    <form role="form" method="post" action="login">
                         <fieldset>
                             <hr>
                             <div class="form-group has-feedback">

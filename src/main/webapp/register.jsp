@@ -24,7 +24,7 @@
             <br>
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                    <form role="form" method="post" action="Register">
+                    <form role="form" method="post" action="register">
                         <%
                             boolean username_taken = false;
                             boolean password_mismatch = false;
@@ -60,15 +60,6 @@
                                 </div>
                             </div>
                         </div>
-                        <%
-                            if (username_taken) {
-                        %>
-                        <div class="form-group">
-                            ALREADY TAKEN: <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username" tabindex="3">
-                        </div>
-                        <%
-                        } else {
-                        %>
                         <div class="form-group">
                             <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username" tabindex="3">
                         </div>

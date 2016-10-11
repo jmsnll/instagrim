@@ -27,9 +27,9 @@ import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
 @WebServlet(urlPatterns = {
-    "/Image",
-    "/Image/*",
-    "/Thumb/*"
+    "/image",
+    "/image/*",
+    "/thumb/*"
 })
 @MultipartConfig
 

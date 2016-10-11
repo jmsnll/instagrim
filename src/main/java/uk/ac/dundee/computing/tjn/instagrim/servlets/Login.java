@@ -14,7 +14,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
-@WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
+@WebServlet(name = "Login", urlPatterns = {"/login", "/login/*"})
 public class Login extends HttpServlet {
 
     private Cluster cluster = null;
@@ -63,7 +63,6 @@ public class Login extends HttpServlet {
 
     private void doTwoFactor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-        javax.swing.JOptionPane.showMessageDialog(null, code);
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
         UserModel user = new UserModel(sessionStore.getUsername(), cluster);
