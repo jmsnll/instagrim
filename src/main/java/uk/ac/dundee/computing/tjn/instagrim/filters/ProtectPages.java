@@ -98,9 +98,9 @@ public class ProtectPages implements Filter {
         System.out.println("Doing filter");
         HttpServletRequest httpReq = (HttpServletRequest) request;
         HttpSession session = httpReq.getSession(false);
-        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+        SessionStore ss = (SessionStore) session.getAttribute("LoggedIn");
         System.out.println("Session in filter " + session);
-        if ((sessionStore == null) || (sessionStore.isLoggedIn() == false)) {
+        if ((ss == null) || (ss.isLoggedIn() == false)) {
             System.out.println("Foward to login");
             RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
