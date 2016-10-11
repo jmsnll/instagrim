@@ -143,7 +143,7 @@ public class ImageModel {
     public LinkedList<ImageStore> getMostRecent() {
         LinkedList<ImageStore> images = new LinkedList<>();
         Session session = cluster.connect("instagrim");
-        SimpleStatement statement = new SimpleStatement("select postid from posts limit 9");
+        SimpleStatement statement = new SimpleStatement("select imageid from images limit 9");
         ResultSet rs = session.execute(statement);
 
         if (rs.isExhausted()) {
@@ -151,7 +151,7 @@ public class ImageModel {
         } else {
             for (Row row : rs) {
                 ImageStore image = new ImageStore();
-                UUID uuid = row.getUUID("imageID");
+                UUID uuid = row.getUUID("imageid");
                 image.setID(uuid);
                 images.add(image);
             }

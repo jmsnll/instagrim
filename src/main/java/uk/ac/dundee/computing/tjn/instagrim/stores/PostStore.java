@@ -6,19 +6,19 @@ import java.util.UUID;
 
 public class PostStore {
 
-    private UUID imageID;
+    private UUID postID;
     private String username;
     private LocalDate posted;
     private String caption;
     private Set<String> likes;
     private Set<UUID> comments;
 
-    public UUID getImageID() {
-        return imageID;
+    public UUID getPostID() {
+        return postID;
     }
 
-    public void setImageID(UUID imageID) {
-        this.imageID = imageID;
+    public void setPostID(UUID postID) {
+        this.postID = postID;
     }
 
     public String getUsername() {
@@ -60,5 +60,5 @@ public class PostStore {
     public void setComments(Set<UUID> comments) {
         this.comments = comments;
     }
-    
+
 }

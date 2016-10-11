@@ -12,16 +12,18 @@ public final class Keyspaces {
         try {
             //Add some keyspaces here
             String createKeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
-            String createImagesTable = "CREATE TABLE if not exists instagrim.images ("
+            String createPostsTable = "CREATE TABLE if not exists instagrim.posts ("
+                    + " postid uuid, "
                     + " username varchar,"
-                    + " imageid uuid, "
-                    + " interaction_time timestamp,"
-                    + " title varchar,"
+                    + " posted timestamp,"
+                    + " caption varchar,"
+                    + " likes set<varchar>,"
+                    + " comments set<uuid>,"
                     + " image blob,"
-                    + " thumb blob,"
                     + " processed blob,"
+                    + " thumbnail blob,"
                     + " imagelength int,"
-                    + " thumblength int,"
+                    + " thumbnaillength int,"
                     + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
@@ -30,18 +32,18 @@ public final class Keyspaces {
             String createCommentsTable = "CREATE TABLE if not exists instagrim.postcomments ("
                     + "commentid uuid,"
                     + "username varchar,"
-                    + "comment_posted timestamp,"
+                    + "_posted timestamp,"
                     + "caption text,"
                     + "PRIMARY KEY (commentid)"
                     + ")";
-            String createPostsTable = "CREATE TABLE if not exists instagrim.posts (\n"
-                    + "postid uuid PRIMARY KEY,\n"
-                    + "username varchar,\n"
-                    + "posted timestamp,\n"
-                    + "caption text,\n"
-                    + "likes set<varchar>,\n"
-                    + "comments set<uuid>\n"
-                    + ");";
+//            String createPostsTable = "CREATE TABLE if not exists instagrim.posts (\n"
+//                    + "postid uuid PRIMARY KEY,\n"
+//                    + "username varchar,\n"
+//                    + "posted timestamp,\n"
+//                    + "caption text,\n"
+//                    + "likes set<varchar>,\n"
+//                    + "comments set<uuid>\n"
+//                    + ");";
             String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      username varchar PRIMARY KEY,\n"
                     + "      password text,\n"
@@ -64,22 +66,22 @@ public final class Keyspaces {
             }
 
             //now add some column families
-            System.out.println("" + createImagesTable);
-
-            try {
-                SimpleStatement cqlQuery = new SimpleStatement(createImagesTable);
-                session.execute(cqlQuery);
-            } catch (Exception ex) {
-                System.out.println("Can't create images table " + ex);
-            }
             System.out.println("" + createPostsTable);
 
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(createPostsTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
-                System.out.println("Can't create user image list table " + ex);
+                System.out.println("Can't create images table " + ex);
             }
+//            System.out.println("" + createPostsTable);
+//
+//            try {
+//                SimpleStatement cqlQuery = new SimpleStatement(createPostsTable);
+//                session.execute(cqlQuery);
+//            } catch (Exception ex) {
+//                System.out.println("Can't create user image list table " + ex);
+//            }
             System.out.println("" + createCommentsTable);
 
             try {
