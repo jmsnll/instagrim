@@ -4,6 +4,7 @@ import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -38,11 +39,26 @@ public class Profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
-        if (args.length > 2) {
+        switch (args.length) {
+            case 2:
+                DisplayCurrentProfile(request, response);
+                break;
+            case 3:
+                DisplayUser(args[2], request, response);
+                break;
+            case 4:
+                DisplayPost(UUID.fromString(args[3]), request, response);
+                break;
+        }
+        if (args.length == 3) {
             DisplayUser(args[2], request, response);
         } else {
             DisplayCurrentProfile(request, response);
         }
+    }
+
+    private void DisplayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
     private void DisplayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
