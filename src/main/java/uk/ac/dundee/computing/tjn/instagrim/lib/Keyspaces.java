@@ -13,7 +13,7 @@ public final class Keyspaces {
             //Add some keyspaces here
             String createKeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
             String createImagesTable = "CREATE TABLE if not exists instagrim.images ("
-                    + " user varchar,"
+                    + " username varchar,"
                     + " imageid uuid, "
                     + " interaction_time timestamp,"
                     + " title varchar,"
@@ -29,28 +29,28 @@ public final class Keyspaces {
                     + ")";
             String createCommentsTable = "CREATE TABLE if not exists instagrim.postcomments ("
                     + "commentid uuid,"
-                    + "user varchar,"
+                    + "username varchar,"
                     + "comment_posted timestamp,"
                     + "caption text,"
                     + "PRIMARY KEY (commentid)"
                     + ")";
             String createPostsTable = "CREATE TABLE if not exists instagrim.posts (\n"
                     + "imageid uuid,\n"
-                    + "user varchar,\n"
+                    + "username varchar,\n"
                     + "posted timestamp,\n"
                     + "caption text,\n"
-                    + "likes set<text>,\n"
+                    + "likes set<varchar>,\n"
                     + "comments set<uuid>,\n"
-                    + "PRIMARY KEY (imageid, user)\n"
+                    + "PRIMARY KEY (username, posted)\n"
                     + ") WITH CLUSTERING ORDER BY (posted desc);";
             String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
-                    + "      username text PRIMARY KEY,\n"
+                    + "      username varchar PRIMARY KEY,\n"
                     + "      password text,\n"
-                    + "      first_name text,\n"
-                    + "      last_name text,\n"
-                    + "      email text,\n"
+                    + "      first_name varchar,\n"
+                    + "      last_name varchar,\n"
+                    + "      email varchar,\n"
                     + "      emailVerified boolean,\n"
-                    + "      base32secret text,\n"
+                    + "      base32secret varchar,\n"
                     + "      bio text,\n"
                     + "      profile_pic uuid\n"
                     + "  );";
@@ -71,7 +71,7 @@ public final class Keyspaces {
                 SimpleStatement cqlQuery = new SimpleStatement(createImagesTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
-                System.out.println("Can't create tweet table " + ex);
+                System.out.println("Can't create images table " + ex);
             }
             System.out.println("" + createPostsTable);
 
