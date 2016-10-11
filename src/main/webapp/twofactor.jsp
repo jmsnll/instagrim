@@ -28,8 +28,8 @@
                         <fieldset>
                             <hr>
                             <div class="form-group has-feedback">
-                                <input type="text" name="code" id="code" maxlength="6" class="form-control input-lg" placeholder="2-Factor Code">
-                                <i class="fa fa-user form-control-feedback"></i>
+                                <input autocomplete="off" type="text" name="code" id="code" maxlength="6" class="form-control input-lg" placeholder="2-Factor Code">
+                                <i class="fa fa-lock form-control-feedback"></i>
                             </div>
                             <hr style="clear: both">
                             <div class="row">
