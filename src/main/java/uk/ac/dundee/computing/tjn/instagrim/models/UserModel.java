@@ -73,7 +73,7 @@ public class UserModel {
     public void push() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, "
-                + "first_name = ?, last_name = ?, email = ?, emailVerified = ?, base32secret = ?,"
+                + "first_name = ?, last_name = ?, email = ?, emailed_verified = ?, base32secret = ?,"
                 + " bio = ?, following = ?, followers = ? WHERE username = ?;");
         BoundStatement bs = new BoundStatement(ps);
         session.execute(bs.bind(this.password, this.firstName, this.lastName, this.email, this.emailVerified, this.base32secret, this.bio, this.following, this.followers, this.username));
@@ -123,7 +123,7 @@ public class UserModel {
             return false;
         }
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, first_name, last_name, email, emailVerified) Values(?,?,?,?,?,?)");
+        PreparedStatement ps = session.prepare("INSERT INTO accounts (username, password, first_name, last_name, email, email_verified) Values(?,?,?,?,?,?)");
         BoundStatement bs = new BoundStatement(ps);
         session.execute(bs.bind(username, password, firstName, lastName, email, false));
         return true;
