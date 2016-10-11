@@ -44,8 +44,8 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-circle-o" aria-hidden="true"></i></a>
                             <ul class="dropdown-menu">
                                 <%
-                                    SessionStore ss = (SessionStore) session.getAttribute("LoggedIn");
-                                    if (ss != null && ss.isLoggedIn()) {
+                                    SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+                                    if (sessionStore != null && sessionStore.isLoggedIn()) {
 
                                 %>
                                 <li>
