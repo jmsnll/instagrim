@@ -29,7 +29,7 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        if (!UserModel.Exists(username, cluster) || UserModel.isValidUser(username, password, cluster)) {
+        if (!UserModel.Exists(username, cluster) || !UserModel.isValidUser(username, password, cluster)) {
             request.setAttribute("login_fail", true);
             request.setAttribute("message", "Invalid username or password, please try again.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
@@ -41,11 +41,12 @@ public class Login extends HttpServlet {
             UserModel user = new UserModel(username, cluster);
             if (user.isTwoFactorEnabled()) {
                 sessionStore.setLoggedIn(false);
-                request.setAttribute("2fa", true);
+                session.setAttribute("LoggedIn", sessionStore);
                 request.getRequestDispatcher("/twofactor.jsp").forward(request, response);
                 return;
             } else {
                 sessionStore.setLoggedIn(true);
+                session.setAttribute("LoggedIn", sessionStore);
                 request.getRequestDispatcher("index.jsp").forward(request, response);
                 return;
             }
