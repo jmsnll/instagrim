@@ -2,6 +2,7 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
+import java.util.HashSet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,16 +17,19 @@ import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 @WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
 public class Login extends HttpServlet {
 
-    Cluster cluster = null;
+    private Cluster cluster = null;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        // TODO Auto-generated method stub
         cluster = CassandraHosts.getCluster();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doLogin(request, response);
+    }
+
+    private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -47,9 +51,26 @@ public class Login extends HttpServlet {
             } else {
                 sessionStore.setLoggedIn(true);
                 session.setAttribute("LoggedIn", sessionStore);
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 return;
             }
+        }
+    }
+
+    private void doTwoFactor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String code = request.getParameter("code");
+        HttpSession session = request.getSession();
+        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+        UserModel user = new UserModel(sessionStore.getUsername(), cluster);
+        if (!user.isValidTwoFactorCode(code)) {
+            request.setAttribute("auth_fail", true);
+            request.setAttribute("message", "Invalid code, please try again.");
+            request.getRequestDispatcher("/twofactor.jsp").forward(request, response);
+        } else {
+            sessionStore.setLoggedIn(true);
+            session.setAttribute("LoggedIn", sessionStore);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+
         }
     }
 }
