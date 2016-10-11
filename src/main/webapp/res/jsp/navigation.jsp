@@ -20,13 +20,13 @@
                             if (currentSession != null && currentSession.isLoggedIn()) {
                         %>
                         <li>
-                        <li><a href="">My Account</a>
+                        <li><a href="../profile/">My Account</a>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Settings</a>
+                        <li><a href="">Settings</a>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Logout</a>
+                        <li><a href="">Logout</a>
                         </li>
                         <%} else {
                         %>
