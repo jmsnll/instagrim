@@ -27,8 +27,8 @@ public class PostModel {
         cluster = CassandraHosts.getCluster();
     }
 
-    public PostModel(UUID imageID, String username, String caption) {
-        this.imageID = imageID;
+    public PostModel(UUID postID, String username, String caption) {
+        this.postID = postID;
         this.username = username;
         this.caption = caption;
     }
@@ -57,15 +57,15 @@ public class PostModel {
         this.posted = LocalDate.fromMillisSinceEpoch(System.currentTimeMillis());
         this.likes = new TreeSet<>();
         this.comments = new TreeSet<>();
-        session.execute(bs.bind(this.imageID, this.username, this.posted, this.caption, this.likes, this.comments));
+        session.execute(bs.bind(this.postID, this.username, this.posted, this.caption, this.likes, this.comments));
     }
 
-    public UUID getImageID() {
-        return imageID;
+    public UUID getPostID() {
+        return postID;
     }
 
-    public void setImageID(UUID imageID) {
-        this.imageID = imageID;
+    public void setPostID(UUID postID) {
+        this.postID = postID;
     }
 
     public String getUsername() {
