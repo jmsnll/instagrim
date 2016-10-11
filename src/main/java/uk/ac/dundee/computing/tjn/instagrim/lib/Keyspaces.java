@@ -32,7 +32,7 @@ public final class Keyspaces {
             String createCommentsTable = "CREATE TABLE if not exists instagrim.postcomments ("
                     + "commentid uuid,"
                     + "username varchar,"
-                    + "_posted timestamp,"
+                    + "posted timestamp,"
                     + "caption text,"
                     + "PRIMARY KEY (commentid)"
                     + ")";
