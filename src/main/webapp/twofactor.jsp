@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : twofactor
     Created on : 11-Oct-2016, 02:14:17
     Author     : thms
@@ -13,5 +13,9 @@
     </head>
     <body>
         <h1>Hello World!</h1>
+        <form role="form" method="POST" action="Login">
+            <p>Code: <input type="text" name="code" maxlength="6"></p>
+            <input type="submit" method="post" class="btn btn-lg btn-success btn-block" value="Submit">
+        </form>
     </body>
 </html>

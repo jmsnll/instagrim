@@ -26,7 +26,11 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doLogin(request, response);
+        if (request.getParameter("username") != null) {
+            doLogin(request, response);
+        } else {
+            doTwoFactor(request, response);
+        }
     }
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,6 +63,7 @@ public class Login extends HttpServlet {
 
     private void doTwoFactor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
+        javax.swing.JOptionPane.showMessageDialog(null, code);
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
         UserModel user = new UserModel(sessionStore.getUsername(), cluster);
