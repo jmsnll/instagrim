@@ -37,12 +37,12 @@ public final class Keyspaces {
             String createPostsTable = "CREATE TABLE if not exists instagrim.posts (\n"
                     + "imageid uuid,\n"
                     + "user varchar,\n"
-                    + "image_added timestamp,\n"
+                    + "posted timestamp,\n"
                     + "caption text,\n"
                     + "likes set<text>,\n"
                     + "comments set<uuid>,\n"
-                    + "PRIMARY KEY (user,image_added)\n"
-                    + ") WITH CLUSTERING ORDER BY (image_added desc);";
+                    + "PRIMARY KEY (imageid, user)\n"
+                    + ") WITH CLUSTERING ORDER BY (posted desc);";
             String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      username text PRIMARY KEY,\n"
                     + "      password text,\n"
