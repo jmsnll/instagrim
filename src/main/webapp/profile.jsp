@@ -59,9 +59,9 @@
                                 </li>
                                 <%} else {
                                 %>
-                                <li><a href="login.jsp">Sign In</a>
+                                <li><a href="/Instagrim/login.jsp">Sign In</a>
                                 </li>
-                                <li><a href="register.jsp">Register</a>
+                                <li><a href="/Instagrim/register.jsp">Register</a>
                                 </li>
                                 <%
                                     }
@@ -75,7 +75,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="/upload.jsp"><l class="fa fa-plus-square-o"></l></a>
+                            <a href="/Instagrim/upload.jsp"><l class="fa fa-plus-square-o"></l></a>
                         </li>
                     </ul>
                 </div>
@@ -83,13 +83,39 @@
         </nav>
         <div class="container">
             <div class="row">
+                <%
+                    if ((boolean) session.getAttribute("UserNotFound")) {
+                        session.setAttribute("UserNotFound", false);
+                %>
+                <div class="col-lg-12 text-center user-profile">
+                    <h1>Error! No user found, please try again.</h1>
+                </div>
+                <%                } else {
+                %>
                 <div class="col-lg-12 text-center user-profile">
                     <h1>Welcome to Instagrim, <%=profile.getFirstName()%>!</h1>
                 </div>
+                <%
+                    }
+                    Cluster cluster = CassandraHosts.getCluster();
+                    ImageModel im = new ImageModel(cluster);
+                    LinkedList<ImageStore> images = im.getImagesForUser(profile.getUsername());
+                    if (images == null) {
+                %>
+                <p>Looks like <%=profile.getFirstName()%> hasn't made any posts yet!</p>
+                <%} else {
+                    Iterator<ImageStore> iterator = images.iterator();
+                    while (iterator.hasNext()) {
+                        ImageStore is = (ImageStore) iterator.next();
+                %>
                 <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-color: red">
+                    <div class="user-post" style="background-image: url('/Instagrim/Image/<%=is.getID()%>')">
                     </div>
                 </div>
+                <%
+                        }
+                    }
+                %>
             </div>
         </div>
     </body>
