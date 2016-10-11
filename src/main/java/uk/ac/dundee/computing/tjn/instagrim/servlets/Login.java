@@ -37,7 +37,7 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        if (!UserModel.Exists(username, cluster) || !UserModel.isValidUser(username, password, cluster)) {
+        if (!UserModel.exists(username, cluster) || !UserModel.isValidUser(username, password, cluster)) {
             request.setAttribute("login_fail", true);
             request.setAttribute("message", "Invalid username or password, please try again.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);

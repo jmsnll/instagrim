@@ -58,6 +58,8 @@ public final class Keyspaces {
                     + "      email varchar,\n"
                     + "      emailVerified boolean,\n"
                     + "      base32secret varchar,\n"
+                    + "      following set<varchar>,\n"
+                    + "      followers set<varchar>,\n"
                     + "      bio text,\n"
                     + "      profile_pic uuid\n"
                     + "  );";

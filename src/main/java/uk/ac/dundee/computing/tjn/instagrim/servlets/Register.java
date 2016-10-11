@@ -34,7 +34,7 @@ public class Register extends HttpServlet {
 
         RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
 
-        if (UserModel.Exists(username, cluster)) {
+        if (UserModel.exists(username, cluster)) {
             request.setAttribute("username_taken", true);
             request.setAttribute("message", "Looks like that username is already taken, please try again.");
             rd.forward(request, response);
@@ -47,7 +47,7 @@ public class Register extends HttpServlet {
             return;
         }
         UserModel user = new UserModel(username, password, email, first_name, last_name, cluster);
-        user.Register();
+        user.register();
         rd.forward(request, response);
         response.sendRedirect("/Instagrim");
     }

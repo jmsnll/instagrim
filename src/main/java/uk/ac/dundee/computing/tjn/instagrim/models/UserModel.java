@@ -7,6 +7,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.security.GeneralSecurityException;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,8 +23,10 @@ public class UserModel {
     private String email;
     private Boolean emailVerified;
     private String base32secret;
-    private UUID profilePic;
+    private HashSet<String> followers;
+    private HashSet<String> following;
     private String bio;
+    private UUID profilePic;
 
     private final Cluster cluster;
 
@@ -113,8 +116,8 @@ public class UserModel {
         return false;
     }
 
-    public boolean Register() {
-        if (Exists(username, cluster)) {
+    public boolean register() {
+        if (exists(username, cluster)) {
             return false;
         }
         Session session = cluster.connect("instagrim");
@@ -124,7 +127,7 @@ public class UserModel {
         return true;
     }
 
-    public boolean Delete() {
+    public boolean delete() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("DELETE FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
@@ -155,7 +158,7 @@ public class UserModel {
         return false;
     }
 
-    public static boolean Exists(String username, Cluster cluster) {
+    public static boolean exists(String username, Cluster cluster) {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT username FROM accounts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
@@ -164,6 +167,20 @@ public class UserModel {
             return false;
         }
         return true;
+    }
+
+    public boolean follows(String username) {
+        if (following.contains(username)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean followed(String username) {
+        if (followers.contains(username)) {
+            return true;
+        }
+        return false;
     }
 
     public String getUsername() {
@@ -236,5 +253,21 @@ public class UserModel {
 
     public void setProfilePic(UUID profilePic) {
         this.profilePic = profilePic;
+    }
+
+    public HashSet<String> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(HashSet<String> followers) {
+        this.followers = followers;
+    }
+
+    public HashSet<String> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(HashSet<String> following) {
+        this.following = following;
     }
 }

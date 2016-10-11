@@ -62,7 +62,7 @@ public class Profile extends HttpServlet {
     private void DisplayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
-        if (UserModel.Exists(username, cluster)) {
+        if (UserModel.exists(username, cluster)) {
             UserModel user = new UserModel(username, cluster);
             ProfileStore profile = new ProfileStore(user);
 
