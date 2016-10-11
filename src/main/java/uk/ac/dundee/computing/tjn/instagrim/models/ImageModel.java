@@ -121,7 +121,7 @@ public class ImageModel {
     public LinkedList<ImageStore> getImagesForUser(String username) {
         LinkedList<ImageStore> images = new LinkedList<>();
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select imageid from posts where user =?");
+        PreparedStatement ps = session.prepare("select postid from posts where user =?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(username));
         if (rs.isExhausted()) {
@@ -143,7 +143,7 @@ public class ImageModel {
     public LinkedList<ImageStore> getMostRecent() {
         LinkedList<ImageStore> images = new LinkedList<>();
         Session session = cluster.connect("instagrim");
-        SimpleStatement statement = new SimpleStatement("select imageid from posts limit 9");
+        SimpleStatement statement = new SimpleStatement("select postid from posts limit 9");
         ResultSet rs = session.execute(statement);
 
         if (rs.isExhausted()) {

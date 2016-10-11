@@ -46,7 +46,6 @@
                                 <%
                                     SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
                                     if (sessionStore != null && sessionStore.isLoggedIn()) {
-
                                 %>
                                 <li>
                                 <li><a href="">My Account</a>
