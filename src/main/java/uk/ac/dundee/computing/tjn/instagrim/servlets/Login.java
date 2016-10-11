@@ -2,8 +2,6 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,26 +25,30 @@ public class Login extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        boolean isValid = UserModel.isValidUser(username, password, cluster);
-        HttpSession session = request.getSession();
-        System.out.println("Session in servlet " + session);
-        if (isValid) {
-            SessionStore sessionStore = new SessionStore();
-            sessionStore.setLoggedIn(true);
-            sessionStore.setUsername(username);
-
-            session.setAttribute("LoggedIn", sessionStore);
-            System.out.println("Session in servlet " + session);
-            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-            rd.forward(request, response);
-
+        if (!UserModel.Exists(username, cluster) || UserModel.isValidUser(username, password, cluster)) {
+            request.setAttribute("login_fail", true);
+            request.setAttribute("message", "Invalid username or password, please try again.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
         } else {
-            response.sendRedirect("/Instagrim/login.jsp");
+            HttpSession session = request.getSession();
+            SessionStore sessionStore = new SessionStore();
+            sessionStore.setUsername(username);
+            UserModel user = new UserModel(username, cluster);
+            if (user.isTwoFactorEnabled()) {
+                sessionStore.setLoggedIn(false);
+                request.setAttribute("2fa", true);
+                request.getRequestDispatcher("/twofactor.jsp").forward(request, response);
+                return;
+            } else {
+                sessionStore.setLoggedIn(true);
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                return;
+            }
         }
     }
 }
