@@ -18,7 +18,7 @@ public class Account extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("/404.jsp");
         switch (args.length) {
             case 2:
-                rd = request.getRequestDispatcher("/account/editaccount.jsp");
+                rd = request.getRequestDispatcher("/account/edit.jsp");
                 break;
             case 3:
                 if (args[2].equals("settings")) {
