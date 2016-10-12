@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-    <%@include file="res/jsp/header.jsp" %>
+    <%@include file="../res/jsp/header.jsp" %>
     <body>
         <div class="container">
             <h1 id="title-big" class="text-center"><a href="/Instagrim">Instagrim</a></h1>
