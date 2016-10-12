@@ -11,7 +11,7 @@ public class ProfileStore {
     private String email;
     private boolean emailVerified;
     private String bio;
-    private UUID profilePic;
+//    private UUID profilePic;
 
     public ProfileStore() {
 
@@ -24,7 +24,6 @@ public class ProfileStore {
         this.email = user.getEmail();
         this.emailVerified = user.getEmailVerified();
         this.bio = user.getBio();
-        this.profilePic = user.getProfilePic();
     }
 
     public String getUsername() {
@@ -73,13 +72,5 @@ public class ProfileStore {
 
     public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    public UUID getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(UUID profilePic) {
-        this.profilePic = profilePic;
     }
 }
