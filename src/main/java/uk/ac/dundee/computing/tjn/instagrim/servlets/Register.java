@@ -32,7 +32,7 @@ public class Register extends HttpServlet {
         String last_name = request.getParameter("last_name");
         String email = request.getParameter("email");
 
-        RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/auth/register.jsp");
 
         if (UserModel.exists(username, cluster)) {
             request.setAttribute("username_taken", true);

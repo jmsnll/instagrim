@@ -40,7 +40,7 @@ public class Login extends HttpServlet {
         if (!UserModel.exists(username, cluster) || !UserModel.isValidUser(username, password, cluster)) {
             request.setAttribute("login_fail", true);
             request.setAttribute("message", "Invalid username or password, please try again.");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
             return;
         } else {
             HttpSession session = request.getSession();
@@ -50,7 +50,7 @@ public class Login extends HttpServlet {
             if (user.isTwoFactorEnabled()) {
                 sessionStore.setLoggedIn(false);
                 session.setAttribute("LoggedIn", sessionStore);
-                request.getRequestDispatcher("/twofactor.jsp").forward(request, response);
+                request.getRequestDispatcher("/auth/twofactor.jsp").forward(request, response);
                 return;
             } else {
                 sessionStore.setLoggedIn(true);
@@ -69,7 +69,7 @@ public class Login extends HttpServlet {
         if (!user.isValidTwoFactorCode(code)) {
             request.setAttribute("auth_fail", true);
             request.setAttribute("message", "Invalid code, please try again.");
-            request.getRequestDispatcher("/twofactor.jsp").forward(request, response);
+            request.getRequestDispatcher("/auth/twofactor.jsp").forward(request, response);
         } else {
             sessionStore.setLoggedIn(true);
             session.setAttribute("LoggedIn", sessionStore);
