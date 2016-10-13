@@ -1,9 +1,3 @@
-<%--
-    Document   : imports.jsp
-    Created on : 11-Oct-2016, 23:04:29
-    Author     : thms
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

@@ -1,3 +1,4 @@
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.models.PostModel"%>
 <%@page import="com.datastax.driver.core.Cluster"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
@@ -16,8 +17,7 @@
                 <div class="col-lg-12 text-center user-profile">
                     <h1>Welcome to Instagrim!</h1>
                 </div>
-                <%
-                    Cluster cluster = CassandraHosts.getCluster();
+                <%                    Cluster cluster = CassandraHosts.getCluster();
                     PostModel post = new PostModel(cluster);
                     LinkedList<ImageStore> images = post.getMostRecentImages();
                     if (images == null) {
@@ -29,7 +29,7 @@
                         ImageStore is = (ImageStore) iterator.next();
                 %>
                 <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-image: url('/Instagrim/Image/<%=is.getID()%>')">
+                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=is.getID()%>')">
                     </div>
                 </div>
                 <%
