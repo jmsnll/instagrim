@@ -9,6 +9,24 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
                     <form role="form" method="post" action="login">
+                        <%
+                            boolean login_fail = false;
+                            String message = "";
+                            if (request.getAttribute("login_fail") != null) {
+                                login_fail = (boolean) request.getAttribute("login_fail");
+                            }
+                            if (request.getAttribute("message") != null) {
+                                message = (String) request.getAttribute("message");
+                            }
+                            if (login_fail) {
+                        %>
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <p class="text-center"><%=message%></p>
+                        </div>
+                        <%
+                            }
+                        %>
                         <fieldset>
                             <hr>
                             <div class="form-group has-feedback">
