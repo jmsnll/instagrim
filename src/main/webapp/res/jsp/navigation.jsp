@@ -1,3 +1,5 @@
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -20,7 +22,7 @@
                             if (currentSession != null && currentSession.isLoggedIn()) {
                         %>
                         <li>
-                        <li><a href="../profile/">My Account</a>
+                        <li><a href="/Instagrim/profile/">My Account</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li><a href="">Settings</a>
@@ -30,9 +32,9 @@
                         </li>
                         <%} else {
                         %>
-                        <li><a href="/Instagrim/login.jsp">Sign In</a>
+                        <li><a href="/Instagrim/login">Sign In</a>
                         </li>
-                        <li><a href="/Instagrim/register.jsp">Register</a>
+                        <li><a href="/Instagrim/register">Register</a>
                         </li>
                         <%
                             }
