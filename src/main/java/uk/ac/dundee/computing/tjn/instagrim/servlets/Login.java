@@ -3,6 +3,7 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import java.util.HashSet;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +34,19 @@ public class Login extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+        if (sessionStore != null && sessionStore.isLoggedIn()) {
+            response.sendRedirect("/Instagrim/");
+            return;
+        } else {
+            RequestDispatcher rd = request.getRequestDispatcher("/auth/login.jsp");
+            rd.forward(request, response);
+        }
+    }
+
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -55,7 +69,8 @@ public class Login extends HttpServlet {
             } else {
                 sessionStore.setLoggedIn(true);
                 session.setAttribute("LoggedIn", sessionStore);
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                //request.getRequestDispatcher("/index.jsp").forward(request, response);
+                response.sendRedirect("/Instagrim/");
                 return;
             }
         }

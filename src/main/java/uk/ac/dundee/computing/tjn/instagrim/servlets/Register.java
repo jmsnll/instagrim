@@ -9,8 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
+import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
 @WebServlet(name = "Register", urlPatterns = {"/register"})
 public class Register extends HttpServlet {
@@ -20,6 +22,19 @@ public class Register extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         cluster = CassandraHosts.getCluster();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+        if (sessionStore != null && sessionStore.isLoggedIn()) {
+            response.sendRedirect("/Instagrim/");
+            return;
+        } else {
+            RequestDispatcher rd = request.getRequestDispatcher("/auth/register.jsp");
+            rd.forward(request, response);
+        }
     }
 
     @Override
