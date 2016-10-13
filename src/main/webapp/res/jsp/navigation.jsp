@@ -28,7 +28,7 @@
                         <li><a href="">Settings</a>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="">Logout</a>
+                        <li><a href="/Instagrim/logout">Logout</a>
                         </li>
                         <%} else {
                         %>
