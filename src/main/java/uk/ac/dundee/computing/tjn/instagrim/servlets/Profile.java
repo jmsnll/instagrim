@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
@@ -57,6 +58,14 @@ public class Profile extends HttpServlet {
 
     private void DisplayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewpost.jsp");
+        HttpSession session = request.getSession();
+        if (PostModel.exists(postID, cluster)) {
+            PostModel post = new PostModel(postID, cluster);
+            session.setAttribute("post", post);
+            rd.forward(request, response);
+        } else {
+            DisplayError(request, response);
+        }
     }
 
     private void DisplayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

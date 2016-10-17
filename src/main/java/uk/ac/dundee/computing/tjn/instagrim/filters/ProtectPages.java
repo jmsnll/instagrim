@@ -102,7 +102,7 @@ public class ProtectPages implements Filter {
         System.out.println("Session in filter " + session);
         if ((sessionStore == null) || (sessionStore.isLoggedIn() == false)) {
             System.out.println("Foward to login");
-            RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/auth/login.jsp");
             rd.forward(request, response);
 
         }

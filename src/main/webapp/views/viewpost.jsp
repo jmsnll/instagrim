@@ -12,6 +12,13 @@
     <%@ include file="../res/jsp/header.jsp" %>
     <body>
         <%@ include file="../res/jsp/navigation.jsp" %>
+        <%            PostModel post = (PostModel) session.getAttribute("post");
+            if (post != null) {
+        %>
+        <p>it's not null!</p>
+        <%
+            }
+        %>
         <div class="container">
             <div class="row">
                 <div class="col-sm-4 text-center">

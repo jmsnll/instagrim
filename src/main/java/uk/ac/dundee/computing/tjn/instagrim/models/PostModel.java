@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -35,13 +36,36 @@ public class PostModel {
 
     private String username;
     private UUID postID;
-    private Date posted;
+    private LocalDate posted;
     private String caption;
-    private TreeSet<String> likes;
-    private TreeSet<UUID> comments;
+    private Set<String> likes;
+    private Set<UUID> comments;
 
     public PostModel(Cluster cluster) {
         this.cluster = cluster;
+    }
+
+    public PostModel(UUID postID, Cluster cluster) {
+        this.postID = postID;
+        this.cluster = cluster;
+        pull();
+    }
+
+    private void pull() {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT * FROM posts WHERE postid = ?");
+        BoundStatement bs = new BoundStatement(ps);
+        bs.bind(this.postID);
+        ResultSet rs = session.execute(bs);
+
+        for (Row row : rs) {
+            this.postID = row.getUUID("postid");
+            this.username = row.getString("username");
+            //this.posted = row.getDate("posted");
+            this.caption = row.getString("caption");
+            this.likes = row.getSet("likes", String.class);
+            this.comments = row.getSet("comments", UUID.class);
+        }
     }
 
     public void createPost(String username, String caption, byte[] image, String type) {
@@ -81,6 +105,17 @@ public class PostModel {
                 Logger.getLogger(PostModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static boolean exists(UUID post, Cluster cluster) {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT postid FROM posts WHERE postid = ?");
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet rs = session.execute(bs.bind(post));
+        if (rs.isExhausted()) {
+            return false;
+        }
+        return true;
     }
 
     public byte[] imageResize(String postID, String type) {
@@ -129,7 +164,7 @@ public class PostModel {
 
     public PostStore getPost(UUID postID) {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT postid FROM posts WHERE postid = ?");
+        PreparedStatement ps = session.prepare("SELECT * FROM posts WHERE postid = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet results = session.execute(bs.bind(postID));
         if (results.isExhausted() || results.all().size() > 1) {
@@ -141,7 +176,7 @@ public class PostModel {
             post.setCaption(row.getString("caption"));
             post.setComments(row.getSet("comments", UUID.class));
             post.setLikes(row.getSet("likes", String.class));
-//            post.setPosted(row.getTimestamp("posted"));
+            post.setPosted(row.getDate("posted"));
             post.setUsername(row.getString("username"));
             return post;
         }
@@ -301,11 +336,11 @@ public class PostModel {
         this.postID = postID;
     }
 
-    public Date getPosted() {
+    public LocalDate getPosted() {
         return posted;
     }
 
-    public void setPosted(Date posted) {
+    public void setPosted(LocalDate posted) {
         this.posted = posted;
     }
 
@@ -317,19 +352,19 @@ public class PostModel {
         this.caption = caption;
     }
 
-    public TreeSet<String> getLikes() {
+    public Set<String> getLikes() {
         return likes;
     }
 
-    public void setLikes(TreeSet<String> likes) {
+    public void setLikes(Set<String> likes) {
         this.likes = likes;
     }
 
-    public TreeSet<UUID> getComments() {
+    public Set<UUID> getComments() {
         return comments;
     }
 
-    public void setComments(TreeSet<UUID> comments) {
+    public void setComments(Set<UUID> comments) {
         this.comments = comments;
     }
 }
