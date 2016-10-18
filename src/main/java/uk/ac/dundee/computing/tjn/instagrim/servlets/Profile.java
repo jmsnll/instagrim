@@ -86,7 +86,11 @@ public class Profile extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
-        DisplayUser(sessionStore.getUsername(), request, response);
+        if (sessionStore != null) {
+            DisplayUser(sessionStore.getUsername(), request, response);
+        } else {
+            response.sendRedirect("/Instagrim/404.html");
+        }
     }
 
     private void DisplayError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
