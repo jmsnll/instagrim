@@ -2,6 +2,7 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
@@ -102,6 +104,30 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+        if (sessionStore == null || !sessionStore.isLoggedIn()) {
+            response.sendRedirect("/Instagrim/login");
+            return;
+        }
+        for (Part part : request.getParts()) {
+            System.out.println("Part Name " + part.getName());
 
+            String type = part.getContentType();
+
+            InputStream is = request.getPart(part.getName()).getInputStream();
+            int i = is.available();
+            if (i > 0) {
+                byte[] b = new byte[i + 1];
+                is.read(b);
+                System.out.println("Length : " + b.length);
+                UserModel user = new UserModel(sessionStore.getUsername(), cluster);
+                user.setProfilePicture(b);
+
+                is.close();
+            }
+            RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
+            rd.forward(request, response);
+        }
     }
 }

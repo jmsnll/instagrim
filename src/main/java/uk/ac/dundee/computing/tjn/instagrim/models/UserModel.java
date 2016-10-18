@@ -264,4 +264,11 @@ public class UserModel {
     public void setFollowing(Set<String> following) {
         this.following = following;
     }
+
+    public void setProfilePicture(byte[] image) {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("UPDATE accounts SET profile_pic = ?");
+        BoundStatement bs = new BoundStatement(ps);
+        session.execute(bs.bind(image));
+    }
 }
