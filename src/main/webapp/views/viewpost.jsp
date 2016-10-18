@@ -16,6 +16,7 @@
             if (post != null) {
         %>
         <p>it's not null!</p>
+        <%=post.getCaption()%>
         <%
             }
         %>

@@ -41,8 +41,8 @@ public class Image extends HttpServlet {
 
     public Image() {
         super();
-        CommandsMap.put("Image", 1);
-        CommandsMap.put("Thumb", 2);
+        CommandsMap.put("image", 1);
+        CommandsMap.put("thumb", 2);
     }
 
     @Override
@@ -110,8 +110,9 @@ public class Image extends HttpServlet {
                 byte[] b = new byte[i + 1];
                 is.read(b);
                 System.out.println("Length : " + b.length);
-                PostModel tm = new PostModel(cluster);
-                tm.createPost(username, "caption_placeholder", b, type);
+                PostModel post = new PostModel(cluster);
+                String caption = request.getParameter("caption");
+                post.createPost(username, caption, b, type);
 
                 is.close();
             }
