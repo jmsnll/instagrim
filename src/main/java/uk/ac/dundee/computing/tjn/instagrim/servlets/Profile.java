@@ -49,7 +49,11 @@ public class Profile extends HttpServlet {
                 break;
             // instagrim/profile/<username>
             case 3:
-                DisplayUser(args[2], request, response);
+                if (args[2].equals("create")) {
+                    CreateProfileWizard(request, response);
+                } else {
+                    DisplayUser(args[2], request, response);
+                }
                 break;
             // instagrim/profile/<username>/<postid>
             case 4:
@@ -58,7 +62,17 @@ public class Profile extends HttpServlet {
         }
     }
 
+    private void CreateProfileWizard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher("/profile/createprofile.jsp");
+        HttpSession session = request.getSession();
+        SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
+        UserModel user = new UserModel(sessionStore.getUsername(), cluster);
+        request.setAttribute("user", user);
+        rd.forward(request, response);
+    }
+
     private void DisplayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO: Check that post was posted by specified user
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewpost.jsp");
         HttpSession session = request.getSession();
         if (PostModel.exists(postID, cluster)) {
@@ -76,7 +90,6 @@ public class Profile extends HttpServlet {
         if (UserModel.exists(username, cluster)) {
             UserModel user = new UserModel(username, cluster);
             ProfileStore profile = new ProfileStore(user);
-
             session.setAttribute("Profile", profile);
             rd.forward(request, response);
         } else {
