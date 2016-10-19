@@ -40,6 +40,7 @@ public class PostModel {
     private String caption;
     private Set<String> likes;
     private Set<UUID> comments;
+    private ImageStore image;
 
     public PostModel(Cluster cluster) {
         this.cluster = cluster;
@@ -272,6 +273,18 @@ public class PostModel {
             }
         }
         return images;
+    }
+
+    public ImageStore getImage() {
+        return this.image;
+    }
+
+    public void setImage(ImageStore image) {
+        this.image = image;
+    }
+
+    public void setImage(UUID imageID) {
+        image.setID(imageID);
     }
 
     public ImageStore getImage(int imageType, UUID postID) {
