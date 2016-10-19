@@ -6,12 +6,16 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.lib.PasswordStorage;
 import uk.ac.dundee.computing.tjn.instagrim.lib.TwoFactorAuthUtil;
+import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
 
 public class UserModel {
 
@@ -265,10 +269,32 @@ public class UserModel {
         this.following = following;
     }
 
-    public void setProfilePicture(byte[] image) {
+    public void setProfilePicture(byte[] image, String type, int length) {
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("UPDATE accounts SET profile_pic = ?");
+        PreparedStatement ps = session.prepare("UPDATE accounts SET profile_pic = ?, type = ?, length = ?");
         BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(image));
+        session.execute(bs.bind(image, type, length));
+    }
+
+    public ImageStore getProfilePicture() {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT profile_pic FROM accounts WHERE account = ?");
+
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet results = session.execute(bs.bind(this.username));
+        ByteBuffer imageBuffer = null;
+        String type = null;
+        int length = 0;
+        if (results.isExhausted()) {
+            return null;
+        } else {
+            for (Row row : results) {
+                imageBuffer = row.getBytes("profile_pic");
+            }
+        }
+        session.close();
+        ImageStore image = new ImageStore();
+        image.setImage(imageBuffer, length, type);
+        return image;
     }
 }
