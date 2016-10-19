@@ -126,8 +126,6 @@ public class Profile extends HttpServlet {
             return;
         }
         for (Part part : request.getParts()) {
-            System.out.println("Part Name " + part.getName());
-
             String type = part.getContentType();
 
             InputStream is = request.getPart(part.getName()).getInputStream();
@@ -135,9 +133,8 @@ public class Profile extends HttpServlet {
             if (i > 0) {
                 byte[] b = new byte[i + 1];
                 is.read(b);
-                System.out.println("Length : " + b.length);
                 UserModel user = new UserModel(sessionStore.getUsername(), cluster);
-                user.setProfilePicture(b);
+                user.setProfilePicture(b, type, b.length);
 
                 is.close();
             }
