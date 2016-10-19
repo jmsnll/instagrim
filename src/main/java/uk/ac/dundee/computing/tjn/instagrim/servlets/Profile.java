@@ -45,24 +45,24 @@ public class Profile extends HttpServlet {
         switch (args.length) {
             // instagrim/profile
             case 2:
-                DisplayCurrentProfile(request, response);
+                displayCurrentProfile(request, response);
                 break;
             // instagrim/profile/<username>
             case 3:
                 if (args[2].equals("create")) {
-                    CreateProfile(request, response);
+                    createProfile(request, response);
                 } else {
-                    DisplayUser(args[2], request, response);
+                    displayUser(args[2], request, response);
                 }
                 break;
             // instagrim/profile/<username>/<postid>
             case 4:
-                DisplayPost(UUID.fromString(args[3]), request, response);
+                displayPost(UUID.fromString(args[3]), request, response);
                 break;
         }
     }
 
-    private void CreateProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void createProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/profile/createprofile.jsp");
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
@@ -73,7 +73,7 @@ public class Profile extends HttpServlet {
         rd.forward(request, response);
     }
 
-    private void DisplayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewpost.jsp");
         HttpSession session = request.getSession();
         if (PostModel.exists(postID, cluster)) {
@@ -81,11 +81,11 @@ public class Profile extends HttpServlet {
             session.setAttribute("post", post);
             rd.forward(request, response);
         } else {
-            DisplayError(request, response);
+            displayError(request, response);
         }
     }
 
-    private void DisplayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         if (UserModel.exists(username, cluster)) {
@@ -95,22 +95,22 @@ public class Profile extends HttpServlet {
             session.setAttribute("Profile", profile);
             rd.forward(request, response);
         } else {
-            DisplayError(request, response);
+            displayError(request, response);
         }
     }
 
-    private void DisplayCurrentProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayCurrentProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
         if (sessionStore != null) {
-            DisplayUser(sessionStore.getUsername(), request, response);
+            displayUser(sessionStore.getUsername(), request, response);
         } else {
             response.sendRedirect("/Instagrim/404.html");
         }
     }
 
-    private void DisplayError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
         HttpSession session = request.getSession();
         session.setAttribute("UserNotFound", true);

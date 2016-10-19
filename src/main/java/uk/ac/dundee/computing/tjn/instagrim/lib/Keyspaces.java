@@ -61,7 +61,9 @@ public final class Keyspaces {
                     + "      following set<varchar>,\n"
                     + "      followers set<varchar>,\n"
                     + "      bio text,\n"
-                    + "      profile_pic blob\n"
+                    + "      profile_pic blob\n,"
+                    + "      length int,"
+                    + "      type varchar"
                     + "  );";
             Session session = c.connect();
             try {
