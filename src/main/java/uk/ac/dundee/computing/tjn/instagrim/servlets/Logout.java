@@ -12,6 +12,7 @@ import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 public class Logout extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().invalidate();
         request.setAttribute("LoggedIn", new SessionStore());
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
