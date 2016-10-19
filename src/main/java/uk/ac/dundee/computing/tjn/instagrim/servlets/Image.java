@@ -23,13 +23,15 @@ import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
+import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
 @WebServlet(urlPatterns = {
     "/image",
     "/image/*",
-    "/thumb/*"
+    "/thumb/*",
+    "/avatar/*"
 })
 @MultipartConfig
 
@@ -43,6 +45,7 @@ public class Image extends HttpServlet {
         super();
         CommandsMap.put("image", 1);
         CommandsMap.put("thumb", 2);
+        CommandsMap.put("avatar", 3);
     }
 
     @Override
@@ -67,6 +70,8 @@ public class Image extends HttpServlet {
             case 2:
                 DisplayImage(Convertors.DISPLAY_THUMB, args[2], response);
                 break;
+            case 3:
+                displayProfileImage(args[2], response);
             default:
                 error("Bad Operator", response);
         }
@@ -91,15 +96,32 @@ public class Image extends HttpServlet {
         os.close();
     }
 
+    private void displayProfileImage(String username, HttpServletResponse response) throws ServletException, IOException {
+        UserModel user = new UserModel(username, cluster);
+        ImageStore image = user.getProfilePicture();
+
+        OutputStream os = response.getOutputStream();
+
+        response.setContentType(image.getType());
+        response.setContentLength(image.getLength());
+
+        InputStream is = new ByteArrayInputStream(image.getBytes());
+        BufferedInputStream bis = new BufferedInputStream(is);
+        byte[] buffer = new byte[8192];
+        for (int length = 0; (length = bis.read(buffer)) > 0;) {
+            os.write(buffer, 0, length);
+        }
+        os.close();
+
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
-            System.out.println("Part Name " + part.getName());
-
             String type = part.getContentType();
-
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
+
             HttpSession session = request.getSession();
             SessionStore logInHandler = (SessionStore) session.getAttribute("LoggedIn");
             String username = "majed";
