@@ -133,8 +133,9 @@ public class Profile extends HttpServlet {
             if (i > 0) {
                 byte[] b = new byte[i + 1];
                 is.read(b);
-                UserModel user = new UserModel(sessionStore.getUsername(), cluster);
-                user.setProfilePicture(b, type, b.length);
+                String username = sessionStore.getUsername();
+                UserModel user = new UserModel(username, cluster);
+                user.setProfilePicture(username, b, type, b.length);
 
                 is.close();
             }
