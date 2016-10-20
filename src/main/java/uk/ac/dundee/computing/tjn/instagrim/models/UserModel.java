@@ -6,9 +6,15 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -269,11 +275,25 @@ public class UserModel {
         this.following = following;
     }
 
-    public void setProfilePicture(byte[] image, String type, int length) {
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("UPDATE accounts SET profile_pic = ?, type = ?, length = ?");
-        BoundStatement bs = new BoundStatement(ps);
-        session.execute(bs.bind(image, type, length));
+    public void setProfilePicture(String username, byte[] image, String type, int length) {
+        try {
+            FileOutputStream fos = null;
+            String filetype = Convertors.SplitFiletype(type)[1];
+            ByteBuffer imageBuffer = ByteBuffer.wrap(image);
+            new File("/var/tmp/instagrim/").mkdirs();
+            fos = new FileOutputStream(new File("/var/tmp/instagrim/" + username));
+            fos.write(image);
+            Session session = cluster.connect("instagrim");
+            PreparedStatement psInsertProfilePic = session.prepare("UPDATE accounts SET profile_pic = ?, type = ?, length = ? WHERE username = ?");
+            BoundStatement bsInsertProfilePic = new BoundStatement(psInsertProfilePic);
+
+            session.execute(bsInsertProfilePic.bind(imageBuffer, type, length, username));
+            session.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public ImageStore getProfilePicture() {
