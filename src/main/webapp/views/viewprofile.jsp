@@ -15,7 +15,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center user-profile">
-                    <h1>Welcome to Instagrim, <%=profile.getUsername()%>!</h1>
+                    <div class="col-lg-4 text-center">
+                        <form method="POST" enctype="multipart/form-data" action="../profile">
+                            File to upload: <input type="file" name="profile-pic"><br/>
+
+                            <br/>
+                            <input type="submit" value="Press"> to upload the file!
+                        </form>
+                    </div>
+                    <div class="col-lg-8 text-center">
+
+                    </div>
                 </div>
                 <div class="col-sm-4 text-center">
                     <div class="user-post" style="background-color:red;">

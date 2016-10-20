@@ -64,8 +64,7 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-xs-12 col-md-6"><a href="login.jsp" class="btn btn-primary btn-block btn-lg">Sign In</a></div>
-                            <div class="col-xs-12 col-md-6"><input type="submit" method="post" value="Register" class="btn btn-success btn-block btn-lg" tabindex="7"></div>
+                            <div class="col-xs-12 col-md-12"><input type="submit" method="post" value="Register" class="btn btn-success btn-block btn-lg" tabindex="7"></div>
                         </div>
                     </form>
                 </div>

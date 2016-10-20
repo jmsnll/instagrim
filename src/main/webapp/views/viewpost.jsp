@@ -14,9 +14,13 @@
         <%@ include file="../res/jsp/navigation.jsp" %>
         <%            PostModel post = (PostModel) session.getAttribute("post");
             if (post != null) {
+                ImageStore image = post.getImage();
+
         %>
-        <p>it's not null!</p>
-        <%=post.getCaption()%>
+        <div class="col-sm-4 text-center">
+            <div class="user-post" style="background-image: url('/Instagrim/image/<%=image.getID()%>')">
+            </div>
+        </div>
         <%
             }
         %>
