@@ -63,7 +63,7 @@ public class Profile extends HttpServlet {
     }
 
     private void createProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/profile/createprofile.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/profiles/createprofile.jsp");
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
         if (sessionStore.isLoggedIn()) {
@@ -86,7 +86,7 @@ public class Profile extends HttpServlet {
     }
 
     private void displayUser(String username, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
         HttpSession session = request.getSession();
         if (UserModel.exists(username, cluster)) {
             UserModel user = new UserModel(username, cluster);
@@ -100,7 +100,7 @@ public class Profile extends HttpServlet {
     }
 
     private void displayCurrentProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
         if (sessionStore != null) {
@@ -111,7 +111,7 @@ public class Profile extends HttpServlet {
     }
 
     private void displayError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
         HttpSession session = request.getSession();
         session.setAttribute("UserNotFound", true);
         rd.forward(request, response);
@@ -139,7 +139,7 @@ public class Profile extends HttpServlet {
 
                 is.close();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/views/viewprofile.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
             rd.forward(request, response);
         }
     }
