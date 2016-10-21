@@ -22,10 +22,13 @@
                             if (currentSession != null && currentSession.isLoggedIn()) {
                         %>
                         <li>
-                        <li><a href="/Instagrim/profile/">My Account</a>
+                        <li><a href="/Instagrim/profile/">Your Profile</a>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="">Settings</a>
+                        <li>
+                        <li><a href="/Instagrim/account/">Account</a>
+                        </li>
+                        <li><a href="/Instagrim/account/settings">Settings</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/Instagrim/logout">Logout</a>

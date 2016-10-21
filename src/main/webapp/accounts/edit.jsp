@@ -1,3 +1,5 @@
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.models.UserModel"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -7,18 +9,25 @@
     <body>
         <%@include file="../res/jsp/navigation.jsp" %>
         <div class="container">
+            <%                SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+
+                UserModel user;
+                if (sessionStore != null && sessionStore.isLoggedIn()) {
+                    user = new UserModel(sessionStore.getUsername(), CassandraHosts.getCluster());
+                }
+            %>
             <h1>Edit Account</h1>
-            <form role="form" method="post" action="edit">
+            <form role="form" method="post" action="account">
                 <hr>
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group has-feedback">
-                            <input type="text" name="first_name" id="first_name" class="form-control input-lg" placeholder="First Name" tabindex="1">
+                            <input type="text" name="first-name" id="first_name" class="form-control input-lg" placeholder="First Name" tabindex="1">
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
-                            <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Last Name" tabindex="2">
+                            <input type="text" name="last-name" id="last_name" class="form-control input-lg" placeholder="Last Name" tabindex="2">
                         </div>
                     </div>
                 </div>
@@ -41,10 +50,9 @@
                     <input type="password" name="current-password" id="password" class="form-control input-lg" placeholder="Current Password" tabindex="7">
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-md-6"><a href="login.jsp" class="btn btn-primary btn-block btn-lg">Sign In</a></div>
-                    <div class="col-xs-12 col-md-6"><input type="submit" method="post" value="Register" class="btn btn-success btn-block btn-lg" tabindex="7"></div>
+                    <div class="col-xs-12 col-md-12"><input type="submit" method="post" value="Save" class="btn btn-success btn-block btn-lg" tabindex="7"></div>
                 </div>
+            </form>
         </div>
-    </form>
-</body>
+    </body>
 </html>
