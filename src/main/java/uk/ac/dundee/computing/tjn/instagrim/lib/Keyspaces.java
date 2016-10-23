@@ -40,10 +40,11 @@ public final class Keyspaces {
                     + " name  varchar,"
                     + " PRIMARY KEY (postid)"
                     + ")";
-            String createPostsCaptionTable = "CREATE TABLE if not exists instagrim.postcaptions (\n"
-                    + "postid uuid,\n"
+            String createPostsCaptionTable = "CREATE TABLE if not exists instagrim.postcomments (\n"
+                    + "commentid uuid,\n"
                     + "caption varchar,\n"
-                    + "PRIMARY KEY(postid, caption)"
+                    + "username varchar,\n"
+                    + "PRIMARY KEY(postid, caption, username)"
                     + ")";
             String createAccountPostsTable = "CREATE TABLE if not exists instagrim.accountposts (\n"
                     + "postid uuid,\n"

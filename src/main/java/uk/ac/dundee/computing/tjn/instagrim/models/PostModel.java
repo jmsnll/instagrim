@@ -104,7 +104,7 @@ public class PostModel {
             Session session = cluster.connect("instagrim");
             PreparedStatement psInsertPost = session.prepare("INSERT INTO posts (postid, username, posted, caption, likes, comments, image, thumbnail, processed, imageLength, thumbnailLength, processedLength, type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertAccountPosts = session.prepare("INSERT INTO accountposts (postid, username, posted) VALUES (?,?,?)");
-            PreparedStatement psInsertPostCaption = session.prepare("INSERT INTO postcaptions (postid, caption) VALUES (?,?)");
+            PreparedStatement psInsertPostCaption = session.prepare("INSERT INTO postcomments (commentid, caption) VALUES (?,?)");
 
             BoundStatement bsInsertPost = new BoundStatement(psInsertPost);
             BoundStatement bsInsertAccountPosts = new BoundStatement(psInsertAccountPosts);
@@ -224,12 +224,17 @@ public class PostModel {
      * @return
      */
     public PostStore getPost(UUID postID) {
+        // connect to the cluster
         Session session = CassandraHosts.getCluster().connect("instagrim");
+        // get the specified post
         PreparedStatement ps = session.prepare("SELECT * FROM posts WHERE postid = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet results = session.execute(bs.bind(postID));
+        // if there are results
         if (!results.isExhausted()) {
+            // for each result
             for (Row row : results) {
+                // create a new post and set its properties
                 PostStore post = new PostStore();
                 post.setPostID(postID);
                 post.setCaption(row.getString("caption"));
@@ -240,9 +245,11 @@ public class PostModel {
                 post.setImage(row.getBytes("image"));
                 post.setType(row.getString("type"));
                 post.setLength(row.getInt("imagelength"));
+                // return the post
                 return post;
             }
         }
+        //otherwise return null
         return null;
     }
 
@@ -253,9 +260,12 @@ public class PostModel {
      * @return
      */
     public static LinkedList<PostStore> searchPosts(String query) {
+        // create a linked list to store all the posts
         LinkedList<PostStore> posts = new LinkedList<>();
+        // connect to the cluster
         Session session = CassandraHosts.getCluster().connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT * FROM postcaptions WHERE caption = ? ALLOW FILTERING");
+        // select all columns from the postcomments table where the caption contains the query
+        PreparedStatement ps = session.prepare("SELECT * FROM postcomments WHERE caption CONTAINS ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet results = session.execute(bs.bind(query));
         if (results.isExhausted()) {
