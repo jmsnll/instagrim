@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -95,7 +95,7 @@ public class Image extends HttpServlet {
 
 //    private void displayProfileImage(String username, HttpServletResponse response) throws ServletException, IOException {
 //        UserModel user = new UserModel(username, cluster);
-//        ImageStore image = user.getProfilePicture();
+//        ByteBuffer image = user.getProfilePicture();
 //
 //        OutputStream os = response.getOutputStream();
 //
@@ -109,7 +109,6 @@ public class Image extends HttpServlet {
 //            os.write(buffer, 0, length);
 //        }
 //        os.close();
-//
 //    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -134,7 +133,7 @@ public class Image extends HttpServlet {
 
                 is.close();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/post.jsp");
             rd.forward(request, response);
         }
     }

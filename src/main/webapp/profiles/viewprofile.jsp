@@ -51,6 +51,18 @@
                 <div class="col-sm-4 text-center">
                     <div class="user-post" style="background-image: url('/Instagrim/image/<%=ps.getPostID()%>')">
                     </div>
+                    <%
+                        StringBuilder sb = new StringBuilder();
+                        String[] split_caption = ps.getCaption().split(" ");
+                        for (String word : split_caption) {
+                            if (word.startsWith("#")) {
+                                String url = "<a href='/Instagrim/search/" + word.replaceAll("#", "") + "'>" + word + "</a>";
+                                word = url;
+                            }
+                            sb.append(word + " ");
+                        }
+                    %>
+                    <%=sb.toString()%>
                 </div>
                 <%
                         }

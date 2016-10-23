@@ -291,26 +291,24 @@ public class UserModel {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-//
-//    public ImageStore getProfilePicture() {
-//        Session session = cluster.connect("instagrim");
-//        PreparedStatement ps = session.prepare("SELECT profile_pic FROM accounts WHERE account = ?");
-//
-//        BoundStatement bs = new BoundStatement(ps);
-//        ResultSet results = session.execute(bs.bind(this.username));
-//        ByteBuffer imageBuffer = null;
-//        String type = null;
-//        int length = 0;
-//        if (results.isExhausted()) {
-//            return null;
-//        } else {
-//            for (Row row : results) {
-//                imageBuffer = row.getBytes("profile_pic");
-//            }
-//        }
-//        session.close();
-//        ImageStore image = new ImageStore();
-//        image.setImage(imageBuffer, length, type);
-//        return image;
-//    }
+
+    public ByteBuffer getProfilePicture() {
+        Session session = cluster.connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT profile_pic FROM accounts WHERE username = ?");
+
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet results = session.execute(bs.bind(this.username));
+        ByteBuffer imageBuffer = null;
+        String type = null;
+        int length = 0;
+        if (results.isExhausted()) {
+            return null;
+        } else {
+            for (Row row : results) {
+                imageBuffer = row.getBytes("profile_pic");
+            }
+        }
+        session.close();
+        return imageBuffer;
+    }
 }

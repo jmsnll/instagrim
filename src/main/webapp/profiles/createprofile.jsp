@@ -7,7 +7,7 @@
     <body>
         <%@include file="../res/jsp/navigation.jsp" %>
         <div class="container">
-            <h1>Edit Account</h1>
+            <h1>Create Profile</h1>
             <form role="form" method="post" action="edit">
                 <hr>
                 <div class="row">

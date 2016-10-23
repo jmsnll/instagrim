@@ -85,7 +85,6 @@ public class PostModel {
             BoundStatement bsInsertAccountPosts = new BoundStatement(psInsertAccountPosts);
 
             Date now = new Date(System.currentTimeMillis());
-            javax.swing.JOptionPane.showMessageDialog(null, now.toString());
 
             TreeSet emptyTreeSet = new TreeSet();
             session.execute(bsInsertPost.bind(postID, username, now, caption, emptyTreeSet, emptyTreeSet, imageBuffer, thumbnailBuffer, processedBuffer, image.length, thumbnail.length, processed.length, type));
