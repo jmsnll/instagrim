@@ -136,14 +136,7 @@ public class Profile extends HttpServlet {
         HttpSession session = request.getSession();
         // get the session store
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
-        // if the session store isn't null and someone is logged in
-        if (sessionStore != null && sessionStore.isLoggedIn()) {
-            // display user
-            displayUser(sessionStore.getUsername(), request, response);
-        } else {
-            // otherwise redirect to a 404 page
-            response.sendRedirect("/Instagrim/404.html");
-        }
+        response.sendRedirect("/Instagrim/profile/" + sessionStore.getUsername());
     }
 
     private void displayError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

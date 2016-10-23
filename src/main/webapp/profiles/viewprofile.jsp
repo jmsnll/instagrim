@@ -25,7 +25,7 @@
                     </div>
                 </div> <%Cluster cluster = CassandraHosts.getCluster();
                     PostModel post = new PostModel();
-                    LinkedList<PostStore> posts = post.getMostRecentPosts();
+                    LinkedList<PostStore> posts = post.getUsersPosts(profile.getUsername());
                     if (posts == null) {
                 %>
                 <p>No posts found!</p>
