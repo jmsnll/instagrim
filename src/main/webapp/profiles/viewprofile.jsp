@@ -17,27 +17,13 @@
                 <div class="col-lg-12 text-center user-profile">
                     <div class="col-lg-4 text-center">
                         <%                    SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
-                            ProfileStore profileStore = (ProfileStore) request.getAttribute("Profile");
-
-                            if (sessionStore != null && profileStore != null) {
-                                if (sessionStore.getUsername().equals(profileStore.getUsername())) {
-                        %>
-                        <form method="POST" enctype="multipart/form-data" action="../profile">
-                            File to upload: <input type="file" name="profile-pic"><br/>
-
-                            <br/>
-                            <input type="submit" value="Press"> to upload the file!
-                        </form>
-                        <%
-                                }
-                            }
-                        %>
+                            ProfileStore profileStore = (ProfileStore) request.getAttribute("Profile");%>
                     </div>
                     <div class="col-lg-8 text-center">
-
+                        <h1><%=profile.getUsername()%></h1>
+                        <h3><%=profile.getFirstName()%> <%=profile.getLastName()%></h3>
                     </div>
-                </div>
-                <%                    Cluster cluster = CassandraHosts.getCluster();
+                </div> <%Cluster cluster = CassandraHosts.getCluster();
                     PostModel post = new PostModel();
                     LinkedList<PostStore> posts = post.getMostRecentPosts();
                     if (posts == null) {

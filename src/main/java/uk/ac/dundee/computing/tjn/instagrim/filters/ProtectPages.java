@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
-@WebFilter(filterName = "ProtectPages", urlPatterns = {"/post.jsp"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE})
+@WebFilter(filterName = "ProtectPages", urlPatterns = {"/post.jsp", "/accounts/edit.jsp", "/accounts/settings.jsp"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE})
 public class ProtectPages implements Filter {
 
     private static final boolean debug = true;

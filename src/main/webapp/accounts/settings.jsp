@@ -16,8 +16,19 @@
                     user = new UserModel(sessionStore.getUsername(), CassandraHosts.getCluster());
                     if (user.isTwoFactorEnabled()) {
             %>
-
-
+            <p>Two factor authentication is enabled. Please scan the barcode below in your authenticator app.</p>
+            <img src='https://chart.googleapis.com/chart?cht=qr&chl=<%=user.getBase32secret()%>&chs=180x180&choe=UTF-8&chld=L|2' alt=''>
+            <p>Or enter your key: <em><%=user.getBase32secret()%></em></p>
+            <form action="account" method="POST">
+                <input type="button" value="Enable">
+            </form>
+            <%
+            } else {
+            %>
+            <p>Two factor authentication is disabled.</p>
+            <form action="account" method="POST">
+                <input type="button" value="Enable">
+            </form>
             <%
                     }
                 }

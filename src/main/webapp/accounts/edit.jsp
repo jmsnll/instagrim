@@ -17,7 +17,13 @@
                 }
             %>
             <h1>Edit Account</h1>
-            <form role="form" method="post" action="account">
+            <form method="POST" enctype="multipart/form-data" action="../profile">
+                Profile Picture: <input type="file" name="profile-pic"><br/>
+
+                <br/>
+                <input type="submit" value="Press"> to upload the file!
+            </form>
+            <form role="form" method="post" action="../account">
                 <hr>
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6">
@@ -50,7 +56,7 @@
                     <input type="password" name="current-password" id="password" class="form-control input-lg" placeholder="Current Password" tabindex="7">
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-md-12"><input type="submit" method="post" value="Save" class="btn btn-success btn-block btn-lg" tabindex="7"></div>
+                    <div class="col-xs-12 col-md-12"><input type="submit" method="post" value="Save" class="btn btn-success btn-block btn-lg" tabindex="8"></div>
                 </div>
             </form>
         </div>
