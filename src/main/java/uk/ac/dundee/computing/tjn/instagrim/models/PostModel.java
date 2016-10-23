@@ -55,18 +55,23 @@ public class PostModel {
      * @param postID
      */
     public PostModel(UUID postID) {
+        // set the id of the post
         this.postID = postID;
+        // load the information from the database
         pull();
     }
 
     private void pull() {
+        // connect to the cluster
         Session session = cluster.connect("instagrim");
+        // select all information where the postid equals this.postID
         PreparedStatement ps = session.prepare("SELECT * FROM posts WHERE postid = ?");
         BoundStatement bs = new BoundStatement(ps);
         bs.bind(this.postID);
-        ResultSet rs = session.execute(bs);
-
-        for (Row row : rs) {
+        ResultSet results = session.execute(bs);
+        // foreach row in the results
+        for (Row row : results) {
+            // get the postid, username, caption, likes and comments
             this.postID = row.getUUID("postid");
             this.username = row.getString("username");
             //this.posted = row.getDate("posted");
@@ -128,6 +133,7 @@ public class PostModel {
     /**
      *
      * @param post
+     *
      * @return
      */
     public static boolean exists(UUID post) {
@@ -145,6 +151,7 @@ public class PostModel {
      *
      * @param postID
      * @param type
+     *
      * @return
      */
     public byte[] imageResize(String postID, String type) {
@@ -168,6 +175,7 @@ public class PostModel {
      *
      * @param postID
      * @param type
+     *
      * @return
      */
     public byte[] imageDecolour(String postID, String type) {
@@ -189,6 +197,7 @@ public class PostModel {
     /**
      *
      * @param image
+     *
      * @return
      */
     public static BufferedImage createThumbnail(BufferedImage image) {
@@ -199,6 +208,7 @@ public class PostModel {
     /**
      *
      * @param image
+     *
      * @return
      */
     public static BufferedImage createProcessed(BufferedImage image) {
@@ -210,6 +220,7 @@ public class PostModel {
     /**
      *
      * @param postID
+     *
      * @return
      */
     public PostStore getPost(UUID postID) {
@@ -238,6 +249,7 @@ public class PostModel {
     /**
      *
      * @param query
+     *
      * @return
      */
     public static LinkedList<PostStore> searchPosts(String query) {
@@ -247,7 +259,7 @@ public class PostModel {
         BoundStatement bs = new BoundStatement(ps);
         ResultSet results = session.execute(bs.bind(query));
         if (results.isExhausted()) {
-
+            return null;
         } else {
             for (Row row : results) {
                 PostStore post = new PostStore();
@@ -260,6 +272,7 @@ public class PostModel {
     /**
      *
      * @param username
+     *
      * @return
      */
     public LinkedList<PostStore> getUsersPosts(String username) {
@@ -297,6 +310,7 @@ public class PostModel {
     /**
      *
      * @param count
+     *
      * @return
      */
     public LinkedList<PostStore> getMostRecentPosts(int count) {
