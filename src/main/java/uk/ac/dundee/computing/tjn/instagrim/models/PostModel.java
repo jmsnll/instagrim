@@ -310,25 +310,32 @@ public class PostModel {
      * @return
      */
     public LinkedList<PostStore> getUsersPosts(String username) {
+        // LinkedLists to store the postID's (for a specific username)
+        // and the posts themselves
+        LinkedList<UUID> postsByID = new LinkedList<>();
         LinkedList<PostStore> posts = new LinkedList<>();
+
+        // connect to the cluster
         Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("SELECT postid FROM posts WHERE username = ?");
+        // select all the posts from accountposts where the username matches the one specified
+        PreparedStatement ps = session.prepare("SELECT * FROM accountposts WHERE username = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet results = session.execute(bs.bind(username));
         if (results.isExhausted()) {
             return null;
         } else {
+            // for each result
             for (Row row : results) {
-                PostStore post = new PostStore();
-                UUID id = row.getUUID("postid");
-                post.setPostID(id);
-                post.setCaption(row.getString("caption"));
-                post.setComments(row.getSet("comments", UUID.class));
-                post.setLikes(row.getSet("likes", String.class));
-//                post.setPosted(row.getTimestamp("posted"));
-                post.setUsername(row.getString("username"));
-                posts.add(post);
+                // add the post id to the list
+                postsByID.add(row.getUUID("postid"));
             }
+        }
+        // for each postid in the list
+        for (UUID postid : postsByID) {
+            // get the post associated with the id
+            PostStore post = getPost(postid);
+            // and add it to the list
+            posts.add(post);
         }
         return posts;
     }
