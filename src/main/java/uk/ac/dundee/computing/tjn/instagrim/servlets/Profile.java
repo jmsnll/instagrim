@@ -2,6 +2,7 @@ package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.CommentModel;
@@ -159,20 +161,49 @@ public class Profile extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get the current session and session store
-        HttpSession session = request.getSession();
-        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
-        // get the caption from the page
-        String caption = request.getParameter("comment");
-        // get the username of the currently logged in user
-        String username = sessionStore.getUsername();
-        // split the request path
         String args[] = Convertors.SplitRequestPath(request);
-        // /Instagrim/profile/<username>/<uuid>
-        UUID postID = UUID.fromString(args[3]);
+        if (args.length == 4) {
+            // Get the current session and session store
+            HttpSession session = request.getSession();
+            SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+            // get the caption from the page
+            String caption = request.getParameter("comment");
+            // get the username of the currently logged in user
+            String username = sessionStore.getUsername();
+            // /Instagrim/profile/<username>/<uuid>
+            UUID postID = UUID.fromString(args[3]);
 
-        // Create a new comment
-        CommentModel commentModel = new CommentModel(cluster);
-        commentModel.addComment(postID, username, caption);
+            // Create a new comment
+            CommentModel commentModel = new CommentModel(cluster);
+            commentModel.addComment(postID, username, caption);
+            response.sendRedirect("/Instagrim/profile/" + username + "/" + postID);
+        } else {
+            // foreach Part part in the request
+            for (Part part : request.getParts()) {
+                // Get the type of the content and an input stream
+                String type = part.getContentType();
+                InputStream is = request.getPart(part.getName()).getInputStream();
+                int i = is.available();
+
+                // Get the current session and session store
+                HttpSession session = request.getSession();
+                SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+                // if someone is currently logged in
+                if (sessionStore.isLoggedIn()) {
+                    // get their username
+                    UserModel user = new UserModel(sessionStore.getUsername(), CassandraHosts.getCluster());
+                    // if there are bytes available
+                    if (i > 0) {
+                        // read the bytes and store them in b
+                        byte[] b = new byte[i + 1];
+                        is.read(b);
+                        user.setProfilePicture(sessionStore.getUsername(), b, type, i);
+                        // Close the input stream
+                        is.close();
+                    }
+                }
+                response.sendRedirect("/Instagrim/profile/");
+            }
+        }
     }
 }

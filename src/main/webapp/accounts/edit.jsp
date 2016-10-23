@@ -17,7 +17,7 @@
                 }
             %>
             <h1>Edit Account</h1>
-            <img src="/Instagrim/image/avatar/<%=sessionStore.getUsername()%>"/>
+            <img src="/Instagrim/avatar/<%=sessionStore.getUsername()%>"/>
             <form method="POST" enctype="multipart/form-data" action="../account">
                 Profile Picture: <input type="file" name="profile-pic"><br/>
 
