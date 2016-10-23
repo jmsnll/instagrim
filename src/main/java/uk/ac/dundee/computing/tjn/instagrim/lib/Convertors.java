@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * @author thms
+ * @author James Neill
  */
 public final class Convertors {
 

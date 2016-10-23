@@ -13,52 +13,133 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import javax.xml.bind.DatatypeConverter;
 
+/**
+ *
+ * @author James Neill
+ */
 public class PasswordStorage {
 
+    /**
+     *
+     */
     @SuppressWarnings("serial")
     static public class InvalidHashException extends Exception {
 
+        /**
+         *
+         * @param message
+         */
         public InvalidHashException(String message) {
             super(message);
         }
 
+        /**
+         *
+         * @param message
+         * @param source
+         */
         public InvalidHashException(String message, Throwable source) {
             super(message, source);
         }
     }
 
+    /**
+     *
+     */
     @SuppressWarnings("serial")
     static public class CannotPerformOperationException extends Exception {
 
+        /**
+         *
+         * @param message
+         */
         public CannotPerformOperationException(String message) {
             super(message);
         }
 
+        /**
+         *
+         * @param message
+         * @param source
+         */
         public CannotPerformOperationException(String message, Throwable source) {
             super(message, source);
         }
     }
 
+    /**
+     *
+     */
     public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 
     // These constants may be changed without breaking existing hashes.
+    /**
+     *
+     */
     public static final int SALT_BYTE_SIZE = 24;
+
+    /**
+     *
+     */
     public static final int HASH_BYTE_SIZE = 18;
+
+    /**
+     *
+     */
     public static final int PBKDF2_ITERATIONS = 64000;
 
     // These constants define the encoding and may not be changed.
+    /**
+     *
+     */
     public static final int HASH_SECTIONS = 5;
+
+    /**
+     *
+     */
     public static final int HASH_ALGORITHM_INDEX = 0;
+
+    /**
+     *
+     */
     public static final int ITERATION_INDEX = 1;
+
+    /**
+     *
+     */
     public static final int HASH_SIZE_INDEX = 2;
+
+    /**
+     *
+     */
     public static final int SALT_INDEX = 3;
+
+    /**
+     *
+     */
     public static final int PBKDF2_INDEX = 4;
 
+    /**
+     *
+     * @param password
+     *
+     * @return
+     *
+     * @throws CannotPerformOperationException
+     */
     public static String createHash(String password)
             throws CannotPerformOperationException {
         return createHash(password.toCharArray());
     }
 
+    /**
+     *
+     * @param password
+     *
+     * @return
+     *
+     * @throws CannotPerformOperationException
+     */
     public static String createHash(char[] password)
             throws CannotPerformOperationException {
         // Generate a random salt
@@ -81,11 +162,31 @@ public class PasswordStorage {
         return parts;
     }
 
+    /**
+     *
+     * @param password
+     * @param correctHash
+     *
+     * @return
+     *
+     * @throws CannotPerformOperationException
+     * @throws InvalidHashException
+     */
     public static boolean verifyPassword(String password, String correctHash)
             throws CannotPerformOperationException, InvalidHashException {
         return verifyPassword(password.toCharArray(), correctHash);
     }
 
+    /**
+     *
+     * @param password
+     * @param correctHash
+     *
+     * @return
+     *
+     * @throws CannotPerformOperationException
+     * @throws InvalidHashException
+     */
     public static boolean verifyPassword(char[] password, String correctHash)
             throws CannotPerformOperationException, InvalidHashException {
         // Decode the hash into its parameters
@@ -155,7 +256,7 @@ public class PasswordStorage {
             );
         }
 
-        // Compute the hash of the provided password, using the same salt, 
+        // Compute the hash of the provided password, using the same salt,
         // iteration count, and hash length
         byte[] testHash = pbkdf2(password, salt, iterations, hash.length);
         // Compare the hashes in constant time. The password is correct if

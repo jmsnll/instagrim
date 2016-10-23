@@ -19,6 +19,10 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.lib.PasswordStorage;
 import uk.ac.dundee.computing.tjn.instagrim.lib.TwoFactorAuthUtil;
 
+/**
+ *
+ * @author James Neill
+ */
 public class UserModel {
 
     private String username;
@@ -36,12 +40,26 @@ public class UserModel {
 
     private TwoFactorAuthUtil twoFactorHandler = new TwoFactorAuthUtil();
 
+    /**
+     *
+     * @param username
+     * @param cluster
+     */
     public UserModel(String username, Cluster cluster) {
         this.username = username;
         this.cluster = cluster;
         pull();
     }
 
+    /**
+     *
+     * @param username
+     * @param password
+     * @param email
+     * @param first_name
+     * @param last_name
+     * @param cluster
+     */
     public UserModel(String username, String password, String email, String first_name, String last_name, Cluster cluster) {
         this.username = username;
         try {
@@ -56,6 +74,9 @@ public class UserModel {
         this.cluster = cluster;
     }
 
+    /**
+     *
+     */
     public void pull() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT * FROM accounts WHERE username = ?");
@@ -76,6 +97,9 @@ public class UserModel {
         }
     }
 
+    /**
+     *
+     */
     public void push() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("UPDATE instagrim.accounts SET password = ?, "
@@ -85,6 +109,10 @@ public class UserModel {
         session.execute(bs.bind(this.password, this.firstName, this.lastName, this.email, this.emailVerified, this.base32secret, this.bio, this.following, this.followers, this.username));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isTwoFactorEnabled() {
         if (this.base32secret == null) {
             return false;
@@ -92,14 +120,24 @@ public class UserModel {
         return true;
     }
 
+    /**
+     *
+     */
     public void enableTwoFactor() {
         this.base32secret = twoFactorHandler.generateBase32Secret();
     }
 
+    /**
+     *
+     */
     public void disableTwoFactor() {
         this.base32secret = null;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCurrentTwoFactorCode() {
         if (!isTwoFactorEnabled()) {
             return null;
@@ -113,6 +151,11 @@ public class UserModel {
         return code;
     }
 
+    /**
+     *
+     * @param code
+     * @return
+     */
     public Boolean isValidTwoFactorCode(String code) {
         try {
             if (code.equals(twoFactorHandler.generateCurrentNumber(this.base32secret))) {
@@ -124,6 +167,10 @@ public class UserModel {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean register() {
         if (exists(username, cluster)) {
             return false;
@@ -135,6 +182,10 @@ public class UserModel {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean delete() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("DELETE FROM accounts WHERE username = ?");
@@ -143,6 +194,13 @@ public class UserModel {
         return true;
     }
 
+    /**
+     *
+     * @param username
+     * @param password
+     * @param cluster
+     * @return
+     */
     public static boolean isValidUser(String username, String password, Cluster cluster) {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT password FROM accounts WHERE username = ?");
@@ -166,6 +224,12 @@ public class UserModel {
         return false;
     }
 
+    /**
+     *
+     * @param username
+     * @param cluster
+     * @return
+     */
     public static boolean exists(String username, Cluster cluster) {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT username FROM accounts WHERE username = ?");
@@ -177,6 +241,11 @@ public class UserModel {
         return true;
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public boolean follows(String username) {
         if (following.contains(username)) {
             return true;
@@ -184,6 +253,11 @@ public class UserModel {
         return false;
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public boolean followed(String username) {
         if (followers.contains(username)) {
             return true;
@@ -191,18 +265,34 @@ public class UserModel {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     *
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setPassword(String password) {
         try {
             this.password = PasswordStorage.createHash(password);
@@ -211,66 +301,133 @@ public class UserModel {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     *
+     * @param email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     *
+     * @return
+     */
     public Boolean getEmailVerified() {
         return emailVerified;
     }
 
+    /**
+     *
+     * @param emailVerified
+     */
     public void setEmailVerified(Boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getBase32secret() {
         return base32secret;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getBio() {
         return bio;
     }
 
+    /**
+     *
+     * @param bio
+     */
     public void setBio(String bio) {
         this.bio = bio;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     *
+     * @param firstName
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     *
+     * @param lastName
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getFollowers() {
         return followers;
     }
 
+    /**
+     *
+     * @param followers
+     */
     public void setFollowers(Set<String> followers) {
         this.followers = followers;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getFollowing() {
         return following;
     }
 
+    /**
+     *
+     * @param following
+     */
     public void setFollowing(Set<String> following) {
         this.following = following;
     }
 
+    /**
+     *
+     * @param username
+     * @param image
+     * @param type
+     * @param length
+     */
     public void setProfilePicture(String username, byte[] image, String type, int length) {
         try {
             FileOutputStream fos = null;
@@ -292,6 +449,10 @@ public class UserModel {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public ByteBuffer getProfilePicture() {
         Session session = cluster.connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT profile_pic FROM accounts WHERE username = ?");

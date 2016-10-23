@@ -14,16 +14,34 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
+/**
+ *
+ * @author James Neill
+ */
 @WebServlet(name = "Register", urlPatterns = {"/register"})
 public class Register extends HttpServlet {
 
     Cluster cluster = null;
 
+    /**
+     *
+     * @param config
+     *
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
         cluster = CassandraHosts.getCluster();
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     *
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -37,9 +55,18 @@ public class Register extends HttpServlet {
         }
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     *
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // get all of the submitted information
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String password_confirmation = request.getParameter("password_confirmation");
@@ -49,26 +76,27 @@ public class Register extends HttpServlet {
 
         RequestDispatcher rd = request.getRequestDispatcher("/auth/register.jsp");
 
+        // if the user already exists
         if (UserModel.exists(username, cluster)) {
+            // set the error message return to the page
             request.setAttribute("username_taken", true);
             request.setAttribute("message", "Looks like that username is already taken, please try again.");
             rd.forward(request, response);
             return;
         }
+        // if the password doesn't match the one in the database
         if (!password.equals(password_confirmation)) {
+            // set the error message return to the page
             request.setAttribute("password_mismatch", true);
             request.setAttribute("message", "Passwords do not match, please try again.");
             rd.forward(request, response);
             return;
         }
+        // otherwise create a new user with the information provided
         UserModel user = new UserModel(username, password, email, first_name, last_name, cluster);
+        // register them
         user.register();
-        rd.forward(request, response);
+        // return to the homepage
         response.sendRedirect("/Instagrim");
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

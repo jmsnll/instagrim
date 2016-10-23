@@ -25,6 +25,10 @@ import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.PostStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
+/**
+ *
+ * @author James Neill
+ */
 @WebServlet(urlPatterns = {
     "/image",
     "/image/*",
@@ -39,6 +43,9 @@ public class Image extends HttpServlet {
     private Cluster cluster;
     private final HashMap CommandsMap = new HashMap();
 
+    /**
+     *
+     */
     public Image() {
         super();
         CommandsMap.put("image", 1);
@@ -46,11 +53,25 @@ public class Image extends HttpServlet {
         CommandsMap.put("avatar", 3);
     }
 
+    /**
+     *
+     * @param config
+     *
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
         this.cluster = CassandraHosts.getCluster();
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     *
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String args[] = Convertors.SplitRequestPath(request);
@@ -76,18 +97,24 @@ public class Image extends HttpServlet {
     }
 
     private void displayImage(String postID, HttpServletResponse response) throws ServletException, IOException {
+        // Create and get a post by it's ID
         PostModel pm = new PostModel();
         PostStore post = pm.getPost(UUID.fromString(postID));
+        // Get an output stream to write image data to
         OutputStream os = response.getOutputStream();
 
+        // Set the content type (i.e. image/jpeg) and the length of the data
         response.setContentType(post.getType());
         response.setContentLength(post.getLength());
+        // Create a new inputstream using the image bytes
         InputStream is = new ByteArrayInputStream(post.getBytes());
         BufferedInputStream bis = new BufferedInputStream(is);
+        // write to the output stream with an 8k buffer
         byte[] buffer = new byte[8192];
         for (int length = 0; (length = bis.read(buffer)) > 0;) {
             os.write(buffer, 0, length);
         }
+        // close the output stream
         os.close();
     }
 
@@ -108,28 +135,42 @@ public class Image extends HttpServlet {
 //        }
 //        os.close();
 //    }
+    /**
+     *
+     * @param request
+     * @param response
+     *
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // foreach Part part in the request
         for (Part part : request.getParts()) {
+            // Get the type of the content and an input stream
             String type = part.getContentType();
             InputStream is = request.getPart(part.getName()).getInputStream();
             int i = is.available();
 
+            // Get the current session and session store
             HttpSession session = request.getSession();
             SessionStore logInHandler = (SessionStore) session.getAttribute("LoggedIn");
-            String username = "majed";
+            // if someone is currently logged in
             if (logInHandler.isLoggedIn()) {
-                username = logInHandler.getUsername();
-            }
-            if (i > 0) {
-                byte[] b = new byte[i + 1];
-                is.read(b);
-                System.out.println("Length : " + b.length);
-                PostModel post = new PostModel();
-                String caption = request.getParameter("caption");
-                post.createPost(username, caption, b, type);
-
-                is.close();
+                // get their username
+                String username = logInHandler.getUsername();
+                // if there are bytes available
+                if (i > 0) {
+                    // read the bytes and store them in b
+                    byte[] b = new byte[i + 1];
+                    is.read(b);
+                    // Create a new post
+                    PostModel post = new PostModel();
+                    String caption = request.getParameter("caption");
+                    post.createPost(username, caption, b, type);
+                    // Close the input stream
+                    is.close();
+                }
             }
             RequestDispatcher rd = request.getRequestDispatcher("/post.jsp");
             rd.forward(request, response);

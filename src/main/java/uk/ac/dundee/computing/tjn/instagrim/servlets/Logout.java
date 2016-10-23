@@ -8,10 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
+/**
+ *
+ * @author James Neill
+ */
 @WebServlet(name = "Logout", urlPatterns = {"/logout"})
 public class Logout extends HttpServlet {
 
+    /**
+     *
+     * @param request
+     * @param response
+     *
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Invalididate the current session and return to the homepage
         request.getSession().invalidate();
         request.setAttribute("LoggedIn", new SessionStore());
         request.getRequestDispatcher("/index.jsp").forward(request, response);

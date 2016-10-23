@@ -2,12 +2,23 @@ package uk.ac.dundee.computing.tjn.instagrim.lib;
 
 import com.datastax.driver.core.*;
 
+/**
+ *
+ * @author James Neill
+ */
 public final class Keyspaces {
 
+    /**
+     *
+     */
     public Keyspaces() {
 
     }
 
+    /**
+     *
+     * @param c
+     */
     public static void SetUpKeySpaces(Cluster c) {
         try {
             //Add some keyspaces here

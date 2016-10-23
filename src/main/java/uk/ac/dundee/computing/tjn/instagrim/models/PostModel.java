@@ -29,6 +29,10 @@ import org.imgscalr.Scalr.Method;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.stores.PostStore;
 
+/**
+ *
+ * @author James Neill
+ */
 public class PostModel {
 
     Cluster cluster = CassandraHosts.getCluster();
@@ -40,9 +44,16 @@ public class PostModel {
     private Set<String> likes;
     private Set<UUID> comments;
 
+    /**
+     *
+     */
     public PostModel() {
     }
 
+    /**
+     *
+     * @param postID
+     */
     public PostModel(UUID postID) {
         this.postID = postID;
         pull();
@@ -65,6 +76,13 @@ public class PostModel {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @param caption
+     * @param image
+     * @param type
+     */
     public void createPost(String username, String caption, byte[] image, String type) {
         FileOutputStream fos = null;
         try {
@@ -107,6 +125,11 @@ public class PostModel {
         }
     }
 
+    /**
+     *
+     * @param post
+     * @return
+     */
     public static boolean exists(UUID post) {
         Session session = CassandraHosts.getCluster().connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT postid FROM posts WHERE postid = ?");
@@ -118,6 +141,12 @@ public class PostModel {
         return true;
     }
 
+    /**
+     *
+     * @param postID
+     * @param type
+     * @return
+     */
     public byte[] imageResize(String postID, String type) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
@@ -135,6 +164,12 @@ public class PostModel {
         return null;
     }
 
+    /**
+     *
+     * @param postID
+     * @param type
+     * @return
+     */
     public byte[] imageDecolour(String postID, String type) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
@@ -151,17 +186,32 @@ public class PostModel {
         return null;
     }
 
+    /**
+     *
+     * @param image
+     * @return
+     */
     public static BufferedImage createThumbnail(BufferedImage image) {
         image = resize(image, Method.SPEED, 250, OP_ANTIALIAS, OP_GRAYSCALE);
         return pad(image, 2);
     }
 
+    /**
+     *
+     * @param image
+     * @return
+     */
     public static BufferedImage createProcessed(BufferedImage image) {
         int Width = image.getWidth() - 1;
         image = resize(image, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE);
         return pad(image, 4);
     }
 
+    /**
+     *
+     * @param postID
+     * @return
+     */
     public PostStore getPost(UUID postID) {
         Session session = CassandraHosts.getCluster().connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT * FROM posts WHERE postid = ?");
@@ -185,6 +235,11 @@ public class PostModel {
         return null;
     }
 
+    /**
+     *
+     * @param query
+     * @return
+     */
     public static LinkedList<PostStore> searchPosts(String query) {
         LinkedList<PostStore> posts = new LinkedList<>();
         Session session = CassandraHosts.getCluster().connect("instagrim");
@@ -202,6 +257,11 @@ public class PostModel {
         return posts;
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public LinkedList<PostStore> getUsersPosts(String username) {
         LinkedList<PostStore> posts = new LinkedList<>();
         Session session = cluster.connect("instagrim");
@@ -226,10 +286,19 @@ public class PostModel {
         return posts;
     }
 
+    /**
+     *
+     * @return
+     */
     public LinkedList<PostStore> getMostRecentPosts() {
         return getMostRecentPosts(10);
     }
 
+    /**
+     *
+     * @param count
+     * @return
+     */
     public LinkedList<PostStore> getMostRecentPosts(int count) {
         LinkedList<PostStore> posts = new LinkedList<>();
         Session session = cluster.connect("instagrim");
@@ -254,50 +323,98 @@ public class PostModel {
         return posts;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     *
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     *
+     * @return
+     */
     public UUID getPostID() {
         return postID;
     }
 
+    /**
+     *
+     * @param postID
+     */
     public void setPostID(UUID postID) {
         this.postID = postID;
     }
 
+    /**
+     *
+     * @return
+     */
     public LocalDate getPosted() {
         return posted;
     }
 
+    /**
+     *
+     * @param posted
+     */
     public void setPosted(LocalDate posted) {
         this.posted = posted;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCaption() {
         return caption;
     }
 
+    /**
+     *
+     * @param caption
+     */
     public void setCaption(String caption) {
         this.caption = caption;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getLikes() {
         return likes;
     }
 
+    /**
+     *
+     * @param likes
+     */
     public void setLikes(Set<String> likes) {
         this.likes = likes;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<UUID> getComments() {
         return comments;
     }
 
+    /**
+     *
+     * @param comments
+     */
     public void setComments(Set<UUID> comments) {
         this.comments = comments;
     }

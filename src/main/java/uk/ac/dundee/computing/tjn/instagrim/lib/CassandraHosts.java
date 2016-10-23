@@ -5,19 +5,36 @@ import com.datastax.driver.core.*;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ *
+ * @author James Neill
+ */
 public final class CassandraHosts {
 
     private static Cluster cluster;
     static String Host = "127.0.0.1";  //at least one starting point to talk to
 
+    /**
+     *
+     */
     public CassandraHosts() {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getHost() {
         return (Host);
     }
 
+    /**
+     *
+     * @param cluster
+     *
+     * @return
+     */
     public static String[] getHosts(Cluster cluster) {
 
         if (cluster == null) {
@@ -49,6 +66,10 @@ public final class CassandraHosts {
         return sHosts;
     }
 
+    /**
+     *
+     * @return
+     */
     public static Cluster getCluster() {
         System.out.println("getCluster");
         cluster = Cluster.builder()
@@ -62,6 +83,9 @@ public final class CassandraHosts {
 
     }
 
+    /**
+     *
+     */
     public void close() {
         cluster.close();
     }
