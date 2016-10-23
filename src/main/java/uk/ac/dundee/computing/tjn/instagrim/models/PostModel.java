@@ -26,13 +26,12 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import static org.imgscalr.Scalr.*;
 import org.imgscalr.Scalr.Method;
-
-import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
+import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.stores.PostStore;
 
 public class PostModel {
 
-    Cluster cluster;
+    Cluster cluster = CassandraHosts.getCluster();
 
     private String username;
     private UUID postID;
@@ -40,15 +39,12 @@ public class PostModel {
     private String caption;
     private Set<String> likes;
     private Set<UUID> comments;
-    private ImageStore image;
 
-    public PostModel(Cluster cluster) {
-        this.cluster = cluster;
+    public PostModel() {
     }
 
-    public PostModel(UUID postID, Cluster cluster) {
+    public PostModel(UUID postID) {
         this.postID = postID;
-        this.cluster = cluster;
         pull();
     }
 
@@ -108,8 +104,8 @@ public class PostModel {
         }
     }
 
-    public static boolean exists(UUID post, Cluster cluster) {
-        Session session = cluster.connect("instagrim");
+    public static boolean exists(UUID post) {
+        Session session = CassandraHosts.getCluster().connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT postid FROM posts WHERE postid = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(post));
@@ -164,23 +160,26 @@ public class PostModel {
     }
 
     public PostStore getPost(UUID postID) {
-        Session session = cluster.connect("instagrim");
+        Session session = CassandraHosts.getCluster().connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT * FROM posts WHERE postid = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet results = session.execute(bs.bind(postID));
-        if (results.isExhausted() || results.all().size() > 1) {
-            return null;
-        } else {
-            Row row = results.one();
-            PostStore post = new PostStore();
-            post.setPostID(postID);
-            post.setCaption(row.getString("caption"));
-            post.setComments(row.getSet("comments", UUID.class));
-            post.setLikes(row.getSet("likes", String.class));
-            post.setPosted(row.getDate("posted"));
-            post.setUsername(row.getString("username"));
-            return post;
+        if (!results.isExhausted()) {
+            for (Row row : results) {
+                PostStore post = new PostStore();
+                post.setPostID(postID);
+                post.setCaption(row.getString("caption"));
+                post.setComments(row.getSet("comments", UUID.class));
+                post.setLikes(row.getSet("likes", String.class));
+                //post.setPosted(row.getDate("posted"));
+                post.setUsername(row.getString("username"));
+                post.setImage(row.getBytes("image"));
+                post.setType(row.getString("type"));
+                post.setLength(row.getInt("imagelength"));
+                return post;
+            }
         }
+        return null;
     }
 
     public LinkedList<PostStore> getUsersPosts(String username) {
@@ -214,7 +213,7 @@ public class PostModel {
     public LinkedList<PostStore> getMostRecentPosts(int count) {
         LinkedList<PostStore> posts = new LinkedList<>();
         Session session = cluster.connect("instagrim");
-        SimpleStatement statement = new SimpleStatement("SELECT postid FROM posts LIMIT " + count);
+        SimpleStatement statement = new SimpleStatement("SELECT * FROM posts LIMIT " + count);
         ResultSet results = session.execute(statement);
 
         if (results.isExhausted()) {
@@ -227,110 +226,12 @@ public class PostModel {
                 post.setCaption(row.getString("caption"));
                 post.setComments(row.getSet("comments", UUID.class));
                 post.setLikes(row.getSet("likes", String.class));
-//                post.setPosted(row.getTimestamp("posted"));
+//              post.setPosted(row.getTimestamp("posted"));
                 post.setUsername(row.getString("username"));
                 posts.add(post);
             }
         }
         return posts;
-    }
-
-    public LinkedList<ImageStore> getUsersImages(String username) {
-        LinkedList<ImageStore> images = new LinkedList<>();
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select postid from posts where username = ?");
-        BoundStatement bs = new BoundStatement(ps);
-        ResultSet rs = session.execute(bs.bind(username));
-        if (rs.isExhausted()) {
-            return null;
-        } else {
-            for (Row row : rs) {
-                ImageStore image = new ImageStore();
-                UUID uuid = row.getUUID("postid");
-                System.out.println("UUID" + uuid.toString());
-                image.setID(uuid);
-                images.add(image);
-
-            }
-        }
-        return images;
-    }
-
-    public LinkedList<ImageStore> getMostRecentImages() {
-        LinkedList<ImageStore> images = new LinkedList<>();
-        Session session = cluster.connect("instagrim");
-        SimpleStatement statement = new SimpleStatement("select postid from posts limit 9");
-        ResultSet rs = session.execute(statement);
-
-        if (rs.isExhausted()) {
-
-        } else {
-            for (Row row : rs) {
-                ImageStore image = new ImageStore();
-                UUID uuid = row.getUUID("postid");
-                image.setID(uuid);
-                images.add(image);
-            }
-        }
-        return images;
-    }
-
-    public ImageStore getImage() {
-        return this.image;
-    }
-
-    public void setImage(ImageStore image) {
-        this.image = image;
-    }
-
-    public void setImage(UUID imageID) {
-        image.setID(imageID);
-    }
-
-    public ImageStore getImage(int imageType, UUID postID) {
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = null;
-        switch (imageType) {
-            case Convertors.DISPLAY_IMAGE:
-                ps = session.prepare("SELECT image, imageLength, type FROM posts WHERE postid = ?");
-                break;
-            case Convertors.DISPLAY_PROCESSED:
-                ps = session.prepare("SELECT processed, processedLength, type FROM posts WHERE postid = ?");
-                break;
-            case Convertors.DISPLAY_THUMB:
-                ps = session.prepare("SELECT thumbnail, imageLength, thumbnailLength, type FROM posts WHERE postid = ?");
-                break;
-        }
-        BoundStatement bs = new BoundStatement(ps);
-        ResultSet results = session.execute(bs.bind(postID));
-        ByteBuffer imageBuffer = null;
-        String type = null;
-        int length = 0;
-        if (results.isExhausted()) {
-            return null;
-        } else {
-            for (Row row : results) {
-                switch (imageType) {
-                    case Convertors.DISPLAY_IMAGE:
-                        imageBuffer = row.getBytes("image");
-                        length = row.getInt("imageLength");
-                        break;
-                    case Convertors.DISPLAY_PROCESSED:
-                        imageBuffer = row.getBytes("processed");
-                        length = row.getInt("processedLength");
-                        break;
-                    case Convertors.DISPLAY_THUMB:
-                        imageBuffer = row.getBytes("thumbnail");
-                        length = row.getInt("thumbnailLength");
-                        break;
-                }
-                type = row.getString("type");
-            }
-        }
-        session.close();
-        ImageStore image = new ImageStore();
-        image.setImage(imageBuffer, length, type);
-        return image;
     }
 
     public String getUsername() {

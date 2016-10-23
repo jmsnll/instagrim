@@ -4,7 +4,6 @@
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.LinkedList"%>
-<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

@@ -51,7 +51,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="/Instagrim/upload.jsp"><l class="fa fa-plus-square-o"></l></a>
+                    <a href="/Instagrim/post.jsp"><l class="fa fa-plus-square-o"></l></a>
                 </li>
             </ul>
         </div>

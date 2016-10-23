@@ -1,12 +1,11 @@
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.PostStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.models.PostModel"%>
+<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <%@page import="com.datastax.driver.core.Cluster"%>
 <%@page import="uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.LinkedList"%>
-<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore"%>
-<%@page import="uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,18 +38,18 @@
                     </div>
                 </div>
                 <%                    Cluster cluster = CassandraHosts.getCluster();
-                    PostModel post = new PostModel(cluster);
-
-                    if (images == null) {
+                    PostModel post = new PostModel();
+                    LinkedList<PostStore> posts = post.getMostRecentPosts();
+                    if (posts == null) {
                 %>
                 <p>No posts found!</p>
                 <%} else {
-                    Iterator<ImageStore> iterator = images.iterator();
+                    Iterator<PostStore> iterator = posts.iterator();
                     while (iterator.hasNext()) {
-                        ImageStore is = (ImageStore) iterator.next();
+                        PostStore ps = (PostStore) iterator.next();
                 %>
                 <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=is.getID()%>')">
+                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=ps.getPostID()%>')">
                     </div>
                 </div>
                 <%

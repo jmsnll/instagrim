@@ -24,7 +24,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
-import uk.ac.dundee.computing.tjn.instagrim.stores.ImageStore;
+import uk.ac.dundee.computing.tjn.instagrim.stores.PostStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
 @WebServlet(urlPatterns = {
@@ -65,29 +65,26 @@ public class Image extends HttpServlet {
         }
         switch (command) {
             case 1:
-                DisplayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
+                displayImage(args[2], response);
                 break;
             case 2:
-                DisplayImage(Convertors.DISPLAY_THUMB, args[2], response);
+                displayImage(args[2], response);
                 break;
-            case 3:
-                displayProfileImage(args[2], response);
+//            case 3:
+//                displayProfileImage(args[2], response);
             default:
                 error("Bad Operator", response);
         }
     }
 
-    private void DisplayImage(int type, String postID, HttpServletResponse response) throws ServletException, IOException {
-        PostModel im = new PostModel(cluster);
-
-        ImageStore image = im.getImage(type, UUID.fromString(postID));
-
+    private void displayImage(String postID, HttpServletResponse response) throws ServletException, IOException {
+        PostModel pm = new PostModel();
+        PostStore post = pm.getPost(UUID.fromString(postID));
         OutputStream os = response.getOutputStream();
 
-        response.setContentType(image.getType());
-        response.setContentLength(image.getLength());
-
-        InputStream is = new ByteArrayInputStream(image.getBytes());
+        response.setContentType(post.getType());
+        response.setContentLength(post.getLength());
+        InputStream is = new ByteArrayInputStream(post.getBytes());
         BufferedInputStream bis = new BufferedInputStream(is);
         byte[] buffer = new byte[8192];
         for (int length = 0; (length = bis.read(buffer)) > 0;) {
@@ -96,25 +93,24 @@ public class Image extends HttpServlet {
         os.close();
     }
 
-    private void displayProfileImage(String username, HttpServletResponse response) throws ServletException, IOException {
-        UserModel user = new UserModel(username, cluster);
-        ImageStore image = user.getProfilePicture();
-
-        OutputStream os = response.getOutputStream();
-
-        response.setContentType(image.getType());
-        response.setContentLength(image.getLength());
-
-        InputStream is = new ByteArrayInputStream(image.getBytes());
-        BufferedInputStream bis = new BufferedInputStream(is);
-        byte[] buffer = new byte[8192];
-        for (int length = 0; (length = bis.read(buffer)) > 0;) {
-            os.write(buffer, 0, length);
-        }
-        os.close();
-
-    }
-
+//    private void displayProfileImage(String username, HttpServletResponse response) throws ServletException, IOException {
+//        UserModel user = new UserModel(username, cluster);
+//        ImageStore image = user.getProfilePicture();
+//
+//        OutputStream os = response.getOutputStream();
+//
+//        response.setContentType(image.getType());
+//        response.setContentLength(image.getLength());
+//
+//        InputStream is = new ByteArrayInputStream(image.getBytes());
+//        BufferedInputStream bis = new BufferedInputStream(is);
+//        byte[] buffer = new byte[8192];
+//        for (int length = 0; (length = bis.read(buffer)) > 0;) {
+//            os.write(buffer, 0, length);
+//        }
+//        os.close();
+//
+//    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         for (Part part : request.getParts()) {
@@ -132,7 +128,7 @@ public class Image extends HttpServlet {
                 byte[] b = new byte[i + 1];
                 is.read(b);
                 System.out.println("Length : " + b.length);
-                PostModel post = new PostModel(cluster);
+                PostModel post = new PostModel();
                 String caption = request.getParameter("caption");
                 post.createPost(username, caption, b, type);
 

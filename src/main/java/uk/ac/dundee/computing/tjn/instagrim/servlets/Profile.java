@@ -76,8 +76,8 @@ public class Profile extends HttpServlet {
     private void displayPost(UUID postID, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher("/views/viewpost.jsp");
         HttpSession session = request.getSession();
-        if (PostModel.exists(postID, cluster)) {
-            PostModel post = new PostModel(postID, cluster);
+        if (PostModel.exists(postID)) {
+            PostModel post = new PostModel(postID);
             session.setAttribute("post", post);
             rd.forward(request, response);
         } else {
