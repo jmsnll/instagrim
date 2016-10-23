@@ -1,12 +1,14 @@
 package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.utils.Bytes;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
@@ -22,6 +24,7 @@ import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
+import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.PostStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
@@ -89,8 +92,8 @@ public class Image extends HttpServlet {
             case 2:
                 displayImage(args[2], response);
                 break;
-//            case 3:
-//                displayProfileImage(args[2], response);
+            case 3:
+                displayProfileImage(args[2], response);
             default:
                 error("Bad Operator", response);
         }
@@ -118,23 +121,24 @@ public class Image extends HttpServlet {
         os.close();
     }
 
-//    private void displayProfileImage(String username, HttpServletResponse response) throws ServletException, IOException {
-//        UserModel user = new UserModel(username, cluster);
-//        ByteBuffer image = user.getProfilePicture();
-//
-//        OutputStream os = response.getOutputStream();
-//
-//        response.setContentType(image.getType());
-//        response.setContentLength(image.getLength());
-//
-//        InputStream is = new ByteArrayInputStream(image.getBytes());
-//        BufferedInputStream bis = new BufferedInputStream(is);
-//        byte[] buffer = new byte[8192];
-//        for (int length = 0; (length = bis.read(buffer)) > 0;) {
-//            os.write(buffer, 0, length);
-//        }
-//        os.close();
-//    }
+    private void displayProfileImage(String username, HttpServletResponse response) throws ServletException, IOException {
+        UserModel user = new UserModel(username, cluster);
+        ByteBuffer image = user.getProfilePicture();
+
+        OutputStream os = response.getOutputStream();
+
+        response.setContentType(user.getType());
+        response.setContentLength(user.getLength());
+
+        InputStream is = new ByteArrayInputStream(Bytes.getArray(image));
+        BufferedInputStream bis = new BufferedInputStream(is);
+        byte[] buffer = new byte[8192];
+        for (int length = 0; (length = bis.read(buffer)) > 0;) {
+            os.write(buffer, 0, length);
+        }
+        os.close();
+    }
+
     /**
      *
      * @param request

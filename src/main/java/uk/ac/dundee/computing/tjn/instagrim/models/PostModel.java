@@ -9,9 +9,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -237,9 +235,9 @@ public class PostModel {
      *
      * @return
      */
-    public static BufferedImage createSepia(BufferedImage image) {
+    public static BufferedImage createDarker(BufferedImage image) {
         int Width = image.getWidth() - 1;
-        image = resize(image, Method.SPEED, Width, OP_ANTIALIAS,);
+        image = resize(image, Method.SPEED, Width, OP_ANTIALIAS, OP_DARKER);
         return pad(image, 4);
     }
 

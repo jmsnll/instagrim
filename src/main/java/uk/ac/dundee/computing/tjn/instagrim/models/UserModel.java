@@ -35,6 +35,9 @@ public class UserModel {
     private Set<String> followers;
     private Set<String> following;
     private String bio;
+    private ByteBuffer image = null;
+    private int length;
+    private String type;
 
     private final Cluster cluster;
 
@@ -49,6 +52,30 @@ public class UserModel {
         this.username = username;
         this.cluster = cluster;
         pull();
+    }
+
+    public ByteBuffer getImage() {
+        return image;
+    }
+
+    public void setImage(ByteBuffer image) {
+        this.image = image;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**
@@ -94,6 +121,7 @@ public class UserModel {
             this.bio = row.getString("bio");
             this.following = row.getSet("following", String.class);
             this.followers = row.getSet("followers", String.class);
+            this.image = row.getBytes("profile_pic");
         }
     }
 
@@ -154,6 +182,7 @@ public class UserModel {
     /**
      *
      * @param code
+     *
      * @return
      */
     public Boolean isValidTwoFactorCode(String code) {
@@ -199,6 +228,7 @@ public class UserModel {
      * @param username
      * @param password
      * @param cluster
+     *
      * @return
      */
     public static boolean isValidUser(String username, String password, Cluster cluster) {
@@ -228,6 +258,7 @@ public class UserModel {
      *
      * @param username
      * @param cluster
+     *
      * @return
      */
     public static boolean exists(String username, Cluster cluster) {
@@ -244,6 +275,7 @@ public class UserModel {
     /**
      *
      * @param username
+     *
      * @return
      */
     public boolean follows(String username) {
@@ -256,6 +288,7 @@ public class UserModel {
     /**
      *
      * @param username
+     *
      * @return
      */
     public boolean followed(String username) {

@@ -1,12 +1,15 @@
 package uk.ac.dundee.computing.tjn.instagrim.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
@@ -17,6 +20,7 @@ import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
  * @author James Neill
  */
 @WebServlet(name = "Account", urlPatterns = {"/account", "/account/*"})
+
 public class Account extends HttpServlet {
 
     /**
@@ -61,22 +65,41 @@ public class Account extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Gets the current session store attribute 'LoggedIn'
-        SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
-        // if the session store isn't null and someone is currently logged in
+        HttpSession session = request.getSession();
+        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
         if (sessionStore != null && sessionStore.isLoggedIn()) {
-            // Get current user's information.
-            UserModel user = new UserModel(sessionStore.getUsername(), CassandraHosts.getCluster());
-            // if they have two factor enabled
-            if (user.isTwoFactorEnabled()) {
-                // disable it
-                user.disableTwoFactor();
-            } else {
-                // otherwise enable it
-                user.enableTwoFactor();
-                // and set the 'base32secret' to their two-factor authentication key
-                request.setAttribute("base32secret", user.getBase32secret());
+            for (Part part : request.getParts()) {
+                String type = part.getContentType();
+
+                InputStream is = request.getPart(part.getName()).getInputStream();
+                int i = is.available();
+                if (i > 0) {
+                    byte[] b = new byte[i + 1];
+                    is.read(b);
+                    String username = sessionStore.getUsername();
+                    UserModel user = new UserModel(username, CassandraHosts.getCluster());
+                    user.setProfilePicture(username, b, type, b.length);
+
+                    is.close();
+                }
+                RequestDispatcher rd = request.getRequestDispatcher("/profile/");
+                rd.forward(request, response);
             }
         }
+//        // if the session store isn't null and someone is currently logged in
+//        if (sessionStore != null && sessionStore.isLoggedIn()) {
+//            // Get current user's information.
+//            UserModel user = new UserModel(sessionStore.getUsername(), CassandraHosts.getCluster());
+//            // if they have two factor enabled
+//            if (user.isTwoFactorEnabled()) {
+//                // disable it
+//                user.disableTwoFactor();
+//            } else {
+//                // otherwise enable it
+//                user.enableTwoFactor();
+//                // and set the 'base32secret' to their two-factor authentication key
+//                request.setAttribute("base32secret", user.getBase32secret());
+//            }
+//        }
     }
 }

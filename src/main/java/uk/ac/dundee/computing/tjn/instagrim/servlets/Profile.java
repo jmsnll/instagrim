@@ -166,30 +166,6 @@ public class Profile extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
-//        if (sessionStore == null || !sessionStore.isLoggedIn()) {
-//            response.sendRedirect("/Instagrim/login");
-//            return;
-//        }
-//        for (Part part : request.getParts()) {
-//            String type = part.getContentType();
-//
-//            InputStream is = request.getPart(part.getName()).getInputStream();
-//            int i = is.available();
-//            if (i > 0) {
-//                byte[] b = new byte[i + 1];
-//                is.read(b);
-//                String username = sessionStore.getUsername();
-//                UserModel user = new UserModel(username, cluster);
-//                user.setProfilePicture(username, b, type, b.length);
-//
-//                is.close();
-//            }
-//            RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
-//            rd.forward(request, response);
-//        }
-
         // Get the current session and session store
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
