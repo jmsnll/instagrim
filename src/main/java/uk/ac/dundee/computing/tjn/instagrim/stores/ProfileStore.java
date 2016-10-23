@@ -1,6 +1,5 @@
 package uk.ac.dundee.computing.tjn.instagrim.stores;
 
-import java.util.UUID;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 
 public class ProfileStore {

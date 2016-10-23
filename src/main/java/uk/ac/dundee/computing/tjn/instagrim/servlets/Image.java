@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
@@ -23,7 +22,6 @@ import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
-import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.PostStore;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 

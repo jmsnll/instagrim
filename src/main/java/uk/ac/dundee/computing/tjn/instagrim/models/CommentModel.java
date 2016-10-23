@@ -6,12 +6,10 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Iterator;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.stores.CommentStore;
 
