@@ -33,8 +33,7 @@
                         for (CommentStore comment : comments) {
                         %>
                     <div>
-                        <p><%=comment.getUsername()%></p>
-                        <p><%=comment.getPosted().toString()%></p>
+                        <a href="/Instagrim/profile/<%=comment.getUsername()%>"><%=comment.getUsername()%></a>
                         <p><%=comment.getCaption()%></p>
                     </div>
                     <%
