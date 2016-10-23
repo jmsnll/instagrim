@@ -29,6 +29,11 @@ public final class Keyspaces {
                     + " name  varchar,"
                     + " PRIMARY KEY (postid, username)"
                     + ")";
+            String createPostsCaptionTable = "CREATE TABLE if not exists instagrim.postcaptions (\n"
+                    + "postid uuid,\n"
+                    + "caption varchar,\n"
+                    + "PRIMARY KEY(postid, caption)"
+                    + ")";
             String createAccountPostsTable = "CREATE TABLE if not exists instagrim.accountposts (\n"
                     + "postid uuid,\n"
                     + "username varchar,\n"
@@ -42,14 +47,6 @@ public final class Keyspaces {
                     + "caption text,"
                     + "PRIMARY KEY (commentid)"
                     + ")";
-//            String createPostsTable = "CREATE TABLE if not exists instagrim.posts (\n"
-//                    + "postid uuid PRIMARY KEY,\n"
-//                    + "username varchar,\n"
-//                    + "posted timestamp,\n"
-//                    + "caption text,\n"
-//                    + "likes set<varchar>,\n"
-//                    + "comments set<uuid>\n"
-//                    + ");";
             String createAccountsTable = "CREATE TABLE if not exists instagrim.accounts (\n"
                     + "      username varchar PRIMARY KEY,\n"
                     + "      password text,\n"
@@ -82,9 +79,17 @@ public final class Keyspaces {
                 SimpleStatement cqlQuery = new SimpleStatement(createPostsTable);
                 session.execute(cqlQuery);
             } catch (Exception ex) {
-                System.out.println("Can't create images table " + ex);
+                System.out.println("Can't create posts table " + ex);
             }
             System.out.println("" + createAccountPostsTable);
+
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(createPostsCaptionTable);
+                session.execute(cqlQuery);
+            } catch (Exception ex) {
+                System.out.println("Can't create posts caption table " + ex);
+            }
+            System.out.println("" + createPostsCaptionTable);
 
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(createAccountPostsTable);

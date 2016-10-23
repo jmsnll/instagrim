@@ -81,14 +81,18 @@ public class PostModel {
             Session session = cluster.connect("instagrim");
             PreparedStatement psInsertPost = session.prepare("INSERT INTO posts (postid, username, posted, caption, likes, comments, image, thumbnail, processed, imageLength, thumbnailLength, processedLength, type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertAccountPosts = session.prepare("INSERT INTO accountposts (postid, username, posted) VALUES (?,?,?)");
+            PreparedStatement psInsertPostCaption = session.prepare("INSERT INTO postcaptions (postid, caption) VALUES (?,?)");
+
             BoundStatement bsInsertPost = new BoundStatement(psInsertPost);
             BoundStatement bsInsertAccountPosts = new BoundStatement(psInsertAccountPosts);
+            BoundStatement bsInsertPostCaption = new BoundStatement(psInsertPostCaption);
 
             Date now = new Date(System.currentTimeMillis());
 
             TreeSet emptyTreeSet = new TreeSet();
             session.execute(bsInsertPost.bind(postID, username, now, caption, emptyTreeSet, emptyTreeSet, imageBuffer, thumbnailBuffer, processedBuffer, image.length, thumbnail.length, processed.length, type));
             session.execute(bsInsertAccountPosts.bind(postID, username, now));
+            session.execute(bsInsertPostCaption.bind(postID, caption));
             session.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PostModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -179,6 +183,23 @@ public class PostModel {
             }
         }
         return null;
+    }
+
+    public static LinkedList<PostStore> searchPosts(String query) {
+        LinkedList<PostStore> posts = new LinkedList<>();
+        Session session = CassandraHosts.getCluster().connect("instagrim");
+        PreparedStatement ps = session.prepare("SELECT * FROM postcaptions WHERE caption = ? ALLOW FILTERING");
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet results = session.execute(bs.bind(query));
+        if (results.isExhausted()) {
+
+        } else {
+            for (Row row : results) {
+                PostStore post = new PostStore();
+                post.setPostID(row.getUUID("postid"));
+            }
+        }
+        return posts;
     }
 
     public LinkedList<PostStore> getUsersPosts(String username) {
