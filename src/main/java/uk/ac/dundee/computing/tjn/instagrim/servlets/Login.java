@@ -81,7 +81,7 @@ public class Login extends HttpServlet {
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // get the submitted username and password
-        String username = request.getParameter("username");
+        String username = request.getParameter("username").toLowerCase();
         String password = request.getParameter("password");
 
         // is the user doesn't exist or the username & password do not match

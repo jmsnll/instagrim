@@ -67,12 +67,12 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // get all of the submitted information
-        String username = request.getParameter("username");
+        String username = request.getParameter("username").toLowerCase();
         String password = request.getParameter("password");
         String password_confirmation = request.getParameter("password_confirmation");
         String first_name = request.getParameter("first_name");
         String last_name = request.getParameter("last_name");
-        String email = request.getParameter("email");
+        String email = request.getParameter("email").toLowerCase();
 
         RequestDispatcher rd = request.getRequestDispatcher("/auth/register.jsp");
 
