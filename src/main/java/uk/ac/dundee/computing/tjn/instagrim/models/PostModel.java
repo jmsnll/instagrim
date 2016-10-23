@@ -9,7 +9,9 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,28 +96,35 @@ public class PostModel {
             String filetype = Convertors.SplitFiletype(type)[1];
             ByteBuffer imageBuffer = ByteBuffer.wrap(image);
             UUID postID = Convertors.getTimeUUID();
+            // make a temporary directory to store the image
             new File("/var/tmp/instagrim/").mkdirs();
+            // write the image to the disk
             fos = new FileOutputStream(new File("/var/tmp/instagrim/" + postID));
             fos.write(image);
+
+            // create a thumbnail version and a processed, black and white verison
             byte[] thumbnail = imageResize(postID.toString(), filetype);
             ByteBuffer thumbnailBuffer = ByteBuffer.wrap(thumbnail);
             byte[] processed = imageDecolour(postID.toString(), filetype);
             ByteBuffer processedBuffer = ByteBuffer.wrap(processed);
             Session session = cluster.connect("instagrim");
+
+            // insert the post into the posts table, account posts and postcomments
             PreparedStatement psInsertPost = session.prepare("INSERT INTO posts (postid, username, posted, caption, likes, comments, image, thumbnail, processed, imageLength, thumbnailLength, processedLength, type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             PreparedStatement psInsertAccountPosts = session.prepare("INSERT INTO accountposts (postid, username, posted) VALUES (?,?,?)");
-            PreparedStatement psInsertPostCaption = session.prepare("INSERT INTO postcomments (commentid, caption) VALUES (?,?)");
+            PreparedStatement psInsertPostComments = session.prepare("INSERT INTO postcomments (commentid, caption) VALUES (?,?)");
 
             BoundStatement bsInsertPost = new BoundStatement(psInsertPost);
             BoundStatement bsInsertAccountPosts = new BoundStatement(psInsertAccountPosts);
-            BoundStatement bsInsertPostCaption = new BoundStatement(psInsertPostCaption);
+            BoundStatement bsInsertPostComments = new BoundStatement(psInsertPostComments);
 
             Date now = new Date(System.currentTimeMillis());
 
+            // empty tree set in place of the likes and comments fields
             TreeSet emptyTreeSet = new TreeSet();
             session.execute(bsInsertPost.bind(postID, username, now, caption, emptyTreeSet, emptyTreeSet, imageBuffer, thumbnailBuffer, processedBuffer, image.length, thumbnail.length, processed.length, type));
             session.execute(bsInsertAccountPosts.bind(postID, username, now));
-            session.execute(bsInsertPostCaption.bind(postID, caption));
+            session.execute(bsInsertPostComments.bind(postID, caption));
             session.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PostModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,13 +146,17 @@ public class PostModel {
      * @return
      */
     public static boolean exists(UUID post) {
+        // connect to the cluster
         Session session = CassandraHosts.getCluster().connect("instagrim");
         PreparedStatement ps = session.prepare("SELECT postid FROM posts WHERE postid = ?");
         BoundStatement bs = new BoundStatement(ps);
         ResultSet rs = session.execute(bs.bind(post));
+        // if there are no results
         if (rs.isExhausted()) {
+            // return false
             return false;
         }
+        // otherwise return true
         return true;
     }
 
@@ -156,6 +169,7 @@ public class PostModel {
      */
     public byte[] imageResize(String postID, String type) {
         try {
+            // read the image from the disk
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
             BufferedImage thumbnail = createThumbnail(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -181,7 +195,7 @@ public class PostModel {
     public byte[] imageDecolour(String postID, String type) {
         try {
             BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
-            BufferedImage processed = createProcessed(BI);
+            BufferedImage processed = createGreyscale(BI);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(processed, type, baos);
             baos.flush();
@@ -211,9 +225,21 @@ public class PostModel {
      *
      * @return
      */
-    public static BufferedImage createProcessed(BufferedImage image) {
+    public static BufferedImage createGreyscale(BufferedImage image) {
         int Width = image.getWidth() - 1;
         image = resize(image, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE);
+        return pad(image, 4);
+    }
+
+    /**
+     *
+     * @param image
+     *
+     * @return
+     */
+    public static BufferedImage createSepia(BufferedImage image) {
+        int Width = image.getWidth() - 1;
+        image = resize(image, Method.SPEED, Width, OP_ANTIALIAS,);
         return pad(image, 4);
     }
 
