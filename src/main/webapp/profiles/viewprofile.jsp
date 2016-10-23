@@ -15,14 +15,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center user-profile">
-                    <div class="col-lg-4 text-center">
-                        <%                    SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
-                            ProfileStore profileStore = (ProfileStore) request.getAttribute("Profile");%>
-                    </div>
-                    <div class="col-lg-8 text-center">
-                        <h1><%=profile.getUsername()%></h1>
-                        <h3><%=profile.getFirstName()%> <%=profile.getLastName()%></h3>
-                    </div>
+                    <%                    SessionStore sessionStore = (SessionStore) request.getAttribute("LoggedIn");
+                        ProfileStore profileStore = (ProfileStore) request.getAttribute("Profile");%>
+
+                    <h1>@<%=profile.getUsername()%></h1>
+                    <h3><%=profile.getFirstName()%> <%=profile.getLastName()%></h3>
+                    <p><%=profile.getBio()%></p>
+                    <hr>
                 </div> <%Cluster cluster = CassandraHosts.getCluster();
                     PostModel post = new PostModel();
                     LinkedList<PostStore> posts = post.getUsersPosts(profile.getUsername());
@@ -54,6 +53,7 @@
                         }
                     %>
                     <%=sb.toString()%>
+                    <hr>
                 </div>
                 <%
                         }
