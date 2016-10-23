@@ -45,26 +45,6 @@ public class CommentModel {
         session.execute(bs.bind(commentID));
     }
 
-    public LinkedList<UUID> getCommentIDs(UUID postID) {
-        Session session = cluster.connect("instagrim");
-        LinkedList<UUID> comments = new LinkedList<>();
-
-        PreparedStatement ps = session.prepare("SELECT comments FROM posts WHERE postid = ?");
-        BoundStatement bs = new BoundStatement(ps);
-        ResultSet results = session.execute(bs.bind(postID));
-        if (results.isExhausted()) {
-            return null;
-        } else {
-            for (Row row : results) {
-                Set<UUID> commentsSet = row.getSet("comments", UUID.class);
-                for (UUID id : commentsSet) {
-                    comments.add(id);
-                }
-            }
-        }
-        return comments;
-    }
-
     public LinkedList<CommentStore> getComments(UUID postID) {
         return getComments(getCommentIDs(postID));
     }
@@ -90,6 +70,26 @@ public class CommentModel {
                     comment.setCaption(caption);
                     comment.setPosted(posted);
                     comments.add(comment);
+                }
+            }
+        }
+        return comments;
+    }
+
+    private LinkedList<UUID> getCommentIDs(UUID postID) {
+        Session session = cluster.connect("instagrim");
+        LinkedList<UUID> comments = new LinkedList<>();
+
+        PreparedStatement ps = session.prepare("SELECT comments FROM posts WHERE postid = ?");
+        BoundStatement bs = new BoundStatement(ps);
+        ResultSet results = session.execute(bs.bind(postID));
+        if (results.isExhausted()) {
+            return null;
+        } else {
+            for (Row row : results) {
+                Set<UUID> commentsSet = row.getSet("comments", UUID.class);
+                for (UUID id : commentsSet) {
+                    comments.add(id);
                 }
             }
         }

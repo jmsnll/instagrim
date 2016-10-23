@@ -27,7 +27,7 @@ public final class Keyspaces {
                     + " processedlength int,"
                     + " type  varchar,"
                     + " name  varchar,"
-                    + " PRIMARY KEY (postid, username)"
+                    + " PRIMARY KEY (postid)"
                     + ")";
             String createPostsCaptionTable = "CREATE TABLE if not exists instagrim.postcaptions (\n"
                     + "postid uuid,\n"

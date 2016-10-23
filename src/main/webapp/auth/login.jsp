@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<!Modified from: http://bootsnipp.com/snippets/featured/mix-amp-match-login>
 <html lang="en">
     <%@include file="../res/jsp/header.jsp" %>
     <body>

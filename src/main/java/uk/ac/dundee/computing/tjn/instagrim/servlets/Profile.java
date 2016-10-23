@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import uk.ac.dundee.computing.tjn.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.tjn.instagrim.models.CommentModel;
 import uk.ac.dundee.computing.tjn.instagrim.models.PostModel;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.ProfileStore;
@@ -119,28 +120,37 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        HttpSession session = request.getSession();
+//        SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
+//        if (sessionStore == null || !sessionStore.isLoggedIn()) {
+//            response.sendRedirect("/Instagrim/login");
+//            return;
+//        }
+//        for (Part part : request.getParts()) {
+//            String type = part.getContentType();
+//
+//            InputStream is = request.getPart(part.getName()).getInputStream();
+//            int i = is.available();
+//            if (i > 0) {
+//                byte[] b = new byte[i + 1];
+//                is.read(b);
+//                String username = sessionStore.getUsername();
+//                UserModel user = new UserModel(username, cluster);
+//                user.setProfilePicture(username, b, type, b.length);
+//
+//                is.close();
+//            }
+//            RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
+//            rd.forward(request, response);
+//        }
         HttpSession session = request.getSession();
         SessionStore sessionStore = (SessionStore) session.getAttribute("LoggedIn");
-        if (sessionStore == null || !sessionStore.isLoggedIn()) {
-            response.sendRedirect("/Instagrim/login");
-            return;
-        }
-        for (Part part : request.getParts()) {
-            String type = part.getContentType();
+        String caption = request.getParameter("comment");
+        String username = sessionStore.getUsername();
+        String args[] = Convertors.SplitRequestPath(request);
+        UUID postID = UUID.fromString(args[3]);
 
-            InputStream is = request.getPart(part.getName()).getInputStream();
-            int i = is.available();
-            if (i > 0) {
-                byte[] b = new byte[i + 1];
-                is.read(b);
-                String username = sessionStore.getUsername();
-                UserModel user = new UserModel(username, cluster);
-                user.setProfilePicture(username, b, type, b.length);
-
-                is.close();
-            }
-            RequestDispatcher rd = request.getRequestDispatcher("/profiles/viewprofile.jsp");
-            rd.forward(request, response);
-        }
+        CommentModel commentModel = new CommentModel(cluster);
+        commentModel.addComment(postID, username, caption);
     }
 }

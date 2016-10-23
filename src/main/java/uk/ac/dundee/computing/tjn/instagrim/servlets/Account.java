@@ -12,7 +12,7 @@ import uk.ac.dundee.computing.tjn.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.tjn.instagrim.models.UserModel;
 import uk.ac.dundee.computing.tjn.instagrim.stores.SessionStore;
 
-@WebServlet(name = "Account", urlPatterns = {"/account", "/account/settings"})
+@WebServlet(name = "Account", urlPatterns = {"/account", "/account/*"})
 public class Account extends HttpServlet {
 
     @Override
