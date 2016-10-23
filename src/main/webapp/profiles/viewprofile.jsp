@@ -46,7 +46,7 @@
                                 word = url;
                             }
                             if (word.startsWith("@")) {
-                                String url = "<a href='Instagrim/profile/" + word.replaceAll("@", "") + "'>" + word + "</a>";
+                                String url = "<a href='/Instagrim/profile/" + word.replaceAll("@", "") + "'>" + word + "</a>";
                                 word = url;
                             }
                             sb.append(word + " ");
