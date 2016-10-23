@@ -192,8 +192,8 @@ public class PostModel {
      */
     public byte[] imageDecolour(String postID, String type) {
         try {
-            BufferedImage BI = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
-            BufferedImage processed = createGreyscale(BI);
+            BufferedImage bi = ImageIO.read(new File("/var/tmp/instagrim/" + postID));
+            BufferedImage processed = createProcessed(bi);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(processed, type, baos);
             baos.flush();
@@ -223,7 +223,7 @@ public class PostModel {
      *
      * @return
      */
-    public static BufferedImage createGreyscale(BufferedImage image) {
+    public static BufferedImage createProcessed(BufferedImage image) {
         int Width = image.getWidth() - 1;
         image = resize(image, Method.SPEED, Width, OP_ANTIALIAS, OP_GRAYSCALE);
         return pad(image, 4);
