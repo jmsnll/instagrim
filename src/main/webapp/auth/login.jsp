@@ -31,7 +31,7 @@
                         <fieldset>
                             <hr>
                             <div class="form-group has-feedback">
-                                <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username or Email Address">
+                                <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username">
                                 <i class="fa fa-user form-control-feedback"></i>
                             </div>
                             <div class="form-group has-feedback">

@@ -25,6 +25,11 @@
             <div class="col-sm-8 text-center">
                 <div class="user-post" style="background-image: url('/Instagrim/image/<%=post.getPostID()%>')">
                 </div>
+                <div class="user-post-description">
+                    <h1><%=post.getUsername()%></h1>
+                    <p><%=post.getCaption()%></p>
+                </div>
+                <br>
                 <div class="comments">
                     <%
                         if (comments.size() == 0) {

@@ -18,6 +18,7 @@
                     <h1>Welcome to Instagrim!</h1>
                 </div>
                 <%                    PostModel post = new PostModel();
+                try {
                     LinkedList<PostStore> posts = post.getMostRecentPosts();
                     if (posts == null) {
                 %>
@@ -28,12 +29,17 @@
                         PostStore ps = (PostStore) iterator.next();
                 %>
                 <div class="col-sm-4 text-center">
-                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=ps.getPostID()%>')">
+                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=ps.getPostID()%>'); background-size: 100% 100%;">
                     </div>
+                    <p>Posted by <a href="/Instagrim/profile/<%=ps.getUsername()%>"><%=ps.getUsername()%></a> - <a href="/Instagrim/profile/<%=profile.getUsername()%>/<%=ps.getPostID()%>">View Comments</a>
                 </div>
                 <%
                         }
                     }
+}
+catch (Exception ex) {
+
+}
                 %>
             </div>
         </div>

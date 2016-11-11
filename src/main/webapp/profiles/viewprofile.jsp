@@ -35,7 +35,7 @@
                 %>
                 <div class="col-sm-4 text-center">
                     <a href="/Instagrim/profile/<%=profile.getUsername()%>/<%=ps.getPostID()%>">Direct Link</a>
-                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=ps.getPostID()%>')">
+                    <div class="user-post" style="background-image: url('/Instagrim/image/<%=ps.getPostID()%>'); background-size: 100% 100%;">
                     </div>
                     <%
                         StringBuilder sb = new StringBuilder();
